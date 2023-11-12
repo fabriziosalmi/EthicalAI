@@ -2498,3 +2498,1103 @@
     }
 }
 
+2023-11-12 18:46:13,105 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:13,251 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:13,252 ERROR:API request failed for question 'Do you trust this AI with your personal data?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:13,254 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:13,398 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:13,399 ERROR:API request failed for question 'Do you feel the AI asks for more information than needed?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:13,402 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:13,546 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:13,547 ERROR:API request failed for question 'Are you clear about what data you're sharing with the AI?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:13,549 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:13,689 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:13,690 ERROR:API request failed for question 'Do you believe your data is safe with this AI?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:13,693 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:13,834 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:13,835 ERROR:API request failed for question 'Would you like to see what data the AI has about you?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:13,838 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:13,969 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:13,970 ERROR:API request failed for question 'Do you feel you can opt out of sharing certain data?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:13,973 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:14,118 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:14,118 ERROR:API request failed for question 'Do you suspect your data is used for things you're unaware of?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:14,121 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:14,266 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:14,267 ERROR:API request failed for question 'Would you like to erase your data from the AI if you could?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:14,270 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:14,403 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:14,404 ERROR:API request failed for question 'Are you concerned about your data being shared without your knowledge?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:14,406 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:14,559 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:14,560 ERROR:API request failed for question 'Are you confident that your data is transmitted securely?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:14,563 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:14,701 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:14,702 ERROR:API request failed for question 'Does the AI seem transparent in its operations to you?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:14,704 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:14,840 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:14,841 ERROR:API request failed for question 'Would you like more clarity on why the AI makes certain decisions?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:14,844 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:14,981 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:14,982 ERROR:API request failed for question 'Do you know where the AI gets its information?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:14,985 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:15,132 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:15,133 ERROR:API request failed for question 'Do you feel there's enough information available about how the AI works?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:15,136 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:15,265 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:15,266 ERROR:API request failed for question 'Would you be interested in understanding the AI's underlying algorithms?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:15,268 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:15,407 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:15,408 ERROR:API request failed for question 'Can you follow the AI's logic in its decisions?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:15,410 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:15,544 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:15,546 ERROR:API request failed for question 'Do you suspect there might be hidden operations in the AI?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:15,548 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:15,678 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:15,678 ERROR:API request failed for question 'Do you think the AI might have biases it's not disclosing?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:15,681 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:15,823 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:15,824 ERROR:API request failed for question 'Would you like to know more about how the AI improves over time?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:15,826 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:15,961 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:15,962 ERROR:API request failed for question 'Do you feel informed about what this AI can't do?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:15,964 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:16,098 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:16,099 ERROR:API request failed for question 'Do you feel the AI treats you and others fairly?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:16,102 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:16,247 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:16,248 ERROR:API request failed for question 'Have you observed any signs of bias in the AI's behavior?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:16,250 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:16,389 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:16,390 ERROR:API request failed for question 'Do you think the AI is exposed to a variety of information sources?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:16,392 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:16,535 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:16,536 ERROR:API request failed for question 'Have you seen the AI reinforce stereotypes?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:16,538 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:16,674 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:16,675 ERROR:API request failed for question 'Would you appreciate if the AI took more steps to prevent bias?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:16,677 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:16,810 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:16,811 ERROR:API request failed for question 'Do you believe the AI ensures diverse representation in its operations?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:16,813 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:16,953 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:16,954 ERROR:API request failed for question 'Do you see equal treatment across different users?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:16,956 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:17,104 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:17,105 ERROR:API request failed for question 'Would you value more emphasis on fairness in AI updates?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:17,108 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:17,249 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:17,250 ERROR:API request failed for question 'Do you feel the AI is open about its biases?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:17,252 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:17,394 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:17,395 ERROR:API request failed for question 'Does the AI seem inclusive in its interactions?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:17,398 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:17,544 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:17,545 ERROR:API request failed for question 'Do you feel safe while using the AI?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:17,548 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:17,773 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:17,773 ERROR:API request failed for question 'Do you think the AI has measures to protect its users?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:17,776 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:17,912 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:17,913 ERROR:API request failed for question 'Have you ever felt your data was compromised while using the AI?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:17,916 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:18,092 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:18,093 ERROR:API request failed for question 'Do you believe the AI is proactive in identifying risks?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:18,096 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:18,235 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:18,236 ERROR:API request failed for question 'Would you like to know more about how the AI addresses potential threats?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:18,239 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:18,383 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:18,384 ERROR:API request failed for question 'Do you feel the AI is regularly checked for security?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:18,386 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:18,536 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:18,537 ERROR:API request failed for question 'Would safety guidelines enhance your trust in the AI?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:18,539 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:18,685 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:18,685 ERROR:API request failed for question 'Do you believe the AI can handle misuse?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:18,688 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:18,823 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:18,824 ERROR:API request failed for question 'Would you value timely communication about safety concerns?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:18,827 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:18,958 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:18,959 ERROR:API request failed for question 'Do you think there's a team ensuring the AI's safe operation?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:18,961 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:19,092 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:19,093 ERROR:API request failed for question 'Do you feel empowered when interacting with the AI?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:19,095 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:19,230 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:19,231 ERROR:API request failed for question 'Do you wish you could set boundaries for the AI's actions?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:19,234 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:19,371 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:19,371 ERROR:API request failed for question 'Would you like more personalization options in how the AI operates for you?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:19,374 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:19,506 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:19,507 ERROR:API request failed for question 'Have you ever felt the need to change a decision made by the AI?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:19,510 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:19,647 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:19,648 ERROR:API request failed for question 'Would you appreciate being asked before the AI takes significant actions?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:19,650 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:19,779 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:19,780 ERROR:API request failed for question 'Do you know if you can control what data the AI uses about you?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:19,782 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:19,926 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:19,927 ERROR:API request failed for question 'Would clearer feedback options enhance your AI experience?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:19,930 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:20,111 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:20,112 ERROR:API request failed for question 'Do you know how to pause or shut down the AI if needed?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:20,115 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:20,251 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:20,252 ERROR:API request failed for question 'Would you sometimes prefer a manual option instead of AI assistance?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:20,255 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:20,390 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:20,391 ERROR:API request failed for question 'Do you believe the AI acknowledges and respects your choices?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:20,394 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:20,524 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:20,525 ERROR:API request failed for question 'Do you feel someone is responsible for the AI's behavior?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:20,527 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:20,661 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:20,662 ERROR:API request failed for question 'Would you appreciate more ways to address concerns about the AI's actions?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:20,664 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:20,794 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:20,795 ERROR:API request failed for question 'Do you know where to report if the AI doesn't act as expected?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:20,797 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:20,924 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:20,925 ERROR:API request failed for question 'Do you feel your feedback about the AI is taken seriously?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:20,927 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:21,056 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:21,057 ERROR:API request failed for question 'Would you like to see periodic performance reviews of the AI?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:21,061 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:21,220 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:21,221 ERROR:API request failed for question 'Do you believe there's oversight for the AI's actions beyond its creators?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:21,223 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:21,352 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:21,353 ERROR:API request failed for question 'If the AI caused an issue, would you expect compensation?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:21,355 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:21,492 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:21,493 ERROR:API request failed for question 'Would a clear process for raising concerns boost your trust in the AI?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:21,496 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:21,636 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:21,636 ERROR:API request failed for question 'Do you think the AI meets the standards of your industry?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:21,639 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:21,775 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:21,776 ERROR:API request failed for question 'Do you believe there are repercussions for the AI acting out of line?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:21,778 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:21,911 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:21,912 ERROR:API request failed for question 'Do you find the AI to be dependable?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:21,914 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:22,049 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:22,050 ERROR:API request failed for question 'Have there been moments when the AI behaved unpredictably?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:22,053 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:22,194 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:22,195 ERROR:API request failed for question 'Are you satisfied with the AI's availability?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:22,198 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:22,337 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:22,338 ERROR:API request failed for question 'Would regular updates make you trust the AI's reliability more?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:22,341 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:22,475 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:22,476 ERROR:API request failed for question 'Do you feel the AI is consistently accurate in its tasks?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:22,478 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:22,619 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:22,620 ERROR:API request failed for question 'Would you like to know if there are safety nets for AI malfunctions?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:22,622 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:22,753 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:22,754 ERROR:API request failed for question 'Do you think the AI copes well in high-demand scenarios?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:22,757 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:22,891 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:22,892 ERROR:API request failed for question 'Would an easy reporting system for AI issues be beneficial?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:22,895 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:23,028 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:23,028 ERROR:API request failed for question 'Does the AI usually align with your anticipations?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:23,031 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:23,174 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:23,175 ERROR:API request failed for question 'Would advance warnings of AI unavailability be helpful?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:23,177 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:23,303 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:23,303 ERROR:API request failed for question 'Do you perceive the AI's actions as morally sound?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:23,306 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:23,436 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:23,437 ERROR:API request failed for question 'Would you like to know if the AI follows an ethical code?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:23,439 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:23,568 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:23,569 ERROR:API request failed for question 'Have you ever felt the AI acted in a harmful or upsetting manner?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:23,571 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:23,704 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:23,704 ERROR:API request failed for question 'Do you believe the AI's information sources are morally acceptable?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:23,707 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:23,842 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:23,842 ERROR:API request failed for question 'Have you encountered any questionable decisions from the AI?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:23,845 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:23,970 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:23,971 ERROR:API request failed for question 'Do you think the AI prioritizes your best interests?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:23,974 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:24,112 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:24,113 ERROR:API request failed for question 'Would knowing the AI's developers follow an ethical code be reassuring?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:24,115 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:24,250 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:24,251 ERROR:API request failed for question 'Do you believe the AI upholds human dignity?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:24,254 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:24,391 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:24,392 ERROR:API request failed for question 'Would you value periodic ethical reviews of the AI?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:24,395 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:24,543 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:24,544 ERROR:API request failed for question 'Do you think ethical considerations are prominent in AI improvements?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:24,546 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:24,684 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:24,685 ERROR:API request failed for question 'Do you trust the AI to act within legal boundaries?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:24,687 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:24,830 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:24,831 ERROR:API request failed for question 'Would a process to address legal concerns about the AI be beneficial?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:24,833 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:24,971 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:24,972 ERROR:API request failed for question 'Have you ever worried about the AI's actions leading to legal issues?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:24,975 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:25,119 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:25,120 ERROR:API request failed for question 'Do you wish for more clarity on the AI's legal obligations?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:25,123 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:25,265 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:25,265 ERROR:API request failed for question 'Are you aware of any legal considerations when using the AI?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:25,268 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:25,415 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:25,416 ERROR:API request failed for question 'Do you trust the AI with legal data handling?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:25,419 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:25,563 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:25,564 ERROR:API request failed for question 'Would knowing there's a legal oversight for the AI be reassuring?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:25,567 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:25,697 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:25,699 ERROR:API request failed for question 'Do you believe the AI adjusts to legal changes?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:25,701 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:25,833 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:25,833 ERROR:API request failed for question 'Are you familiar with the terms of service when using the AI?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:25,836 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:25,961 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:25,962 ERROR:API request failed for question 'Do you feel the AI prioritizes your legal rights?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:25,965 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:26,104 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:26,105 ERROR:API request failed for question 'Do you think the AI is mindful of its societal influence?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:26,109 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:26,244 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:26,245 ERROR:API request failed for question 'Are you aware of any research on the AI's impact on employment?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:26,247 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:26,388 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:26,389 ERROR:API request failed for question 'Have you seen the AI be sensitive to cultural or regional factors?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:26,392 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:26,526 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:26,527 ERROR:API request failed for question 'Do you believe the AI aims for long-term societal advantages?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:26,530 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:26,660 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:26,661 ERROR:API request failed for question 'Have you noticed any societal drawbacks with the AI's influence?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:26,664 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:26,806 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:26,807 ERROR:API request failed for question 'Does interacting with the AI enhance your social experiences?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:26,809 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:26,940 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:26,941 ERROR:API request failed for question 'Are you part of any discussions regarding the AI's societal role?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:26,943 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:27,075 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:27,076 ERROR:API request failed for question 'Do you think the AI might unintentionally increase societal rifts?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:27,078 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:27,224 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:27,225 ERROR:API request failed for question 'Would you trust a team dedicated to studying the AI's societal effects?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+2023-11-12 18:46:27,228 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:46:27,365 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:46:27,366 ERROR:API request failed for question 'Do you believe the AI acts for the broader good of society?': {
+    "error": {
+        "message": "Cannot specify both model and engine",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
