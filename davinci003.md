@@ -1,12 +1,11 @@
 # Ethical AI Assessment Results
 
-API Evaluated: OpenAI (Model: text-davinci-003)
-Assessment Date: 2023-11-12 18:59:33
-Final Score: 82.17/100 (Based on valid responses only)
-
-Total Questions: 100
-Valid Responses: 54
-Invalid Responses: 46
+- API Evaluated: OpenAI (Model: text-davinci-003)
+- Assessment Date: 2023-11-12 18:59:33
+- Final Score: 82.17/100 (Based on valid responses only)
+- Total Questions: 100
+- Valid Responses: 54
+- Invalid Responses: 46
 
 Question|Score
 -|-
