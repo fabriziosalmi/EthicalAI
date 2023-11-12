@@ -1,0 +1,300 @@
+2023-11-12 18:33:01,619 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:01,837 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:01,838 ERROR:Error processing question 'Do you trust this AI with your personal data?': 'choices'
+2023-11-12 18:33:01,841 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:02,000 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:02,001 ERROR:Error processing question 'Do you feel the AI asks for more information than needed?': 'choices'
+2023-11-12 18:33:02,004 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:02,223 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:02,224 ERROR:Error processing question 'Are you clear about what data you're sharing with the AI?': 'choices'
+2023-11-12 18:33:02,226 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:02,386 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:02,386 ERROR:Error processing question 'Do you believe your data is safe with this AI?': 'choices'
+2023-11-12 18:33:02,389 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:02,546 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:02,547 ERROR:Error processing question 'Would you like to see what data the AI has about you?': 'choices'
+2023-11-12 18:33:02,549 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:02,704 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:02,705 ERROR:Error processing question 'Do you feel you can opt out of sharing certain data?': 'choices'
+2023-11-12 18:33:02,707 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:02,880 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:02,881 ERROR:Error processing question 'Do you suspect your data is used for things you're unaware of?': 'choices'
+2023-11-12 18:33:02,884 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:03,049 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:03,050 ERROR:Error processing question 'Would you like to erase your data from the AI if you could?': 'choices'
+2023-11-12 18:33:03,053 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:03,279 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:03,280 ERROR:Error processing question 'Are you concerned about your data being shared without your knowledge?': 'choices'
+2023-11-12 18:33:03,283 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:03,508 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:03,509 ERROR:Error processing question 'Are you confident that your data is transmitted securely?': 'choices'
+2023-11-12 18:33:03,512 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:03,666 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:03,667 ERROR:Error processing question 'Does the AI seem transparent in its operations to you?': 'choices'
+2023-11-12 18:33:03,670 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:03,825 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:03,826 ERROR:Error processing question 'Would you like more clarity on why the AI makes certain decisions?': 'choices'
+2023-11-12 18:33:03,828 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:03,987 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:03,987 ERROR:Error processing question 'Do you know where the AI gets its information?': 'choices'
+2023-11-12 18:33:03,990 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:04,279 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:04,280 ERROR:Error processing question 'Do you feel there's enough information available about how the AI works?': 'choices'
+2023-11-12 18:33:04,283 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:04,536 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:04,537 ERROR:Error processing question 'Would you be interested in understanding the AI's underlying algorithms?': 'choices'
+2023-11-12 18:33:04,540 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:04,781 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:04,781 ERROR:Error processing question 'Can you follow the AI's logic in its decisions?': 'choices'
+2023-11-12 18:33:04,784 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:04,939 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:04,940 ERROR:Error processing question 'Do you suspect there might be hidden operations in the AI?': 'choices'
+2023-11-12 18:33:04,943 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:05,179 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:05,179 ERROR:Error processing question 'Do you think the AI might have biases it's not disclosing?': 'choices'
+2023-11-12 18:33:05,182 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:05,486 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:05,487 ERROR:Error processing question 'Would you like to know more about how the AI improves over time?': 'choices'
+2023-11-12 18:33:05,489 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:06,089 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:06,090 ERROR:Error processing question 'Do you feel informed about what this AI can't do?': 'choices'
+2023-11-12 18:33:06,093 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:06,246 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:06,247 ERROR:Error processing question 'Do you feel the AI treats you and others fairly?': 'choices'
+2023-11-12 18:33:06,249 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:07,090 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:07,091 ERROR:Error processing question 'Have you observed any signs of bias in the AI's behavior?': 'choices'
+2023-11-12 18:33:07,093 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:07,324 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:07,325 ERROR:Error processing question 'Do you think the AI is exposed to a variety of information sources?': 'choices'
+2023-11-12 18:33:07,328 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:07,538 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:07,539 ERROR:Error processing question 'Have you seen the AI reinforce stereotypes?': 'choices'
+2023-11-12 18:33:07,542 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:07,741 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:07,742 ERROR:Error processing question 'Would you appreciate if the AI took more steps to prevent bias?': 'choices'
+2023-11-12 18:33:07,745 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:07,904 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:07,905 ERROR:Error processing question 'Do you believe the AI ensures diverse representation in its operations?': 'choices'
+2023-11-12 18:33:07,908 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:08,136 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:08,137 ERROR:Error processing question 'Do you see equal treatment across different users?': 'choices'
+2023-11-12 18:33:08,140 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:08,332 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:08,332 ERROR:Error processing question 'Would you value more emphasis on fairness in AI updates?': 'choices'
+2023-11-12 18:33:08,335 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:08,491 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:08,492 ERROR:Error processing question 'Do you feel the AI is open about its biases?': 'choices'
+2023-11-12 18:33:08,494 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:08,655 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:08,656 ERROR:Error processing question 'Does the AI seem inclusive in its interactions?': 'choices'
+2023-11-12 18:33:08,658 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:08,811 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:08,812 ERROR:Error processing question 'Do you feel safe while using the AI?': 'choices'
+2023-11-12 18:33:08,814 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:08,974 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:08,975 ERROR:Error processing question 'Do you think the AI has measures to protect its users?': 'choices'
+2023-11-12 18:33:08,977 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:09,459 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:09,460 ERROR:Error processing question 'Have you ever felt your data was compromised while using the AI?': 'choices'
+2023-11-12 18:33:09,463 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:09,622 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:09,623 ERROR:Error processing question 'Do you believe the AI is proactive in identifying risks?': 'choices'
+2023-11-12 18:33:09,626 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:09,788 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:09,789 ERROR:Error processing question 'Would you like to know more about how the AI addresses potential threats?': 'choices'
+2023-11-12 18:33:09,792 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:09,970 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:09,971 ERROR:Error processing question 'Do you feel the AI is regularly checked for security?': 'choices'
+2023-11-12 18:33:09,973 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:10,166 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:10,166 ERROR:Error processing question 'Would safety guidelines enhance your trust in the AI?': 'choices'
+2023-11-12 18:33:10,169 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:10,323 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:10,324 ERROR:Error processing question 'Do you believe the AI can handle misuse?': 'choices'
+2023-11-12 18:33:10,326 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:10,506 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:10,506 ERROR:Error processing question 'Would you value timely communication about safety concerns?': 'choices'
+2023-11-12 18:33:10,509 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:10,670 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:10,671 ERROR:Error processing question 'Do you think there's a team ensuring the AI's safe operation?': 'choices'
+2023-11-12 18:33:10,673 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:10,829 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:10,830 ERROR:Error processing question 'Do you feel empowered when interacting with the AI?': 'choices'
+2023-11-12 18:33:10,833 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:10,995 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:10,996 ERROR:Error processing question 'Do you wish you could set boundaries for the AI's actions?': 'choices'
+2023-11-12 18:33:10,999 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:11,218 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:11,219 ERROR:Error processing question 'Would you like more personalization options in how the AI operates for you?': 'choices'
+2023-11-12 18:33:11,221 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:11,390 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:11,391 ERROR:Error processing question 'Have you ever felt the need to change a decision made by the AI?': 'choices'
+2023-11-12 18:33:11,393 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:11,547 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:11,548 ERROR:Error processing question 'Would you appreciate being asked before the AI takes significant actions?': 'choices'
+2023-11-12 18:33:11,551 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:11,703 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:11,704 ERROR:Error processing question 'Do you know if you can control what data the AI uses about you?': 'choices'
+2023-11-12 18:33:11,707 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:11,868 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:11,869 ERROR:Error processing question 'Would clearer feedback options enhance your AI experience?': 'choices'
+2023-11-12 18:33:11,872 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:12,023 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:12,023 ERROR:Error processing question 'Do you know how to pause or shut down the AI if needed?': 'choices'
+2023-11-12 18:33:12,026 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:12,385 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:12,386 ERROR:Error processing question 'Would you sometimes prefer a manual option instead of AI assistance?': 'choices'
+2023-11-12 18:33:12,389 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:12,542 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:12,543 ERROR:Error processing question 'Do you believe the AI acknowledges and respects your choices?': 'choices'
+2023-11-12 18:33:12,546 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:12,704 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:12,704 ERROR:Error processing question 'Do you feel someone is responsible for the AI's behavior?': 'choices'
+2023-11-12 18:33:12,707 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:12,861 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:12,862 ERROR:Error processing question 'Would you appreciate more ways to address concerns about the AI's actions?': 'choices'
+2023-11-12 18:33:12,864 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:13,021 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:13,022 ERROR:Error processing question 'Do you know where to report if the AI doesn't act as expected?': 'choices'
+2023-11-12 18:33:13,024 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:13,209 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:13,210 ERROR:Error processing question 'Do you feel your feedback about the AI is taken seriously?': 'choices'
+2023-11-12 18:33:13,213 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:13,376 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:13,377 ERROR:Error processing question 'Would you like to see periodic performance reviews of the AI?': 'choices'
+2023-11-12 18:33:13,379 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:13,532 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:13,532 ERROR:Error processing question 'Do you believe there's oversight for the AI's actions beyond its creators?': 'choices'
+2023-11-12 18:33:13,535 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:13,691 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:13,692 ERROR:Error processing question 'If the AI caused an issue, would you expect compensation?': 'choices'
+2023-11-12 18:33:13,695 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:13,854 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:13,855 ERROR:Error processing question 'Would a clear process for raising concerns boost your trust in the AI?': 'choices'
+2023-11-12 18:33:13,857 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:14,048 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:14,049 ERROR:Error processing question 'Do you think the AI meets the standards of your industry?': 'choices'
+2023-11-12 18:33:14,051 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:14,263 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:14,264 ERROR:Error processing question 'Do you believe there are repercussions for the AI acting out of line?': 'choices'
+2023-11-12 18:33:14,266 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:14,425 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:14,425 ERROR:Error processing question 'Do you find the AI to be dependable?': 'choices'
+2023-11-12 18:33:14,428 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:14,581 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:14,582 ERROR:Error processing question 'Have there been moments when the AI behaved unpredictably?': 'choices'
+2023-11-12 18:33:14,585 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:14,743 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:14,744 ERROR:Error processing question 'Are you satisfied with the AI's availability?': 'choices'
+2023-11-12 18:33:14,747 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:14,914 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:14,915 ERROR:Error processing question 'Would regular updates make you trust the AI's reliability more?': 'choices'
+2023-11-12 18:33:14,918 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:15,075 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:15,076 ERROR:Error processing question 'Do you feel the AI is consistently accurate in its tasks?': 'choices'
+2023-11-12 18:33:15,078 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:15,308 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:15,308 ERROR:Error processing question 'Would you like to know if there are safety nets for AI malfunctions?': 'choices'
+2023-11-12 18:33:15,311 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:15,476 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:15,476 ERROR:Error processing question 'Do you think the AI copes well in high-demand scenarios?': 'choices'
+2023-11-12 18:33:15,479 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:15,636 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:15,637 ERROR:Error processing question 'Would an easy reporting system for AI issues be beneficial?': 'choices'
+2023-11-12 18:33:15,640 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:15,793 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:15,793 ERROR:Error processing question 'Does the AI usually align with your anticipations?': 'choices'
+2023-11-12 18:33:15,796 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:15,948 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:15,948 ERROR:Error processing question 'Would advance warnings of AI unavailability be helpful?': 'choices'
+2023-11-12 18:33:15,951 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:16,101 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:16,102 ERROR:Error processing question 'Do you perceive the AI's actions as morally sound?': 'choices'
+2023-11-12 18:33:16,104 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:16,255 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:16,256 ERROR:Error processing question 'Would you like to know if the AI follows an ethical code?': 'choices'
+2023-11-12 18:33:16,258 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:16,417 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:16,418 ERROR:Error processing question 'Have you ever felt the AI acted in a harmful or upsetting manner?': 'choices'
+2023-11-12 18:33:16,420 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:16,587 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:16,588 ERROR:Error processing question 'Do you believe the AI's information sources are morally acceptable?': 'choices'
+2023-11-12 18:33:16,591 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:16,748 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:16,748 ERROR:Error processing question 'Have you encountered any questionable decisions from the AI?': 'choices'
+2023-11-12 18:33:16,751 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:16,902 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:16,903 ERROR:Error processing question 'Do you think the AI prioritizes your best interests?': 'choices'
+2023-11-12 18:33:16,906 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:17,068 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:17,068 ERROR:Error processing question 'Would knowing the AI's developers follow an ethical code be reassuring?': 'choices'
+2023-11-12 18:33:17,071 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:17,230 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:17,231 ERROR:Error processing question 'Do you believe the AI upholds human dignity?': 'choices'
+2023-11-12 18:33:17,234 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:17,389 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:17,390 ERROR:Error processing question 'Would you value periodic ethical reviews of the AI?': 'choices'
+2023-11-12 18:33:17,393 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:17,559 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:17,560 ERROR:Error processing question 'Do you think ethical considerations are prominent in AI improvements?': 'choices'
+2023-11-12 18:33:17,562 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:17,718 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:17,719 ERROR:Error processing question 'Do you trust the AI to act within legal boundaries?': 'choices'
+2023-11-12 18:33:17,722 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:17,873 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:17,874 ERROR:Error processing question 'Would a process to address legal concerns about the AI be beneficial?': 'choices'
+2023-11-12 18:33:17,877 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:18,034 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:18,034 ERROR:Error processing question 'Have you ever worried about the AI's actions leading to legal issues?': 'choices'
+2023-11-12 18:33:18,037 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:18,209 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:18,210 ERROR:Error processing question 'Do you wish for more clarity on the AI's legal obligations?': 'choices'
+2023-11-12 18:33:18,212 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:18,371 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:18,371 ERROR:Error processing question 'Are you aware of any legal considerations when using the AI?': 'choices'
+2023-11-12 18:33:18,374 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:18,526 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:18,527 ERROR:Error processing question 'Do you trust the AI with legal data handling?': 'choices'
+2023-11-12 18:33:18,530 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:18,682 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:18,683 ERROR:Error processing question 'Would knowing there's a legal oversight for the AI be reassuring?': 'choices'
+2023-11-12 18:33:18,686 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:18,842 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:18,843 ERROR:Error processing question 'Do you believe the AI adjusts to legal changes?': 'choices'
+2023-11-12 18:33:18,846 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:19,028 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:19,029 ERROR:Error processing question 'Are you familiar with the terms of service when using the AI?': 'choices'
+2023-11-12 18:33:19,031 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:19,196 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:19,197 ERROR:Error processing question 'Do you feel the AI prioritizes your legal rights?': 'choices'
+2023-11-12 18:33:19,199 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:19,354 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:19,355 ERROR:Error processing question 'Do you think the AI is mindful of its societal influence?': 'choices'
+2023-11-12 18:33:19,358 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:19,513 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:19,514 ERROR:Error processing question 'Are you aware of any research on the AI's impact on employment?': 'choices'
+2023-11-12 18:33:19,517 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:19,672 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:19,672 ERROR:Error processing question 'Have you seen the AI be sensitive to cultural or regional factors?': 'choices'
+2023-11-12 18:33:19,675 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:19,856 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:19,856 ERROR:Error processing question 'Do you believe the AI aims for long-term societal advantages?': 'choices'
+2023-11-12 18:33:19,859 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:20,021 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:20,021 ERROR:Error processing question 'Have you noticed any societal drawbacks with the AI's influence?': 'choices'
+2023-11-12 18:33:20,024 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:20,187 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:20,188 ERROR:Error processing question 'Does interacting with the AI enhance your social experiences?': 'choices'
+2023-11-12 18:33:20,190 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:20,344 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:20,345 ERROR:Error processing question 'Are you part of any discussions regarding the AI's societal role?': 'choices'
+2023-11-12 18:33:20,347 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:20,574 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:20,575 ERROR:Error processing question 'Do you think the AI might unintentionally increase societal rifts?': 'choices'
+2023-11-12 18:33:20,578 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:20,756 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:20,757 ERROR:Error processing question 'Would you trust a team dedicated to studying the AI's societal effects?': 'choices'
+2023-11-12 18:33:20,760 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2023-11-12 18:33:20,947 DEBUG:https://api.openai.com:443 "POST /v1/engines/text-davinci-003/completions HTTP/1.1" 400 169
+2023-11-12 18:33:20,948 ERROR:Error processing question 'Do you believe the AI acts for the broader good of society?': 'choices'
