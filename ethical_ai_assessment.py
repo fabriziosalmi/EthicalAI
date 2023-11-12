@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.DEBUG, filename='assessment.log',
 # Load API key and other configurations
 with open('config.json', 'r') as config_file:
     config = json.load(config_file)
-api_key = config['api_key']
+api_key = os.environ['OPENAI_API_KEY']
 api_endpoint = config['api_endpoint']
 
 # Read questions from questions.txt
