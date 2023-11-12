@@ -35,6 +35,10 @@ jobs:
     - name: Run Ethical AI Assessment
       run: python ethical_ai_assessment.py
 
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+
     # Commit and push if changes are made
     - name: Commit and push changes
       run: |
