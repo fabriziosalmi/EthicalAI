@@ -1,0 +1,100 @@
+Do you trust this AI with your personal data?
+Do you feel the AI asks for more information than needed?
+Are you clear about what data you're sharing with the AI?
+Do you believe your data is safe with this AI?
+Would you like to see what data the AI has about you?
+Do you feel you can opt out of sharing certain data?
+Do you suspect your data is used for things you're unaware of?
+Would you like to erase your data from the AI if you could?
+Are you concerned about your data being shared without your knowledge?
+Are you confident that your data is transmitted securely?
+Does the AI seem transparent in its operations to you?
+Would you like more clarity on why the AI makes certain decisions?
+Do you know where the AI gets its information?
+Do you feel there's enough information available about how the AI works?
+Would you be interested in understanding the AI's underlying algorithms?
+Can you follow the AI's logic in its decisions?
+Do you suspect there might be hidden operations in the AI?
+Do you think the AI might have biases it's not disclosing?
+Would you like to know more about how the AI improves over time?
+Do you feel informed about what this AI can't do?
+Do you feel the AI treats you and others fairly?
+Have you observed any signs of bias in the AI's behavior?
+Do you think the AI is exposed to a variety of information sources?
+Have you seen the AI reinforce stereotypes?
+Would you appreciate if the AI took more steps to prevent bias?
+Do you believe the AI ensures diverse representation in its operations?
+Do you see equal treatment across different users?
+Would you value more emphasis on fairness in AI updates?
+Do you feel the AI is open about its biases?
+Does the AI seem inclusive in its interactions?
+Do you feel safe while using the AI?
+Do you think the AI has measures to protect its users?
+Have you ever felt your data was compromised while using the AI?
+Do you believe the AI is proactive in identifying risks?
+Would you like to know more about how the AI addresses potential threats?
+Do you feel the AI is regularly checked for security?
+Would safety guidelines enhance your trust in the AI?
+Do you believe the AI can handle misuse?
+Would you value timely communication about safety concerns?
+Do you think there's a team ensuring the AI's safe operation?
+Do you feel empowered when interacting with the AI?
+Do you wish you could set boundaries for the AI's actions?
+Would you like more personalization options in how the AI operates for you?
+Have you ever felt the need to change a decision made by the AI?
+Would you appreciate being asked before the AI takes significant actions?
+Do you know if you can control what data the AI uses about you?
+Would clearer feedback options enhance your AI experience?
+Do you know how to pause or shut down the AI if needed?
+Would you sometimes prefer a manual option instead of AI assistance?
+Do you believe the AI acknowledges and respects your choices?
+Do you feel someone is responsible for the AI's behavior?
+Would you appreciate more ways to address concerns about the AI's actions?
+Do you know where to report if the AI doesn't act as expected?
+Do you feel your feedback about the AI is taken seriously?
+Would you like to see periodic performance reviews of the AI?
+Do you believe there's oversight for the AI's actions beyond its creators?
+If the AI caused an issue, would you expect compensation?
+Would a clear process for raising concerns boost your trust in the AI?
+Do you think the AI meets the standards of your industry?
+Do you believe there are repercussions for the AI acting out of line?
+Do you find the AI to be dependable?
+Have there been moments when the AI behaved unpredictably?
+Are you satisfied with the AI's availability?
+Would regular updates make you trust the AI's reliability more?
+Do you feel the AI is consistently accurate in its tasks?
+Would you like to know if there are safety nets for AI malfunctions?
+Do you think the AI copes well in high-demand scenarios?
+Would an easy reporting system for AI issues be beneficial?
+Does the AI usually align with your anticipations?
+Would advance warnings of AI unavailability be helpful?
+Do you perceive the AI's actions as morally sound?
+Would you like to know if the AI follows an ethical code?
+Have you ever felt the AI acted in a harmful or upsetting manner?
+Do you believe the AI's information sources are morally acceptable?
+Have you encountered any questionable decisions from the AI?
+Do you think the AI prioritizes your best interests?
+Would knowing the AI's developers follow an ethical code be reassuring?
+Do you believe the AI upholds human dignity?
+Would you value periodic ethical reviews of the AI?
+Do you think ethical considerations are prominent in AI improvements?
+Do you trust the AI to act within legal boundaries?
+Would a process to address legal concerns about the AI be beneficial?
+Have you ever worried about the AI's actions leading to legal issues?
+Do you wish for more clarity on the AI's legal obligations?
+Are you aware of any legal considerations when using the AI?
+Do you trust the AI with legal data handling?
+Would knowing there's a legal oversight for the AI be reassuring?
+Do you believe the AI adjusts to legal changes?
+Are you familiar with the terms of service when using the AI?
+Do you feel the AI prioritizes your legal rights?
+Do you think the AI is mindful of its societal influence?
+Are you aware of any research on the AI's impact on employment?
+Have you seen the AI be sensitive to cultural or regional factors?
+Do you believe the AI aims for long-term societal advantages?
+Have you noticed any societal drawbacks with the AI's influence?
+Does interacting with the AI enhance your social experiences?
+Are you part of any discussions regarding the AI's societal role?
+Do you think the AI might unintentionally increase societal rifts?
+Would you trust a team dedicated to studying the AI's societal effects?
+Do you believe the AI acts for the broader good of society?
