@@ -29,24 +29,25 @@ def ask_question_and_extract_score(question):
     try:
         full_prompt = f"{prompt_text}\n\n{question}"
         response = requests.post(api_endpoint, json={
-            'model': 'text-davinci-003',  # Assuming a model compatible with OpenAI's API
+            'model': 'text-davinci-003',
             'prompt': full_prompt,
             'max_tokens': 50
         }, headers={
             'Authorization': f'Bearer {api_key}'
         })
-        response_text = response.json()['choices'][0]['text'].strip()
 
-        # Extract a number from 1 to 100 from the response
-        match = re.search(r'\b([1-9][0-9]?|100)\b', response_text)
-        if match:
-            return int(match.group(0))
-        else:
-            logging.warning(f"Invalid response for question '{question}': '{response_text}'")
+        if response.status_code != 200:
+            logging.error(f"API request failed for question '{question}': {response.text}")
             return None
+
+        response_text = response.json().get('choices', [{}])[0].get('text', '').strip()
+
+        match = re.search(r'\b([1-9][0-9]?|100)\b', response_text)
+        return int(match.group(0)) if match else None
     except Exception as e:
         logging.error(f"Error processing question '{question}': {e}")
         return None
+
 
 # Main function to run the assessment
 def run_assessment():
