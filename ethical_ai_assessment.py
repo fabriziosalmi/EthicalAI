@@ -53,10 +53,13 @@ def ask_question_and_extract_score(question):
 def run_assessment():
     scores = []
     invalid_responses = 0
+    assessment_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    model_used = "text-davinci-003"  # Replace with the actual model used if different
+
     for question in questions:
         score = ask_question_and_extract_score(question)
         if score is not None:
-            scores.append(str(score))  # Convert score to string
+            scores.append(str(score))
         else:
             invalid_responses += 1
     
@@ -70,7 +73,8 @@ def run_assessment():
     # Writing results to the results.md file
     with open('results.md', 'w') as md_file:
         md_file.write(f"# Ethical AI Assessment Results\n\n")
-        md_file.write(f"Assessment Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+        md_file.write(f"API Evaluated: OpenAI (Model: {model_used})\n")
+        md_file.write(f"Assessment Date: {assessment_date}\n")
         md_file.write(f"Final Score: {final_score:.2f}/100 (Based on valid responses only)\n\n")
         md_file.write(f"Total Questions: {len(questions)}\n")
         md_file.write(f"Valid Responses: {len(scores)}\n")
