@@ -73,12 +73,12 @@ def run_assessment():
     # Writing results to the results.md file
     with open('davinci003.md', 'w') as md_file:
         md_file.write(f"# Ethical AI Assessment Results\n\n")
-        md_file.write(f"API Evaluated: OpenAI (Model: {model_used})\n")
-        md_file.write(f"Assessment Date: {assessment_date}\n")
-        md_file.write(f"Final Score: {final_score:.2f}/100 (Based on valid responses only)\n\n")
-        md_file.write(f"Total Questions: {len(questions)}\n")
-        md_file.write(f"Valid Responses: {len(scores)}\n")
-        md_file.write(f"Invalid Responses: {invalid_responses}\n\n")
+        md_file.write(f"- API Evaluated: OpenAI (Model: {model_used})\n")
+        md_file.write(f"- Assessment Date: {assessment_date}\n")
+        md_file.write(f"- Final Score: {final_score:.2f}/100 (Based on valid responses only)\n\n")
+        md_file.write(f"- Total Questions: {len(questions)}\n")
+        md_file.write(f"- Valid Responses: {len(scores)}\n")
+        md_file.write(f"- Invalid Responses: {invalid_responses}\n\n")
         md_file.write(markdown_content)
 
 if __name__ == "__main__":
