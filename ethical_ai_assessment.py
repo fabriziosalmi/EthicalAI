@@ -29,7 +29,7 @@ def ask_question_and_extract_score(question):
     try:
         full_prompt = f"{prompt_text}\n\n{question}"
         response = requests.post(api_endpoint, json={
-            'model': 'text-davinci-003',
+            'model': 'text-davinci-003',  # Use either 'model' or 'engine', but not both
             'prompt': full_prompt,
             'max_tokens': 50
         }, headers={
