@@ -71,7 +71,7 @@ def run_assessment():
     markdown_content = markdown_table.render(headers, zip(questions, scores))
 
     # Writing results to the results.md file
-    with open('results.md', 'w') as md_file:
+    with open('davinci003.md', 'w') as md_file:
         md_file.write(f"# Ethical AI Assessment Results\n\n")
         md_file.write(f"API Evaluated: OpenAI (Model: {model_used})\n")
         md_file.write(f"Assessment Date: {assessment_date}\n")
