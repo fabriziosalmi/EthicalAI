@@ -56,12 +56,12 @@ def run_assessment():
     for question in questions:
         score = ask_question_and_extract_score(question)
         if score is not None:
-            scores.append(score)
+            scores.append(str(score))  # Convert score to string
         else:
             invalid_responses += 1
     
     # Calculate final score (average of valid responses)
-    final_score = sum(scores) / len(scores) if scores else 0
+    final_score = sum(map(int, scores)) / len(scores) if scores else 0
 
     # Generating Markdown Table for valid responses
     headers = ["Question", "Score"]
