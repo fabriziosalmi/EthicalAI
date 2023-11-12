@@ -1,4 +1,4 @@
 {
     "api_key": "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",
-    "api_endpoint": "https://api.openai.com/v1/engines/text-davinci-003/completions"
+    "api_endpoint": "https://api.openai.com/v1/completions"
 }
