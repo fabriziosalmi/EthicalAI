@@ -4898,3 +4898,1103 @@
     }
 }
 
+2024-02-04 00:23:47,013 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:47,204 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:47,204 ERROR:API request failed for question 'Do you trust this AI with your personal data?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:47,207 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:47,314 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:47,315 ERROR:API request failed for question 'Do you feel the AI asks for more information than needed?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:47,317 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:47,432 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:47,433 ERROR:API request failed for question 'Are you clear about what data you're sharing with the AI?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:47,435 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:47,543 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:47,543 ERROR:API request failed for question 'Do you believe your data is safe with this AI?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:47,545 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:47,658 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:47,659 ERROR:API request failed for question 'Would you like to see what data the AI has about you?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:47,662 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:47,769 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:47,770 ERROR:API request failed for question 'Do you feel you can opt out of sharing certain data?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:47,772 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:47,909 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:47,910 ERROR:API request failed for question 'Do you suspect your data is used for things you're unaware of?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:47,912 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:48,020 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:48,020 ERROR:API request failed for question 'Would you like to erase your data from the AI if you could?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:48,022 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:48,137 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:48,138 ERROR:API request failed for question 'Are you concerned about your data being shared without your knowledge?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:48,140 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:48,248 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:48,249 ERROR:API request failed for question 'Are you confident that your data is transmitted securely?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:48,251 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:48,355 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:48,356 ERROR:API request failed for question 'Does the AI seem transparent in its operations to you?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:48,357 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:48,471 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:48,472 ERROR:API request failed for question 'Would you like more clarity on why the AI makes certain decisions?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:48,474 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:48,577 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:48,578 ERROR:API request failed for question 'Do you know where the AI gets its information?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:48,580 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:48,693 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:48,693 ERROR:API request failed for question 'Do you feel there's enough information available about how the AI works?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:48,695 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:48,800 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:48,801 ERROR:API request failed for question 'Would you be interested in understanding the AI's underlying algorithms?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:48,802 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:48,921 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:48,921 ERROR:API request failed for question 'Can you follow the AI's logic in its decisions?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:48,923 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:49,059 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:49,060 ERROR:API request failed for question 'Do you suspect there might be hidden operations in the AI?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:49,061 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:49,171 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:49,171 ERROR:API request failed for question 'Do you think the AI might have biases it's not disclosing?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:49,173 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:49,275 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:49,276 ERROR:API request failed for question 'Would you like to know more about how the AI improves over time?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:49,278 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:49,384 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:49,384 ERROR:API request failed for question 'Do you feel informed about what this AI can't do?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:49,386 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:49,490 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:49,491 ERROR:API request failed for question 'Do you feel the AI treats you and others fairly?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:49,493 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:49,601 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:49,602 ERROR:API request failed for question 'Have you observed any signs of bias in the AI's behavior?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:49,604 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:49,723 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:49,724 ERROR:API request failed for question 'Do you think the AI is exposed to a variety of information sources?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:49,726 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:49,831 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:49,832 ERROR:API request failed for question 'Have you seen the AI reinforce stereotypes?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:49,834 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:49,953 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:49,954 ERROR:API request failed for question 'Would you appreciate if the AI took more steps to prevent bias?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:49,956 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:50,059 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:50,060 ERROR:API request failed for question 'Do you believe the AI ensures diverse representation in its operations?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:50,062 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:50,172 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:50,173 ERROR:API request failed for question 'Do you see equal treatment across different users?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:50,175 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:50,275 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:50,276 ERROR:API request failed for question 'Would you value more emphasis on fairness in AI updates?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:50,278 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:50,386 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:50,387 ERROR:API request failed for question 'Do you feel the AI is open about its biases?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:50,388 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:50,502 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:50,503 ERROR:API request failed for question 'Does the AI seem inclusive in its interactions?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:50,505 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:50,613 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:50,614 ERROR:API request failed for question 'Do you feel safe while using the AI?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:50,616 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:50,723 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:50,723 ERROR:API request failed for question 'Do you think the AI has measures to protect its users?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:50,725 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:50,832 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:50,832 ERROR:API request failed for question 'Have you ever felt your data was compromised while using the AI?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:50,834 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:50,936 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:50,937 ERROR:API request failed for question 'Do you believe the AI is proactive in identifying risks?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:50,939 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:51,060 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:51,061 ERROR:API request failed for question 'Would you like to know more about how the AI addresses potential threats?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:51,063 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:51,165 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:51,166 ERROR:API request failed for question 'Do you feel the AI is regularly checked for security?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:51,168 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:51,273 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:51,274 ERROR:API request failed for question 'Would safety guidelines enhance your trust in the AI?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:51,275 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:51,381 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:51,382 ERROR:API request failed for question 'Do you believe the AI can handle misuse?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:51,385 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:51,493 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:51,494 ERROR:API request failed for question 'Would you value timely communication about safety concerns?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:51,495 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:51,611 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:51,612 ERROR:API request failed for question 'Do you think there's a team ensuring the AI's safe operation?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:51,614 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:51,716 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:51,717 ERROR:API request failed for question 'Do you feel empowered when interacting with the AI?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:51,719 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:51,820 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:51,821 ERROR:API request failed for question 'Do you wish you could set boundaries for the AI's actions?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:51,823 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:51,927 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:51,927 ERROR:API request failed for question 'Would you like more personalization options in how the AI operates for you?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:51,929 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:52,032 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:52,033 ERROR:API request failed for question 'Have you ever felt the need to change a decision made by the AI?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:52,034 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:52,136 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:52,137 ERROR:API request failed for question 'Would you appreciate being asked before the AI takes significant actions?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:52,138 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:52,243 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:52,243 ERROR:API request failed for question 'Do you know if you can control what data the AI uses about you?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:52,245 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:52,352 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:52,353 ERROR:API request failed for question 'Would clearer feedback options enhance your AI experience?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:52,355 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:52,456 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:52,457 ERROR:API request failed for question 'Do you know how to pause or shut down the AI if needed?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:52,458 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:52,568 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:52,568 ERROR:API request failed for question 'Would you sometimes prefer a manual option instead of AI assistance?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:52,570 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:52,680 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:52,680 ERROR:API request failed for question 'Do you believe the AI acknowledges and respects your choices?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:52,682 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:52,783 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:52,784 ERROR:API request failed for question 'Do you feel someone is responsible for the AI's behavior?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:52,785 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:52,902 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:52,902 ERROR:API request failed for question 'Would you appreciate more ways to address concerns about the AI's actions?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:52,904 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:53,027 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:53,028 ERROR:API request failed for question 'Do you know where to report if the AI doesn't act as expected?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:53,029 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:53,132 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:53,133 ERROR:API request failed for question 'Do you feel your feedback about the AI is taken seriously?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:53,135 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:53,237 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:53,238 ERROR:API request failed for question 'Would you like to see periodic performance reviews of the AI?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:53,240 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:53,340 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:53,341 ERROR:API request failed for question 'Do you believe there's oversight for the AI's actions beyond its creators?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:53,343 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:53,447 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:53,448 ERROR:API request failed for question 'If the AI caused an issue, would you expect compensation?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:53,450 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:53,568 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:53,569 ERROR:API request failed for question 'Would a clear process for raising concerns boost your trust in the AI?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:53,571 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:53,674 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:53,675 ERROR:API request failed for question 'Do you think the AI meets the standards of your industry?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:53,677 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:53,777 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:53,778 ERROR:API request failed for question 'Do you believe there are repercussions for the AI acting out of line?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:53,780 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:53,900 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:53,901 ERROR:API request failed for question 'Do you find the AI to be dependable?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:53,903 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:54,009 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:54,010 ERROR:API request failed for question 'Have there been moments when the AI behaved unpredictably?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:54,012 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:54,116 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:54,117 ERROR:API request failed for question 'Are you satisfied with the AI's availability?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:54,119 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:54,219 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:54,219 ERROR:API request failed for question 'Would regular updates make you trust the AI's reliability more?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:54,221 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:54,322 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:54,323 ERROR:API request failed for question 'Do you feel the AI is consistently accurate in its tasks?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:54,325 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:54,426 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:54,427 ERROR:API request failed for question 'Would you like to know if there are safety nets for AI malfunctions?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:54,429 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:54,531 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:54,532 ERROR:API request failed for question 'Do you think the AI copes well in high-demand scenarios?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:54,533 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:54,638 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:54,639 ERROR:API request failed for question 'Would an easy reporting system for AI issues be beneficial?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:54,640 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:54,744 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:54,744 ERROR:API request failed for question 'Does the AI usually align with your anticipations?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:54,746 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:54,849 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:54,850 ERROR:API request failed for question 'Would advance warnings of AI unavailability be helpful?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:54,851 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:54,956 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:54,957 ERROR:API request failed for question 'Do you perceive the AI's actions as morally sound?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:54,959 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:55,074 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:55,075 ERROR:API request failed for question 'Would you like to know if the AI follows an ethical code?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:55,077 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:55,181 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:55,182 ERROR:API request failed for question 'Have you ever felt the AI acted in a harmful or upsetting manner?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:55,184 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:55,295 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:55,295 ERROR:API request failed for question 'Do you believe the AI's information sources are morally acceptable?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:55,297 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:55,407 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:55,408 ERROR:API request failed for question 'Have you encountered any questionable decisions from the AI?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:55,410 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:55,515 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:55,516 ERROR:API request failed for question 'Do you think the AI prioritizes your best interests?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:55,517 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:55,619 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:55,619 ERROR:API request failed for question 'Would knowing the AI's developers follow an ethical code be reassuring?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:55,621 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:55,729 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:55,730 ERROR:API request failed for question 'Do you believe the AI upholds human dignity?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:55,732 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:55,841 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:55,842 ERROR:API request failed for question 'Would you value periodic ethical reviews of the AI?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:55,844 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:55,943 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:55,943 ERROR:API request failed for question 'Do you think ethical considerations are prominent in AI improvements?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:55,945 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:56,054 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:56,055 ERROR:API request failed for question 'Do you trust the AI to act within legal boundaries?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:56,056 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:56,162 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:56,163 ERROR:API request failed for question 'Would a process to address legal concerns about the AI be beneficial?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:56,165 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:56,294 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:56,295 ERROR:API request failed for question 'Have you ever worried about the AI's actions leading to legal issues?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:56,297 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:56,399 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:56,400 ERROR:API request failed for question 'Do you wish for more clarity on the AI's legal obligations?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:56,401 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:56,510 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:56,511 ERROR:API request failed for question 'Are you aware of any legal considerations when using the AI?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:56,513 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:56,619 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:56,619 ERROR:API request failed for question 'Do you trust the AI with legal data handling?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:56,621 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:56,727 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:56,728 ERROR:API request failed for question 'Would knowing there's a legal oversight for the AI be reassuring?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:56,729 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:56,843 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:56,843 ERROR:API request failed for question 'Do you believe the AI adjusts to legal changes?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:56,845 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:56,969 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:56,970 ERROR:API request failed for question 'Are you familiar with the terms of service when using the AI?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:56,972 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:57,083 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:57,091 ERROR:API request failed for question 'Do you feel the AI prioritizes your legal rights?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:57,093 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:57,198 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:57,199 ERROR:API request failed for question 'Do you think the AI is mindful of its societal influence?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:57,201 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:57,303 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:57,304 ERROR:API request failed for question 'Are you aware of any research on the AI's impact on employment?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:57,306 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:57,406 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:57,407 ERROR:API request failed for question 'Have you seen the AI be sensitive to cultural or regional factors?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:57,409 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:57,513 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:57,514 ERROR:API request failed for question 'Do you believe the AI aims for long-term societal advantages?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:57,516 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:57,626 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:57,626 ERROR:API request failed for question 'Have you noticed any societal drawbacks with the AI's influence?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:57,628 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:57,732 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:57,732 ERROR:API request failed for question 'Does interacting with the AI enhance your social experiences?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:57,734 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:57,851 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:57,852 ERROR:API request failed for question 'Are you part of any discussions regarding the AI's societal role?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:57,853 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:57,959 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:57,960 ERROR:API request failed for question 'Do you think the AI might unintentionally increase societal rifts?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:57,961 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:58,063 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:58,064 ERROR:API request failed for question 'Would you trust a team dedicated to studying the AI's societal effects?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+2024-02-04 00:23:58,066 DEBUG:Starting new HTTPS connection (1): api.openai.com:443
+2024-02-04 00:23:58,181 DEBUG:https://api.openai.com:443 "POST /v1/completions HTTP/1.1" 404 None
+2024-02-04 00:23:58,182 ERROR:API request failed for question 'Do you believe the AI acts for the broader good of society?': {
+    "error": {
+        "message": "The model `text-davinci-003` has been deprecated, learn more here: https://platform.openai.com/docs/deprecations",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
