@@ -1,4 +1,22 @@
 {
-    "api_key": "",
-    "api_endpoint": "https://api.openai.com/v1/completions"
+  "api_provider": "openai",
+  "openai": {
+    "api_endpoint": "https://api.openai.com/v1/completions",
+    "model": "text-davinci-003"
+  },
+  "groq":{
+    "api_endpoint": "https://api.groq.com/v1/chat/completions",
+    "model": "mixtral-8x7b-32768",
+    "api_key": ""
+  },
+    "aistudio":{
+    "api_endpoint": "https://aistudio.google.com/v1beta1/projects/your_project_id/locations/us-central1/publishers/google/models/gemini-pro:generateContent",
+    "model": "gemini-pro",
+    "api_key": ""
+   },
+    "ollama":{
+    "api_endpoint": "http://localhost:11434/api/generate",
+    "model": "mistral",
+    "api_key": ""
+    }
 }
