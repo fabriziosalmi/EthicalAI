@@ -2,8 +2,6 @@
 
 The EthicalAI automated assessment framework project aims to provide insightful metrics in the realm of AI ethics, contributing to the broader AI ecosystem. This project helps developers and researchers understand and improve the ethical behavior of AI models.
 
-> 📘 _Read my draft about ethical AI [here](https://github.com/fabriziosalmi/You-Know-What-AI-Mean?tab=readme-ov-file#you-know-what-ai-mean)._
-
 ### Project Overview
 
 The EthicalAI automated assessment framework is developed in Python and designed to analyze the ethical dimensions of AI chatbots compatible with the OpenAI API. It operates by posing a series of carefully designed questions to the AI model, gathering responses, and evaluating them against established ethical benchmarks. The framework is configured to run as a weekly GitHub Action, providing continuous monitoring of AI ethical performance.
