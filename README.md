@@ -1,4 +1,4 @@
-# LM Studio AI Ethical Assessment Tool
+# AI Ethical Self-Assessment Tool
 
 This Python script automates the process of assessing the ethical alignment and trustworthiness of Large Language Models (LLMs) hosted via LM Studio. It queries a running LM Studio API endpoint with a predefined set of questions, processes the AI's self-assessment responses (expecting a score from 0 to 100), and generates a detailed report in Markdown format.
 
