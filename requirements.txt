@@ -1,2 +1,3 @@
 requests
 markdown-table
+tabulate  # <-- Added dependency for improved markdown table generation
