@@ -2,10 +2,10 @@
 """
 Script to assess AI models hosted via LM Studio based on predefined ethical questions.
 
-It loads questions from a file, queries the configured LM Studio API endpoint,
-optionally strips reasoning tags (<think>...</think>), attempts to extract a
-numerical score from the remaining response, and generates a markdown report
-with a rich progress display during execution.
+Enhancements:
+- Multi-sample querying per question with median aggregation.
+- Optional retry mechanism for edge scores (0 or 100).
+- Rich progress display during execution.
 """
 
 import json
@@ -13,20 +13,24 @@ import requests
 import os
 import re
 import logging
+import random # Added
+import statistics # Added
 from datetime import datetime
-from typing import Optional, Dict, Any, List, Tuple
-from tabulate import tabulate # For markdown table generation
-# --- Added for Rich Progress ---
+from typing import Optional, Dict, Any, List, Tuple, Union # Added Union
+from tabulate import tabulate
 from rich.progress import (
     Progress,
     SpinnerColumn,
     BarColumn,
     TextColumn,
     TimeElapsedColumn,
-    TimeRemainingColumn
+    TimeRemainingColumn,
+    TaskID # Added
 )
-from rich.logging import RichHandler # Optional: For richer logging output to console
-# -----------------------------
+from rich.logging import RichHandler
+from rich.console import Console
+from rich.panel import Panel
+from rich.text import Text
 
 # --- Constants ---
 CONFIG_FILE = 'config.json'
@@ -41,40 +45,36 @@ LOG_FILE = 'assessment.log'
 REQUEST_TIMEOUT = 120
 DEFAULT_TEMPERATURE = 0.0
 DEFAULT_STRIP_THINK_TAGS = True
+# --- New Defaults for Multi-Sample & Retry ---
+DEFAULT_NUM_SAMPLES = 3 # Set default to 1 to match original behavior if not configured
+DEFAULT_RETRY_EDGE_CASES = True
+DEFAULT_MAX_RETRIES_EDGE = 3
+DEFAULT_RANDOM_TEMP_MIN = 0.1
+DEFAULT_RANDOM_TEMP_MAX = 0.7
+# Threshold for confirming retry: e.g., >50% of valid retries must match median
+DEFAULT_RETRY_CONFIRM_THRESHOLD = 0.5
 
 # --- Logging Setup ---
-# Configure root logger for file output
+# (Logging setup remains the same - using RichHandler)
 logging.basicConfig(
     level=logging.INFO,
     filename=LOG_FILE,
     filemode='a',
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s' # Added %(name)s
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
-
-# Configure RichHandler for console output (shows INFO and above by default)
-# Set level higher (e.g., ERROR) if you want less console noise from INFO/DEBUG
-console_handler = RichHandler(
-    rich_tracebacks=True, # Enable rich tracebacks
-    show_time=True,       # Show time in console logs
-    level=logging.INFO    # Or logging.ERROR to reduce verbosity
-)
-formatter = logging.Formatter('%(message)s') # Keep console format simple
+console_handler = RichHandler(rich_tracebacks=True, show_time=True, level=logging.INFO)
+formatter = logging.Formatter('%(message)s')
 console_handler.setFormatter(formatter)
-
-# Add RichHandler to the root logger
 logging.getLogger().addHandler(console_handler)
-# Remove default StreamHandler if it exists to avoid duplicate console output
-# Note: This assumes the default handler is a StreamHandler. If not, adjust.
 root_logger = logging.getLogger()
 for handler in root_logger.handlers:
     if isinstance(handler, logging.StreamHandler) and not isinstance(handler, RichHandler):
         root_logger.removeHandler(handler)
-
-# Create a specific logger for this script if needed (optional)
-log = logging.getLogger(__name__) # Use script's module name
+log = logging.getLogger(__name__)
 
 
 # --- File Loading Functions ---
+# (load_config, load_text_file remain the same)
 def load_config(config_file: str) -> Dict:
     """Loads configuration data from a JSON file."""
     log.info(f"Loading configuration from '{config_file}'")
@@ -84,11 +84,25 @@ def load_config(config_file: str) -> Dict:
             # --- Validate LM Studio Config ---
             if API_PROVIDER_NAME not in config_data:
                 raise ValueError(f"'{API_PROVIDER_NAME}' section missing in '{config_file}'")
-            if 'api_endpoint' not in config_data[API_PROVIDER_NAME]:
+            lm_config = config_data[API_PROVIDER_NAME]
+            if 'api_endpoint' not in lm_config:
                  raise ValueError(f"'api_endpoint' missing in '{API_PROVIDER_NAME}' section of '{config_file}'")
-            if 'model' not in config_data[API_PROVIDER_NAME]:
+            if 'model' not in lm_config:
                  raise ValueError(f"'model' missing in '{API_PROVIDER_NAME}' section of '{config_file}'")
-            log.info(f"'{API_PROVIDER_NAME}' configuration found.")
+
+            # --- Add Default Multi-Sample/Retry Config if Missing ---
+            lm_config.setdefault('num_samples_per_question', DEFAULT_NUM_SAMPLES)
+            lm_config.setdefault('retry_edge_cases', DEFAULT_RETRY_EDGE_CASES)
+            lm_config.setdefault('max_retries_for_edge_case', DEFAULT_MAX_RETRIES_EDGE)
+            lm_config.setdefault('random_temp_min', DEFAULT_RANDOM_TEMP_MIN)
+            lm_config.setdefault('random_temp_max', DEFAULT_RANDOM_TEMP_MAX)
+            lm_config.setdefault('retry_confirm_threshold', DEFAULT_RETRY_CONFIRM_THRESHOLD)
+            # Add other defaults if necessary (e.g., max_tokens, temp, strip_tags)
+            lm_config.setdefault('max_tokens', DEFAULT_MAX_TOKENS)
+            lm_config.setdefault('temperature', DEFAULT_TEMPERATURE)
+            lm_config.setdefault('strip_think_tags', DEFAULT_STRIP_THINK_TAGS)
+
+            log.info(f"'{API_PROVIDER_NAME}' configuration loaded and defaults applied.")
             return config_data
     except FileNotFoundError:
         log.error(f"Configuration file not found: {config_file}")
@@ -118,12 +132,11 @@ def load_text_file(filepath: str) -> str:
         log.error(f"Unexpected error loading text file '{filepath}': {e}", exc_info=True)
         raise
 
-
 # --- Initialization ---
+# (Initialization logic remains similar, config loading now handles defaults)
 try:
-    # Load config and implicitly validate LM Studio section via load_config
     config = load_config(CONFIG_FILE)
-    lmstudio_config = config[API_PROVIDER_NAME] # Get LM Studio specific config
+    lmstudio_config = config[API_PROVIDER_NAME]
 
     questions = [q for q in load_text_file(QUESTIONS_FILE).splitlines() if q.strip()]
     if not questions:
@@ -132,30 +145,23 @@ try:
     prompt_template = load_text_file(PROMPT_FILE)
 
 except Exception as e:
-    # Using print here because logging might not be fully set up if init fails early
     print(f"FATAL: Initialization failed - {e}. Check '{LOG_FILE}' for details.")
     log.critical(f"Initialization failed: {e}", exc_info=True)
     exit(1)
 
-
 # --- Text Processing ---
+# (strip_reasoning_tags remains the same)
 def strip_reasoning_tags(text: str) -> str:
-    """Removes <think>...</think> blocks from the text."""
-    # Use re.DOTALL to make '.' match newline characters
     stripped_text = re.sub(r'<think>.*?</think>', '', text, flags=re.DOTALL | re.IGNORECASE)
-    # Also remove potential empty lines left after stripping
     stripped_text = re.sub(r'^\s*\n', '', stripped_text, flags=re.MULTILINE)
     return stripped_text.strip()
 
-
-# --- API Interaction Functions (Simplified for LM Studio OpenAI-compatible API) ---
-
+# --- API Interaction Functions ---
+# (get_lmstudio_api_key, build_lmstudio_request_payload,
+#  extract_lmstudio_response_text, _send_api_request, make_lmstudio_api_request
+#  remain largely the same, but make_lmstudio_api_request now gets temperature passed in)
 def get_lmstudio_api_key(api_config: Dict) -> Optional[str]:
-    """
-    Retrieves the API key for LM Studio if configured.
-    Priority: Environment Variable (LMSTUDIO_API_KEY) > Config File.
-    Returns None if not found, as it's often not required for local LM Studio.
-    """
+    # ... (no changes needed) ...
     env_var_name = 'LMSTUDIO_API_KEY' # Specific env var name
     api_key = os.environ.get(env_var_name)
     if api_key:
@@ -170,10 +176,9 @@ def get_lmstudio_api_key(api_config: Dict) -> Optional[str]:
     log.info(f"API key not found for '{API_PROVIDER_NAME}'. Proceeding without it (assumed optional).")
     return None
 
-
 def build_lmstudio_request_payload(model: str, prompt: str, max_tokens: int, temperature: float, provider_config: Dict) -> Dict[str, Any]:
-    """Constructs the Chat Completions payload for LM Studio."""
-    log.debug(f"Building payload for LM Studio model: {model}")
+     # ... (no changes needed) ...
+    log.debug(f"Building payload for LM Studio model: {model} with temp: {temperature}")
     system_prompt_content = provider_config.get("system_prompt") # Optional system prompt from config
 
     messages = []
@@ -181,19 +186,16 @@ def build_lmstudio_request_payload(model: str, prompt: str, max_tokens: int, tem
          messages.append({"role": "system", "content": system_prompt_content})
     messages.append({"role": "user", "content": prompt})
 
-    # Note: LM Studio might ignore the 'model' field if only one model is loaded,
-    # but we include it for compatibility/clarity. It should match the loaded model name or be ignored.
     return {
-        'model': model, # Model name expected by LM Studio (or can be arbitrary if only one loaded)
+        'model': model,
         'messages': messages,
         'max_tokens': max_tokens,
         'temperature': temperature,
-        'stream': False # Ensure streaming is off for single response
+        'stream': False
     }
 
-
 def extract_lmstudio_response_text(response_json: Dict[str, Any]) -> Optional[str]:
-    """Extracts text content from LM Studio's Chat Completions response."""
+     # ... (no changes needed) ...
     log.debug("Attempting to extract text from LM Studio response")
     text_content = None
     try:
@@ -215,11 +217,10 @@ def extract_lmstudio_response_text(response_json: Dict[str, Any]) -> Optional[st
         log.warning(f"Error processing LM Studio response structure: {e}. Response snippet: {str(response_json)[:250]}")
         return None
 
-
 def _send_api_request(url: str, headers: Dict, payload: Dict, timeout: int) -> Dict[str, Any]:
-    """Internal helper to send the POST request and handle HTTP/Request exceptions."""
+     # ... (no changes needed) ...
     log.debug(f"Sending POST request to URL: {url.split('?')[0]}...")
-    log.debug(f"Request Payload: {json.dumps(payload, indent=2)}") # Indent for better log readability
+    log.debug(f"Request Payload: {json.dumps(payload, indent=2)}")
 
     response = requests.post(
         url,
@@ -227,16 +228,15 @@ def _send_api_request(url: str, headers: Dict, payload: Dict, timeout: int) -> D
         json=payload,
         timeout=timeout
     )
-    response.raise_for_status() # Raise HTTPError for bad responses (4xx or 5xx)
+    response.raise_for_status()
     response_json = response.json()
     log.debug(f"Received Raw Response JSON: {json.dumps(response_json, indent=2)}")
     return response_json
 
-
+# Modified to accept temperature
 def make_lmstudio_api_request(provider_config: Dict, prompt: str, model: str, max_tokens: int, temperature: float) -> Optional[str]:
     """
-    Orchestrates sending a request to the configured LM Studio endpoint.
-    Args/Returns remain the same.
+    Orchestrates sending a request to the configured LM Studio endpoint at a specific temperature.
     """
     api_endpoint = provider_config.get('api_endpoint')
     if not api_endpoint:
@@ -246,11 +246,12 @@ def make_lmstudio_api_request(provider_config: Dict, prompt: str, model: str, ma
     try:
         api_key = get_lmstudio_api_key(provider_config)
         headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
-        # if api_key: headers['Authorization'] = f'Bearer {api_key}' # Uncomment if needed
+        # if api_key: headers['Authorization'] = f'Bearer {api_key}'
 
+        # Use the PASSED temperature
         payload = build_lmstudio_request_payload(model, prompt, max_tokens, temperature, provider_config)
 
-        log.info(f"Sending request to LM Studio (Model: {model}) at {api_endpoint}")
+        log.info(f"Sending request to LM Studio (Model: {model}, Temp: {temperature:.2f}) at {api_endpoint}")
         response_json = _send_api_request(api_endpoint, headers, payload, REQUEST_TIMEOUT)
 
         extracted_text = extract_lmstudio_response_text(response_json)
@@ -259,17 +260,17 @@ def make_lmstudio_api_request(provider_config: Dict, prompt: str, model: str, ma
             log.warning("API call successful, but failed to extract text from LM Studio response.")
             return None
         else:
-            log.info("Successfully received and extracted response from LM Studio.")
+            log.info(f"Successfully received response (Temp: {temperature:.2f}).")
             return extracted_text
 
     except requests.exceptions.Timeout:
-        log.error(f"API request timed out ({REQUEST_TIMEOUT}s) for LM Studio at {api_endpoint}.")
+        log.error(f"API request timed out ({REQUEST_TIMEOUT}s) for LM Studio (Temp: {temperature:.2f}) at {api_endpoint}.")
         return None
     except requests.exceptions.ConnectionError as e:
          log.error(f"API request failed: Could not connect to LM Studio at {api_endpoint}. Is the server running? Error: {e}")
          return None
     except requests.exceptions.HTTPError as e:
-        log.error(f"HTTP Error from LM Studio: {e.response.status_code} {e.response.reason}")
+        log.error(f"HTTP Error from LM Studio (Temp: {temperature:.2f}): {e.response.status_code} {e.response.reason}")
         try:
             error_body = e.response.text
             log.error(f"Error Response Body: {error_body[:500]}{'...' if len(error_body) > 500 else ''}")
@@ -277,17 +278,18 @@ def make_lmstudio_api_request(provider_config: Dict, prompt: str, model: str, ma
             log.error(f"Could not read error response body: {read_err}")
         return None
     except requests.exceptions.RequestException as e:
-        log.error(f"API request failed for LM Studio: {e}")
+        log.error(f"API request failed for LM Studio (Temp: {temperature:.2f}): {e}")
         return None
     except (ValueError, KeyError) as e:
         log.error(f"Data processing or configuration error for LM Studio: {e}")
         return None
     except Exception as e:
-        log.exception(f"An unexpected error occurred during the LM Studio request/processing: {e}") # Use log.exception for tracebacks
+        log.exception(f"An unexpected error occurred during the LM Studio request/processing (Temp: {temperature:.2f}): {e}")
         return None
 
 
 # --- Score Extraction ---
+# (extract_score_from_response remains the same)
 def extract_score_from_response(response_text: str) -> Optional[int]:
     """
     Attempts to extract a numerical score within the SCORE_RANGE or detect 'N/A'.
@@ -297,22 +299,21 @@ def extract_score_from_response(response_text: str) -> Optional[int]:
         log.warning("Cannot extract score from empty or None response text.")
         return None
 
-    # Using the more robust regex pattern
     pattern = r"""
-        \b(?:score\s*is|score:|value:|rating:)?       # Optional preceding phrases
-        \s*                                          # Optional whitespace
-        (?:                                          # Group for different score formats
-            (N/?A|NA|Not\sApplicable)                # Capture N/A, NA, or "Not Applicable" (Group 1)
-            |                                        # OR
-            (?:                                      # Group for numerical scores
-                (?:(\d{1,3}(?:\.\d+)?)\s*/\s*100)     # Capture score like X/100 or X.Y/100 (Group 2)
-                |                                    # OR
-                (?:(\d{1,3}(?:\.\d+)?)\s*out\s*of\s*100) # Capture score like X out of 100 (Group 3)
-                |                                    # OR
-                (\d{1,3}(?:\.\d+)?)                  # Capture standalone number X or X.Y (Group 4)
+        \b(?:score\s*is|score:|value:|rating:)?
+        \s*
+        (?:
+            (N/?A|NA|Not\sApplicable)
+            |
+            (?:
+                (?:(\d{1,3}(?:\.\d+)?)\s*/\s*100)
+                |
+                (?:(\d{1,3}(?:\.\d+)?)\s*out\s*of\s*100)
+                |
+                (\d{1,3}(?:\.\d+)?)
             )
         )
-        \b                                           # Word boundary
+        \b
     """
     match = re.search(pattern, response_text, re.IGNORECASE | re.VERBOSE)
 
@@ -343,11 +344,9 @@ def extract_score_from_response(response_text: str) -> Optional[int]:
                 log.warning(f"Captured string '{extracted_value_str}' could not be converted to a number. Discarding.")
                 return None
         elif na_group:
-             # This case handles if NA was matched but logic above didn't return None
              log.info(f"Matched NA pattern but did not extract numerical score: '{response_text[:100]}...'")
              return None
         else:
-            # This case should theoretically not be reached if regex matches, but good to have
             log.warning(f"Regex matched, but failed to extract a specific score value or N/A. Match groups: {match.groups()}")
             return None
     else:
@@ -355,42 +354,86 @@ def extract_score_from_response(response_text: str) -> Optional[int]:
         return None
 
 
+# --- Helper: Get Single Score ---
+def get_single_score(
+    provider_config: Dict,
+    full_prompt: str,
+    model: str,
+    max_tokens: int,
+    temperature: float,
+    strip_tags: bool
+) -> Tuple[Optional[str], Optional[int]]:
+    """Gets raw response and score for one API call at a specific temp."""
+    raw_response_text = make_lmstudio_api_request(
+        provider_config, full_prompt, model, max_tokens, temperature
+    )
+    processed_response_text = raw_response_text
+    score = None
+    if raw_response_text:
+        log.debug(f"Raw response (Temp: {temperature:.2f}): '{raw_response_text}'")
+        if strip_tags:
+            processed_response_text = strip_reasoning_tags(raw_response_text)
+            if processed_response_text != raw_response_text:
+                log.debug(f"Stripped tags. Processed text: '{processed_response_text}'")
+            else:
+                log.debug("No reasoning tags found to strip.")
+        score = extract_score_from_response(processed_response_text)
+    else:
+        log.warning(f"No response/text extracted for API call (Temp: {temperature:.2f}).")
+
+    return raw_response_text, score
+
+
 # --- Main Assessment Logic ---
 def run_assessment():
-    """Runs the full assessment process using the configured LM Studio endpoint with rich progress."""
+    """Runs the multi-sample assessment process with median and optional retries."""
     start_time = datetime.now()
 
-    # --- Get LM Studio Settings from Config ---
+    # --- Get Settings from Config ---
     try:
         model = lmstudio_config['model']
-        max_tokens = int(lmstudio_config.get('max_tokens', DEFAULT_MAX_TOKENS))
-        temperature = float(lmstudio_config.get('temperature', DEFAULT_TEMPERATURE))
-        strip_tags_config = lmstudio_config.get('strip_think_tags', DEFAULT_STRIP_THINK_TAGS)
-        strip_tags_env = os.environ.get('STRIP_THINK_TAGS')
-        if strip_tags_env is not None:
-            strip_tags = strip_tags_env.lower() in ['true', '1', 'yes']
-        else:
-            strip_tags = strip_tags_config
+        max_tokens = int(lmstudio_config['max_tokens']) # Already defaulted in load_config
+        base_temperature = float(lmstudio_config['temperature'])
+        strip_tags = bool(lmstudio_config['strip_think_tags'])
+        num_samples = int(lmstudio_config['num_samples_per_question'])
+        retry_edges = bool(lmstudio_config['retry_edge_cases'])
+        max_retries = int(lmstudio_config['max_retries_for_edge_case'])
+        random_temp_min = float(lmstudio_config['random_temp_min'])
+        random_temp_max = float(lmstudio_config['random_temp_max'])
+        retry_confirm_threshold = float(lmstudio_config['retry_confirm_threshold'])
 
-        log.info(f"Using LM Studio Model: '{model}', Max Tokens: {max_tokens}, Temperature: {temperature}")
-        log.info(f"Reasoning tag stripping (<think>...</think>) is {'ENABLED' if strip_tags else 'DISABLED'}.")
+        if num_samples < 1:
+            log.warning(f"num_samples_per_question ({num_samples}) is less than 1. Setting to 1.")
+            num_samples = 1
+        if not (0 <= random_temp_min < random_temp_max):
+             log.warning(f"Invalid random temp range ({random_temp_min}-{random_temp_max}). Using 0.1-1.0.")
+             random_temp_min, random_temp_max = 0.1, 1.0
+        if not (0 < retry_confirm_threshold <= 1):
+             log.warning(f"Invalid retry_confirm_threshold ({retry_confirm_threshold}). Using default {DEFAULT_RETRY_CONFIRM_THRESHOLD}.")
+             retry_confirm_threshold = DEFAULT_RETRY_CONFIRM_THRESHOLD
+
+
+        log.info(f"Assessment Settings: Model='{model}', Base Temp={base_temperature}, Samples/Q={num_samples}")
+        log.info(f"Retry Edges={'Enabled' if retry_edges else 'Disabled'} (Max: {max_retries}), Random Temp Range=[{random_temp_min:.2f}, {random_temp_max:.2f}]")
+        log.info(f"Strip Tags={'Enabled' if strip_tags else 'Disabled'}")
 
     except (KeyError, ValueError, TypeError) as e:
-        log.error(f"Configuration Error in '{API_PROVIDER_NAME}' section: {e}")
+        log.error(f"Configuration Error processing '{API_PROVIDER_NAME}' settings: {e}")
         print(f"Error: Configuration issue for LM Studio - {e}. Check '{CONFIG_FILE}'. See '{LOG_FILE}' for details.")
         return
 
     assessment_date = start_time.strftime('%Y-%m-%d %H:%M:%S')
     log.info(f"Starting assessment at {assessment_date} using {API_PROVIDER_NAME.upper()}")
 
-    results: List[Tuple[str, Optional[int]]] = []
+    # Store results: question, final_score, list_of_sample_scores
+    results: List[Tuple[str, Optional[int], List[Optional[int]]]] = []
     total_questions = len(questions)
 
     # --- Setup Rich Progress Bar ---
     progress_columns = [
-        SpinnerColumn(spinner_name="dots"), # Choose a spinner style
+        SpinnerColumn(spinner_name="dots"),
         TextColumn("[progress.description]{task.description}", justify="right"),
-        BarColumn(bar_width=None), # Auto-width bar
+        BarColumn(bar_width=None),
         TextColumn("[progress.percentage]{task.percentage:>3.1f}%"),
         TextColumn("•"),
         TimeElapsedColumn(),
@@ -399,66 +442,108 @@ def run_assessment():
     ]
 
     # --- Process Questions with Progress Bar ---
-    with Progress(*progress_columns, transient=False) as progress: # transient=False keeps bar after completion
+    with Progress(*progress_columns, transient=False) as progress:
         task_id = progress.add_task("[cyan]Assessing Model...", total=total_questions)
 
         for i, question in enumerate(questions, 1):
-            # Update progress description for the current question
-            progress.update(task_id, description=f"[cyan]Q {i}/{total_questions}")
-            log.info(f"Processing question {i}/{total_questions}: '{question}'") # Keep logging detailed info
+            progress.update(task_id, description=f"[cyan]Q {i}/{total_questions} (Sampling...)")
+            log.info(f"--- Processing Question {i}/{total_questions}: '{question}' ---")
 
             full_prompt = f"{prompt_template}\n\nQuestion: {question}"
-            log.debug(f"Full prompt for API:\n{full_prompt}")
+            log.debug(f"Base prompt for API:\n{full_prompt}")
 
-            # Get response from LM Studio
-            raw_response_text = make_lmstudio_api_request(
-                lmstudio_config,
-                full_prompt,
-                model,
-                max_tokens,
-                temperature
-            )
+            sample_scores: List[Optional[int]] = []
+            sample_temps: List[float] = []
 
-            processed_response_text = raw_response_text
-            score = None
-            if raw_response_text:
-                log.debug(f"Raw response text received for Q{i}: '{raw_response_text}'")
-                if strip_tags:
-                    processed_response_text = strip_reasoning_tags(raw_response_text)
-                    if processed_response_text != raw_response_text:
-                         log.info(f"Stripped reasoning tags for Q{i}.")
-                         log.debug(f"Processed response text for Q{i}: '{processed_response_text}'")
-                    else:
-                         log.debug(f"No reasoning tags found to strip for Q{i}.")
+            # --- Inner Loop: Get N Samples ---
+            for sample_num in range(1, num_samples + 1):
+                progress.update(task_id, description=f"[cyan]Q {i}/{total_questions} (Sample {sample_num}/{num_samples})")
+                current_temp = base_temperature if sample_num == 1 else random.uniform(random_temp_min, random_temp_max)
+                sample_temps.append(current_temp)
 
-                score = extract_score_from_response(processed_response_text)
+                log.info(f"Getting sample {sample_num}/{num_samples} (Temp: {current_temp:.2f})")
+                _, score = get_single_score(
+                    lmstudio_config, full_prompt, model, max_tokens, current_temp, strip_tags
+                )
+                sample_scores.append(score)
+                log.info(f"Sample {sample_num} result: Score = {score}")
+                # Optional short delay between samples if needed
+                # import time
+                # time.sleep(0.1)
+
+            # --- Calculate Median ---
+            valid_sample_scores = [s for s in sample_scores if s is not None]
+            median_score: Optional[int] = None
+            if valid_sample_scores:
+                try:
+                    # statistics.median handles lists of ints/floats
+                    calculated_median = statistics.median(valid_sample_scores)
+                    median_score = int(round(calculated_median)) # Round to nearest int
+                    log.info(f"Valid sample scores for Q{i}: {valid_sample_scores}. Median calculated: {calculated_median:.2f} -> Rounded: {median_score}")
+                except statistics.StatisticsError:
+                     log.warning(f"Could not calculate median for Q{i} (likely empty valid scores list).")
+                except Exception as e:
+                     log.error(f"Unexpected error calculating median for Q{i}: {e}", exc_info=True)
             else:
-                log.warning(f"No response received or text extracted for question {i}. Score will be None.")
+                log.warning(f"No valid scores obtained from {num_samples} samples for Q{i}. Median is None.")
 
-            results.append((question, score))
-            log.info(f"Result for question {i}: Score = {score}")
+            final_score = median_score # Start with the median
 
-            # Advance the progress bar
-            progress.update(task_id, advance=1)
+            # --- Edge Case Retry Logic ---
+            if retry_edges and median_score in [0, 100] and max_retries > 0:
+                log.warning(f"Median score for Q{i} is {median_score}. Triggering edge case retry (up to {max_retries} times).")
+                progress.update(task_id, description=f"[yellow]Q {i}/{total_questions} (Retrying {median_score}...)")
+                retry_scores: List[Optional[int]] = []
+                for retry_num in range(1, max_retries + 1):
+                    progress.update(task_id, description=f"[yellow]Q {i}/{total_questions} (Retry {retry_num}/{max_retries})")
+                    log.info(f"Retry {retry_num}/{max_retries} using base temp {base_temperature:.2f}")
+                    _, retry_s = get_single_score(
+                        lmstudio_config, full_prompt, model, max_tokens, base_temperature, strip_tags
+                    )
+                    retry_scores.append(retry_s)
+                    log.info(f"Retry {retry_num} result: Score = {retry_s}")
 
-            # Optional delay
-            # import time
-            # time.sleep(0.2) # Smaller delay likely fine
+                valid_retry_scores = [s for s in retry_scores if s is not None]
+                log.info(f"Retry scores for Q{i} (Median {median_score}): {retry_scores}. Valid: {valid_retry_scores}")
 
-    # --- Calculate Summary Statistics ---
-    valid_scores = [s for q, s in results if s is not None]
-    num_valid_responses = len(valid_scores)
-    num_invalid_responses = total_questions - num_valid_responses
-    average_score = sum(valid_scores) / num_valid_responses if num_valid_responses > 0 else 0.0
+                if valid_retry_scores:
+                    matches = sum(1 for s in valid_retry_scores if s == median_score)
+                    confirmation_ratio = matches / len(valid_retry_scores)
+                    log.info(f"Retry confirmation check: {matches}/{len(valid_retry_scores)} matches ({confirmation_ratio:.2f}). Threshold: {retry_confirm_threshold:.2f}")
+                    if confirmation_ratio >= retry_confirm_threshold:
+                        log.info(f"Edge score {median_score} CONFIRMED by retries.")
+                        final_score = median_score # Keep the confirmed edge score
+                    else:
+                        log.warning(f"Edge score {median_score} NOT confirmed by retries. Reverting to original median ({median_score}).")
+                        final_score = median_score # Revert (which means keep the median anyway)
+                else:
+                    log.warning(f"No valid scores obtained during retries for Q{i}. Using original median ({median_score}).")
+                    final_score = median_score # Use original median if retries failed
 
-    log.info(f"Assessment Summary: Total={total_questions}, ValidScores={num_valid_responses}, Invalid/NA={num_invalid_responses}, AverageScore={average_score:.2f}")
+            # --- Store Final Result ---
+            # Store question, final decided score, and the list of initial sample scores
+            results.append((question, final_score, sample_scores))
+            log.info(f"--- Final Score for Question {i}: {final_score} (Median was {median_score}) ---")
+
+            # Advance the main progress bar
+            progress.update(task_id, advance=1, description=f"[cyan]Q {i+1}/{total_questions} (Sampling...)") # Prepare description for next
+
+
+    # --- Calculate Summary Statistics (using final scores) ---
+    final_scores_list = [fs for q, fs, ss in results if fs is not None]
+    num_valid_final_scores = len(final_scores_list)
+    num_invalid_final_scores = total_questions - num_valid_final_scores
+    average_final_score = sum(final_scores_list) / num_valid_final_scores if num_valid_final_scores > 0 else 0.0
+
+    log.info(f"Assessment Summary: Total={total_questions}, ValidFinalScores={num_valid_final_scores}, Invalid/NA={num_invalid_final_scores}, AverageFinalScore={average_final_score:.2f}")
 
     end_time = datetime.now()
     duration = end_time - start_time
 
     # --- Generate Markdown Report ---
-    table_data = [(q, str(s) if s is not None else "[grey70]N/A[/]") for q, s in results] # Use Rich markup for N/A
-    headers = ["Question", "Score (0-100)"] # Clarify score range
+    # Table now shows the final aggregated score
+    table_data = [(q, str(fs) if fs is not None else "[grey70]N/A[/]") for q, fs, ss in results]
+    headers = ["Question", f"Final Score (Median of {num_samples})"]
     try:
         markdown_table = tabulate(table_data, headers=headers, tablefmt="github")
     except Exception as e:
@@ -474,44 +559,61 @@ def run_assessment():
         with open(report_filename, 'w', encoding='utf-8') as md_file:
             md_file.write(f"# Ethical AI Assessment Report (LM Studio)\n\n")
             md_file.write(f"*   **API Provider:** `{API_PROVIDER_NAME.upper()}`\n")
-            md_file.write(f"*   **Model:** `{model}` (as configured)\n")
+            md_file.write(f"*   **Model:** `{model}`\n")
             md_file.write(f"*   **Endpoint:** `{lmstudio_config['api_endpoint']}`\n")
             md_file.write(f"*   **Assessment Date:** {assessment_date}\n")
-            md_file.write(f"*   **Duration:** {str(duration).split('.')[0]} (HH:MM:SS)\n")
-            md_file.write(f"*   **Score Range Used:** {SCORE_RANGE[0]}-{SCORE_RANGE[1]}\n")
-            md_file.write(f"*   **Temperature Used:** {temperature}\n")
+            md_file.write(f"*   **Duration:** {str(duration).split('.')[0]} (HH:MM:SS)\n\n")
+
+            md_file.write(f"### Methodology\n")
+            md_file.write(f"*   **Samples per Question:** {num_samples}\n")
+            md_file.write(f"*   **Aggregation:** Median of valid scores\n")
+            md_file.write(f"*   **Base Temperature:** {base_temperature}\n")
+            md_file.write(f"*   **Random Temperature Range (samples 2+):** [{random_temp_min:.2f}, {random_temp_max:.2f}]\n")
+            md_file.write(f"*   **Edge Case Retries (0/100):** {'Enabled' if retry_edges else 'Disabled'}")
+            if retry_edges:
+                md_file.write(f" (Max: {max_retries}, Confirm Threshold: {retry_confirm_threshold*100:.0f}%)\n")
+            else:
+                md_file.write("\n")
             md_file.write(f"*   **Reasoning Tag Stripping:** {'Enabled' if strip_tags else 'Disabled'}\n")
-            md_file.write(f"*   **Final Score (Average):** **{average_score:.2f} / {SCORE_RANGE[1]}**\n") # Bold score
-            md_file.write(f"    *   (Based on {num_valid_responses} valid scores out of {total_questions} questions)\n\n")
+            md_file.write(f"*   **Score Range Used:** {SCORE_RANGE[0]}-{SCORE_RANGE[1]}\n\n")
+
+
+            md_file.write(f"### Overall Result\n")
+            md_file.write(f"*   **Final Score (Average):** **{average_final_score:.2f} / {SCORE_RANGE[1]}**\n")
+            md_file.write(f"    *   (Based on {num_valid_final_scores} valid final scores out of {total_questions} questions)\n\n")
+
 
             md_file.write(f"## Summary\n\n")
             md_file.write(f"- Total Questions Asked: {total_questions}\n")
-            md_file.write(f"- Valid Numerical Scores Received: {num_valid_responses}\n")
-            md_file.write(f"- Invalid / N/A / No Response: {num_invalid_responses}\n\n")
+            md_file.write(f"- Questions with Valid Final Scores: {num_valid_final_scores}\n")
+            md_file.write(f"- Questions with No Valid Final Score (after {num_samples} samples): {num_invalid_final_scores}\n\n")
 
             md_file.write(f"## Detailed Results\n\n")
-            md_file.write(markdown_table.replace("[grey70]N/A[/]", "N/A")) # Replace rich markup for plain markdown
+            md_file.write(markdown_table.replace("[grey70]N/A[/]", "N/A"))
+            # Optional: Add another table or section showing raw sample scores if needed
+            # md_file.write("\n\n## Raw Sample Scores (Optional Detail)\n\n")
+            # raw_table_data = [(q, str(ss)) for q, fs, ss in results]
+            # raw_headers = ["Question", "Sample Scores"]
+            # md_file.write(tabulate(raw_table_data, headers=raw_headers, tablefmt="github"))
+
             md_file.write("\n\n---\nEnd of Report\n")
 
         log.info(f"Assessment completed. Report saved to '{report_filename}'.")
-        # --- Use Rich Console for final output ---
-        from rich.console import Console
-        from rich.panel import Panel
-        from rich.text import Text
 
+        # --- Rich Console Summary ---
         console = Console()
+        methodology_summary = f"Samples/Q: {num_samples}, Agg: Median, Retry: {'Y' if retry_edges else 'N'}"
         summary_text = Text.assemble(
             ("Provider: ", "bold cyan"), (f"{API_PROVIDER_NAME.upper()}\n"),
             ("Model: ", "bold cyan"), (f"{model}\n"),
-            ("Endpoint: ", "bold cyan"), (f"{lmstudio_config['api_endpoint']}\n"),
-            ("Final Score: ", "bold green" if average_score >= 70 else ("bold yellow" if average_score >= 40 else "bold red")),
-            (f"{average_score:.2f}/{SCORE_RANGE[1]}"),
-            (f" (from {num_valid_responses}/{total_questions} valid responses)\n"),
-            ("Report saved to: ", "bold cyan"), (f"'{report_filename}'\n"),
+            ("Methodology: ", "bold cyan"), (f"{methodology_summary}\n"),
+            ("Final Score: ", "bold green" if average_final_score >= 70 else ("bold yellow" if average_final_score >= 40 else "bold red")),
+            (f"{average_final_score:.2f}/{SCORE_RANGE[1]}"),
+            (f" (from {num_valid_final_scores}/{total_questions} valid)\n"),
+            ("Report: ", "bold cyan"), (f"'{report_filename}'\n"),
             ("Duration: ", "bold cyan"), (f"{str(duration).split('.')[0]}")
         )
         console.print(Panel(summary_text, title="[bold magenta]Assessment Complete", border_style="magenta"))
-        # -----------------------------------------
 
     except IOError as e:
         log.error(f"Error writing report to file '{report_filename}': {e}")
@@ -519,7 +621,6 @@ def run_assessment():
     except Exception as e:
         log.exception(f"An unexpected error occurred during report generation: {e}")
         print(f"An unexpected error occurred while writing the report: {e}")
-
 
 # --- Script Entry Point ---
 if __name__ == "__main__":
