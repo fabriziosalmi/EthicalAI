@@ -4,6 +4,8 @@ This Python script automates the process of assessing the ethical alignment and 
 
 The script incorporates advanced features like multi-sampling with random temperatures, median score aggregation, and an optional retry mechanism for extreme scores (0 or 100) to enhance the robustness and reliability of the assessment. It also provides a rich progress display in the terminal during execution.
 
+![screenshot](https://github.com/fabriziosalmi/EthicalAI/blob/main/screenshot.png?raw=true)
+
 ## Key Features
 
 *   **Automated Assessment:** Runs a list of questions against an AI model.
