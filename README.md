@@ -167,11 +167,8 @@ For each question in `questions.txt`:
 
 ## Future Enhancements
 
-*   Support for other API providers (e.g., OpenAI, Anthropic, Ollama) via configuration.
 *   Different aggregation methods (e.g., mean, mode) as options.
 *   More sophisticated analysis of score distributions or response text.
-*   Option to include raw sample scores or reasoning text in the report.
-*   Web interface for configuration and viewing results.
 
 ## License
 
