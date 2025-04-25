@@ -4,7 +4,12 @@ This Python tool automates the process of assessing the ethical alignment and tr
 
 The tool incorporates advanced features like multi-sampling with random temperatures, median score aggregation, robust visualization of results, provider comparisons, and Docker deployment capabilities to enhance the reliability and usability of ethical assessments.
 
-![screenshot](https://github.com/fabriziosalmi/EthicalAI/blob/main/screenshot.png?raw=true)
+## Screenshots
+
+![screenshot1](https://github.com/fabriziosalmi/EthicalAI/blob/main/screenshot_1.png?raw=true)
+![screenshot2](https://github.com/fabriziosalmi/EthicalAI/blob/main/screenshot_2.png?raw=true)
+![screenshot3](https://github.com/fabriziosalmi/EthicalAI/blob/main/screenshot_3.png?raw=true)
+![screenshot4](https://github.com/fabriziosalmi/EthicalAI/blob/main/screenshot_4.png?raw=true)
 
 ## Key Features
 
