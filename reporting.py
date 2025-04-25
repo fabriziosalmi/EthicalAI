@@ -11,6 +11,7 @@ import weasyprint
 from datetime import datetime
 from jinja2 import Template
 from typing import Dict, List, Optional, Tuple
+from collections import defaultdict
 
 from config import RESULTS_DIR
 
