@@ -19,7 +19,7 @@
   "google": {
     "api_endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
     "model": "gemini-2.0-flash",
-    "api_key": "AIzaSyCnDaGzciD7ben2e_dXogwzUSM4sc_9YVY",
+    "api_key": "",
     "max_tokens": 512,
     "temperature": 0.0,
     "strip_think_tags": true,

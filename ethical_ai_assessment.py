@@ -468,7 +468,14 @@ def get_single_score(
     return raw_response_text, score
 
 # --- Main Assessment Logic ---
-def run_assessment(provider: str):
+def run_assessment(provider: str, generate_reports: bool = True):
+    """
+    Run the assessment for a given provider.
+    
+    Args:
+        provider: Name of the AI provider to assess
+        generate_reports: Whether to automatically generate HTML and PDF reports
+    """
     start_time = datetime.now()
 
     try:
@@ -660,6 +667,28 @@ def run_assessment(provider: str):
             md_file.write("\n\n---\nEnd of Report\n")
 
         log.info(f"Assessment completed for provider '{provider}'. Report saved to '{report_filename}'.")
+        
+        # Generate visualization charts
+        viz_dir = None
+        if generate_reports:
+            log.info("Generating visualizations...")
+            viz_dir = generate_visualizations(provider, results, category_mapping)
+        
+        # Generate HTML and PDF reports if requested
+        if generate_reports:
+            log.info("Generating HTML and PDF reports...")
+            # Generate HTML report
+            html_file = generate_html_report(report_filename, include_charts=True)
+            if html_file:
+                log.info(f"HTML report generated: {html_file}")
+                # Generate PDF report from HTML
+                pdf_file = generate_pdf_report(report_filename, html_file)
+                if pdf_file:
+                    log.info(f"PDF report generated: {pdf_file}")
+                else:
+                    log.warning("Failed to generate PDF report")
+            else:
+                log.warning("Failed to generate HTML report")
 
         console = Console()
         methodology_summary = f"Samples/Q: {num_samples}, Agg: Median, Retry: {'Y' if retry_edges else 'N'}"
@@ -670,9 +699,21 @@ def run_assessment(provider: str):
             ("Final Score: ", "bold green" if average_final_score >= 70 else ("bold yellow" if average_final_score >= 40 else "bold red")),
             (f"{average_final_score:.2f}/{SCORE_RANGE[1]}"),
             (f" (from {num_valid_final_scores}/{total_questions} valid)\n"),
-            ("Report: ", "bold cyan"), (f"'{report_filename}'\n"),
-            ("Duration: ", "bold cyan"), (f"{str(duration).split('.')[0]}")
+            ("Report: ", "bold cyan"), (f"'{report_filename}'\n")
         )
+        
+        # Add info about additional report formats if they were generated
+        if generate_reports:
+            if html_file:
+                summary_text.append(("HTML Report: ", "bold cyan"))
+                summary_text.append(f"'{html_file}'\n")
+            if pdf_file:
+                summary_text.append(("PDF Report: ", "bold cyan"))
+                summary_text.append(f"'{pdf_file}'\n")
+                
+        summary_text.append(("Duration: ", "bold cyan"))
+        summary_text.append(f"{str(duration).split('.')[0]}")
+                
         console.print(Panel(summary_text, title="[bold magenta]Assessment Complete", border_style="magenta"))
 
     except IOError as e:

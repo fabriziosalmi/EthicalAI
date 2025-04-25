@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  ethical-ai:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ethical-ai-assessment
+    volumes:
+      - ./config.json:/app/config.json
+      - ./questions.txt:/app/questions.txt
+      - ./prompt.txt:/app/prompt.txt
+      - ./results:/app/results
+    environment:
+      # Uncomment and set API keys as needed
+      # - OPENAI_API_KEY=${OPENAI_API_KEY}
+      # - GEMINI_API_KEY=${GEMINI_API_KEY}
+      # - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      # - LMSTUDIO_API_KEY=${LMSTUDIO_API_KEY}
+      # - GENERIC_API_KEY=${GENERIC_API_KEY}
+    # For LM Studio, you may need to use host network mode on Linux
+    # network_mode: "host"
+    # For LM Studio on macOS or Windows, use this instead:
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: ["--provider", "lmstudio"]
+    
+  # Optional: add a web server to view HTML reports
+  report-server:
+    image: nginx:alpine
+    container_name: ethical-ai-reports
+    volumes:
+      - ./results:/usr/share/nginx/html
+    ports:
+      - "8080:80"
+    depends_on:
+      - ethical-ai

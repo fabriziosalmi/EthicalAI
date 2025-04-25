@@ -1,0 +1,51 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Logs
+*.log
+logs/
+
+# Results directory (will be mounted as volume)
+results/
+
+# Git files
+.git
+.gitignore
+.github/
+
+# Editor specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Documentation
+README.md
+LICENSE
+*.md
+*.png
+screenshot.png
+chart.png
+
+# Docker files
+.dockerignore
