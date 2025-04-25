@@ -210,32 +210,41 @@ Run the assessment specifying the provider:
 
 ```bash
 # Run with LM Studio
-python ethical_ai_assessment.py --provider lmstudio
+python main.py lmstudio
 
 # Run with OpenAI
-python ethical_ai_assessment.py --provider openai
+python main.py openai
 
 # Run with Google Gemini
-python ethical_ai_assessment.py --provider google
+python main.py google
 
-# Run with specific model
-python ethical_ai_assessment.py --provider openai --model gpt-4o-mini
+# Run with specific model (using optional arguments)
+python main.py openai --model gpt-4o-mini
 
-# Compare results across providers
-python ethical_ai_assessment.py --compare
+# Run with different config file
+python main.py lmstudio -c my_config.json
+
+# Run with different questions file
+python main.py lmstudio -q custom_questions.txt
+
+# Run with debug logging
+python main.py lmstudio -l DEBUG
+
+# Disable HTML/PDF report generation
+python main.py lmstudio --no-reports
 ```
 
 ### Using Docker
 
 ```bash
-# Run with default settings
+# Run with default settings (uses provider from config.json)
 docker-compose up
 
 # Run with specific provider
-docker-compose run ethical-ai --provider openai
+docker-compose run ethical-ai lmstudio
 
 # Run with API key from environment
-OPENAI_API_KEY=your-key-here docker-compose run ethical-ai --provider openai
+OPENAI_API_KEY=your-key-here docker-compose run ethical-ai openai
 
 # View results in web browser
 # After running the assessment, open http://localhost:8080 in your browser
@@ -243,18 +252,16 @@ OPENAI_API_KEY=your-key-here docker-compose run ethical-ai --provider openai
 
 ## Command Line Arguments
 
-The tool supports various command-line arguments:
+The `main.py` script supports various command-line arguments:
 
-* `--provider`: Specify the AI provider (lmstudio, openai, google, anthropic, generic_openai)
-* `--model`: Override the model specified in config.json
-* `--api-endpoint`: Override the API endpoint URL
-* `--max-tokens`: Override the maximum tokens setting
-* `--temperature`: Override the base temperature
-* `--samples`: Override number of samples per question
-* `--timeout`: API request timeout in seconds
-* `--no-retry-edges`: Disable retry mechanism for edge scores
-* `--request-delay`: Delay between API requests in seconds
-* `--compare`: Compare results across multiple providers
+*   `provider`: (Required) Specify the AI provider (e.g., `lmstudio`, `openai`, `google`, `anthropic`, `generic_openai`). Must match a key in the config file.
+*   `-c`, `--config`: Path to the configuration file (default: `config.json`).
+*   `-q`, `--questions`: Path to the questions file (default: `questions.txt`).
+*   `-p`, `--prompt`: Path to the prompt template file (default: `prompt.txt`).
+*   `-l`, `--log`: Set the logging level (`DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`). Default: `INFO`.
+*   `--no-reports`: Disable automatic generation of HTML and PDF reports.
+
+*(Note: Some arguments previously available like `--model`, `--api-endpoint`, `--max-tokens`, etc., are now primarily managed through the `config.json` file for simplicity. Modify the config file to change these settings per provider.)*
 
 ## Output
 
