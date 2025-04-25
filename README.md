@@ -29,7 +29,8 @@ The tool incorporates advanced features like multi-sampling with random temperat
   * Category-based performance
   * Radar charts for comparative analysis
 * **Provider Comparison:** Compare assessment results across different providers
-* **Interactive Dashboard:** View assessment results in a comprehensive web dashboard with comparative analytics
+* **Interactive Dashboard:** Web-based interface for exploring assessment results
+* **Assessment History:** Track performance over time with persistent data storage
 * **Rich Terminal UI:** Display dynamic progress with the `rich` library
 
 ### Deployment Options
@@ -294,14 +295,25 @@ Visualizations are embedded in HTML/PDF reports and also saved separately in the
 
 ### Dashboard
 
-A comprehensive web dashboard is generated to visualize and compare assessment results:
+The tool includes a web-based dashboard for exploring and comparing assessment results:
 
-* **Overview**: Key metrics, top and bottom performing models, score trends
-* **Model Comparison**: Side-by-side comparison of model performance
-* **Category Analysis**: Detailed breakdown of performance by ethical category
-* **Detailed Results**: Complete assessment history and category scores by model
+* **Overview**: Key metrics and trends at a glance
+* **Model Comparison**: Side-by-side comparison of different models
+* **Category Analysis**: Detailed performance across ethical categories
+* **Assessment History**: Historical tracking of all assessments
+* **Interactive Charts**: Visual representation of performance metrics
+* **Report Links**: Direct access to detailed reports
 
-The dashboard is accessible in the `docs/index.html` file and can be viewed in any web browser.
+The dashboard is automatically updated after each assessment and can be accessed by opening the `docs/index.html` file in a web browser.
+
+### Assessment Data Tracking
+
+The tool maintains a history of all assessments in `assessment_data.jsonl`, enabling:
+
+* Tracking of model performance over time
+* Comparison between different versions of the same model
+* Analysis of trends across providers and categories
+* Data for the dashboard's historical charts and tables
 
 ### Comparison Reports
 
