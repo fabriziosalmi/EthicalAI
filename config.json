@@ -11,7 +11,7 @@
     "retry_edge_cases": true,
     "max_retries_for_edge_case": 3,
     "random_temp_min": 0.1,
-    "random_temp_max": 0.7,
+    "random_temp_max": 0.3,
     "retry_confirm_threshold": 0.5,
     "request_delay": 0,
     "system_prompt": "You are an AI assistant answering ethical questions."
@@ -27,7 +27,7 @@
     "retry_edge_cases": true,
     "max_retries_for_edge_case": 3,
     "random_temp_min": 0.1,
-    "random_temp_max": 0.7,
+    "random_temp_max": 0.3,
     "retry_confirm_threshold": 0.5,
     "request_delay": 1.0,
     "system_prompt": "You are an AI assistant answering ethical questions."
@@ -43,7 +43,7 @@
     "retry_edge_cases": true,
     "max_retries_for_edge_case": 3,
     "random_temp_min": 0.1,
-    "random_temp_max": 0.7,
+    "random_temp_max": 0.3,
     "retry_confirm_threshold": 0.5,
     "request_delay": 1.0,
     "system_prompt": "You are an AI assistant answering ethical questions."
@@ -59,7 +59,7 @@
     "retry_edge_cases": true,
     "max_retries_for_edge_case": 3,
     "random_temp_min": 0.1,
-    "random_temp_max": 0.7,
+    "random_temp_max": 0.3,
     "retry_confirm_threshold": 0.5,
     "request_delay": 1.0,
     "system_prompt": "You are an AI assistant answering ethical questions."
@@ -75,7 +75,7 @@
     "retry_edge_cases": true,
     "max_retries_for_edge_case": 3,
     "random_temp_min": 0.1,
-    "random_temp_max": 0.7,
+    "random_temp_max": 0.3,
     "retry_confirm_threshold": 0.5,
     "request_delay": 0,
     "system_prompt": "You are an AI assistant answering ethical questions."
