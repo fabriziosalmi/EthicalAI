@@ -61,7 +61,17 @@ def run_assessment(provider: str, config: Dict, questions: List[str], prompt_tem
         random_temp_max = float(provider_config['random_temp_max'])
         retry_confirm_threshold = float(provider_config['retry_confirm_threshold'])
         request_delay = float(provider_config['request_delay'])
-        category_mapping = provider_config['category_mapping']
+        
+        # Get category mapping from provider config, or from root config, or use default
+        if 'category_mapping' in provider_config:
+            category_mapping = provider_config['category_mapping']
+        elif 'category_mapping' in config:
+            category_mapping = config['category_mapping']
+            log.info(f"Using root-level category mapping for provider '{provider}'")
+        else:
+            from config import DEFAULT_CATEGORY_MAPPING
+            category_mapping = DEFAULT_CATEGORY_MAPPING
+            log.warning(f"No category mapping found for provider '{provider}'. Using default mapping.")
 
         if num_samples < 1:
             log.warning(f"num_samples_per_question ({num_samples}) is less than 1. Setting to 1.")
@@ -166,8 +176,13 @@ def run_assessment(provider: str, config: Dict, questions: List[str], prompt_tem
                         log.info(f"Edge score {median_score} CONFIRMED by retries.")
                         final_score = median_score
                     else:
-                        log.warning(f"Edge score {median_score} NOT confirmed by retries. Reverting to original median ({median_score}).")
-                        final_score = median_score
+                        log.warning(f"Edge score {median_score} NOT confirmed by retries.")
+                        # Calculate a new score based on all samples (original + retries)
+                        all_valid_scores = valid_sample_scores + valid_retry_scores
+                        new_median = statistics.median(all_valid_scores)
+                        new_median_rounded = int(round(new_median))
+                        log.info(f"New median from all samples: {new_median:.2f} -> Rounded: {new_median_rounded}")
+                        final_score = new_median_rounded
                 else:
                     log.warning(f"No valid scores obtained during retries for Q{i}. Using original median ({median_score}).")
                     final_score = median_score
