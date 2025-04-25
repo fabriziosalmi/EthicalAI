@@ -505,7 +505,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             margin: 0 auto;
             padding: 2rem;
             background-color: var(--card-bg-color);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             margin-top: 2rem;
             margin-bottom: 2rem;
@@ -532,13 +532,13 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         }
         
         h3 {
-            color: var (--secondary-color);
+            color: var(--secondary-color);
             margin-top: 1.5rem;
         }
         
         .metadata {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
             margin-bottom: 2rem;
         }
@@ -558,7 +558,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         
         .methodology {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
             margin-bottom: 2rem;
         }
@@ -635,7 +635,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         
         .summary {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
             margin: 2rem 0;
         }
@@ -661,7 +661,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         
         .charts {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 2rem;
             margin: 2rem 0;
         }
@@ -697,7 +697,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                 max-width: 100%;
                 margin: 0;
                 padding: 1rem;
-                box-shadow: none;
+                border: none;
             }
             
             @page {
@@ -1260,13 +1260,13 @@ def run_assessment(provider: str, generate_reports: bool = True):
         # Add info about additional report formats if they were generated
         if generate_reports:
             if html_file:
-                summary_text.append(("HTML Report: ", "bold cyan"))
+                summary_text.append(Text.from_markup("HTML Report: ", style="bold cyan"))
                 summary_text.append(f"'{html_file}'\n")
             if pdf_file:
-                summary_text.append(("PDF Report: ", "bold cyan"))
+                summary_text.append(Text.from_markup("PDF Report: ", style="bold cyan"))
                 summary_text.append(f"'{pdf_file}'\n")
                 
-        summary_text.append(("Duration: ", "bold cyan"))
+        summary_text.append(Text.from_markup("Duration: ", style="bold cyan"))
         summary_text.append(f"{str(duration).split('.')[0]}")
                 
         console.print(Panel(summary_text, title="[bold magenta]Assessment Complete", border_style="magenta"))
