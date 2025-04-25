@@ -600,7 +600,7 @@ def generate_pdf_report(markdown_file: str, html_file: Optional[str] = None) -> 
             pdf_file = markdown_file.replace('.md', '.pdf')
         else:
             # In case the file doesn't have .md extension
-            pdf_file = markdown_file + '.pdf
+            pdf_file = markdown_file + '.pdf'
             
         # Ensure the directory exists
         os.makedirs(os.path.dirname(os.path.abspath(pdf_file)), exist_ok=True)
@@ -644,12 +644,32 @@ def generate_comparison_report(
     Returns:
         Path to the generated report
     """
-    from tabulate import tabulate
-    
-    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    report_filename = os.path.join(comparison_dir, f"{timestamp}_providers_comparison_report.md")
-    
     try:
+        from tabulate import tabulate
+        from collections import defaultdict
+        
+        if not provider_scores:
+            log.error("No provider scores provided for comparison report")
+            return ""
+            
+        if not comparison_dir:
+            log.error("No comparison directory specified")
+            return ""
+            
+        # Ensure the comparison directory exists
+        os.makedirs(comparison_dir, exist_ok=True)
+            
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        report_filename = os.path.join(comparison_dir, f"{timestamp}_providers_comparison_report.md")
+        
+        providers_with_scores = [p for p, s in provider_scores.items() if s.get('average') is not None]
+        
+        if not providers_with_scores:
+            log.warning("No providers with valid scores found for comparison report")
+            return ""
+            
+        log.info(f"Generating comparison report for {len(providers_with_scores)} providers")
+        
         with open(report_filename, 'w', encoding='utf-8') as f:
             f.write("# Ethical AI Assessment - Provider Comparison Report\n\n")
             f.write(f"**Date:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
@@ -659,7 +679,9 @@ def generate_comparison_report(
                 ["Provider", "Average Score", "Valid Question Count", "Assessment Date"]
             ]
             
-            for provider, scores in provider_scores.items():
+            for provider, scores in sorted(provider_scores.items(), 
+                                          key=lambda x: x[1].get('average', 0), 
+                                          reverse=True):
                 assessment_date = scores.get('assessment_date', 'Unknown')
                 overall_table.append([
                     provider.upper(),
@@ -671,61 +693,189 @@ def generate_comparison_report(
             f.write(tabulate(overall_table, headers="firstrow", tablefmt="pipe"))
             f.write("\n\n")
             
-            # Add comparison charts
+            # Add comparison charts - verify files exist first
             f.write("## Visual Comparisons\n\n")
-            f.write(f"![Overall Comparison](provider_comparison_overall.png)\n\n")
+            overall_chart_path = os.path.join(comparison_dir, "provider_comparison_overall.png")
+            radar_chart_path = os.path.join(comparison_dir, "provider_comparison_radar.png")
             
-            if os.path.exists(os.path.join(comparison_dir, "provider_comparison_radar.png")):
+            if os.path.exists(overall_chart_path):
+                f.write(f"![Overall Comparison](provider_comparison_overall.png)\n\n")
+            else:
+                f.write("*Overall comparison chart not available*\n\n")
+                
+            if os.path.exists(radar_chart_path):
                 f.write(f"![Category Comparison](provider_comparison_radar.png)\n\n")
+            else:
+                f.write("*Category comparison radar chart not available*\n\n")
             
             # Add category-specific comparisons
             if all_categories and any('categories' in scores for scores in provider_scores.values()):
                 f.write("## Category Scores\n\n")
                 
+                # Organize by category scores
+                category_comparison = defaultdict(list)
                 for category in sorted(all_categories):
+                    for provider, scores in provider_scores.items():
+                        if 'categories' in scores and category in scores['categories']:
+                            score = scores['categories'][category]
+                            category_comparison[category].append((provider, score))
+                
+                # Write comparison tables for each category, sorted by score
+                for category, provider_scores_list in sorted(category_comparison.items()):
+                    if not provider_scores_list:
+                        continue
+                        
                     f.write(f"### {category.capitalize()}\n\n")
                     
+                    # Sort providers by category score (highest first)
+                    provider_scores_list.sort(key=lambda x: x[1], reverse=True)
+                    
                     category_table = [["Provider", f"{category.capitalize()} Score"]]
-                    for provider, scores in provider_scores.items():
-                        if 'categories' in scores:
-                            score = scores['categories'].get(category, 'N/A')
-                            if isinstance(score, (int, float)):
-                                score = f"{score:.2f}"
-                            category_table.append([provider.upper(), score])
+                    for provider, score in provider_scores_list:
+                        if isinstance(score, (int, float)):
+                            formatted_score = f"{score:.2f}"
+                        else:
+                            formatted_score = 'N/A'
+                        category_table.append([provider.upper(), formatted_score])
                     
                     f.write(tabulate(category_table, headers="firstrow", tablefmt="pipe"))
                     f.write("\n\n")
             
+            # Add detailed question comparisons - use a more robust approach to find questions
             f.write("## Detailed Question Comparisons\n\n")
-            # For each provider, list top 5 highest and lowest scoring questions
-            for provider, scores in provider_scores.items():
-                f.write(f"### {provider.upper()} Highlights\n\n")
-                
+            
+            # Get all questions from all providers to enable cross-provider comparison
+            all_questions = set()
+            for scores in provider_scores.values():
                 if 'questions' in scores:
-                    # Sort questions by score
-                    sorted_questions = sorted(
-                        [(q, s) for q, s in scores['questions'].items() if s is not None],
-                        key=lambda x: x[1],
-                        reverse=True
-                    )
+                    all_questions.update(scores['questions'].keys())
+            
+            if all_questions:
+                # First, list highlights for each provider
+                for provider, scores in provider_scores.items():
+                    f.write(f"### {provider.upper()} Highlights\n\n")
                     
-                    if sorted_questions:
-                        f.write("#### Top 5 Highest Scores\n\n")
-                        top_table = [["Question", "Score"]]
-                        for q, s in sorted_questions[:5]:
-                            top_table.append([q[:100] + "..." if len(q) > 100 else q, str(s)])
-                        f.write(tabulate(top_table, headers="firstrow", tablefmt="pipe"))
-                        f.write("\n\n")
+                    if 'questions' in scores and any(s is not None for s in scores['questions'].values()):
+                        # Sort questions by score
+                        sorted_questions = sorted(
+                            [(q, s) for q, s in scores['questions'].items() if s is not None],
+                            key=lambda x: x[1],
+                            reverse=True
+                        )
                         
-                        f.write("#### 5 Lowest Scores\n\n")
-                        bottom_table = [["Question", "Score"]]
-                        for q, s in sorted_questions[-5:]:
-                            bottom_table.append([q[:100] + "..." if len(q) > 100 else q, str(s)])
-                        f.write(tabulate(bottom_table, headers="firstrow", tablefmt="pipe"))
-                        f.write("\n\n")
+                        if sorted_questions:
+                            # Top scores
+                            f.write("#### Top 5 Highest Scores\n\n")
+                            top_table = [["Question", "Score"]]
+                            for q, s in sorted_questions[:min(5, len(sorted_questions))]:
+                                question_text = q[:100] + "..." if len(q) > 100 else q
+                                top_table.append([question_text, str(s)])
+                            f.write(tabulate(top_table, headers="firstrow", tablefmt="pipe"))
+                            f.write("\n\n")
+                            
+                            # Lowest scores
+                            f.write("#### 5 Lowest Scores\n\n")
+                            bottom_table = [["Question", "Score"]]
+                            for q, s in sorted_questions[max(-5, -len(sorted_questions)):]:
+                                question_text = q[:100] + "..." if len(q) > 100 else q
+                                bottom_table.append([question_text, str(s)])
+                            f.write(tabulate(bottom_table, headers="firstrow", tablefmt="pipe"))
+                            f.write("\n\n")
+                    else:
+                        f.write("No detailed question scores available.\n\n")
                 
-                else:
-                    f.write("No detailed question scores available.\n\n")
+                # Then, add a cross-provider question comparison if we have multiple providers with questions
+                providers_with_questions = [p for p, s in provider_scores.items() if 'questions' in s and s['questions']]
+                if len(providers_with_questions) > 1:
+                    f.write("### Cross-Provider Question Comparison\n\n")
+                    f.write("Questions with the largest score differences across providers:\n\n")
+                    
+                    # Find questions that appear in multiple providers and calculate the score variance
+                    question_comparison = []
+                    for question in all_questions:
+                        scores = []
+                        providers_for_q = []
+                        for provider, provider_data in provider_scores.items():
+                            if 'questions' in provider_data and question in provider_data['questions']:
+                                score = provider_data['questions'][question]
+                                if score is not None:
+                                    scores.append(score)
+                                    providers_for_q.append(provider)
+                        
+                        # Only include questions that have scores from multiple providers
+                        if len(scores) > 1:
+                            score_variance = max(scores) - min(scores)
+                            avg_score = sum(scores) / len(scores)
+                            question_comparison.append({
+                                'question': question,
+                                'variance': score_variance,
+                                'avg_score': avg_score,
+                                'providers': providers_for_q,
+                                'scores': scores
+                            })
+                    
+                    # Sort by variance (largest first) and take top 10
+                    question_comparison.sort(key=lambda x: x['variance'], reverse=True)
+                    top_variance_questions = question_comparison[:min(10, len(question_comparison))]
+                    
+                    if top_variance_questions:
+                        variance_table = [["Question", "Variance", "Providers", "Scores"]]
+                        for item in top_variance_questions:
+                            # Truncate question text for display
+                            question_text = item['question'][:80] + "..." if len(item['question']) > 80 else item['question']
+                            providers_text = ", ".join(p.upper() for p in item['providers'])
+                            scores_text = ", ".join(f"{s:.1f}" for s in item['scores'])
+                            variance_table.append([
+                                question_text,
+                                f"{item['variance']:.1f}",
+                                providers_text,
+                                scores_text
+                            ])
+                        f.write(tabulate(variance_table, headers="firstrow", tablefmt="pipe"))
+                        f.write("\n\n")
+                    else:
+                        f.write("No questions with significant variance found.\n\n")
+            else:
+                f.write("No detailed question data available for comparison.\n\n")
+            
+            # Add conclusion with summary of findings
+            f.write("## Conclusion\n\n")
+            
+            # Sort providers by average score
+            ranked_providers = sorted(
+                [(p, s.get('average', 0)) for p, s in provider_scores.items() if s.get('average') is not None],
+                key=lambda x: x[1],
+                reverse=True
+            )
+            
+            if ranked_providers:
+                top_provider, top_score = ranked_providers[0]
+                f.write(f"Overall, **{top_provider.upper()}** achieved the highest score ({top_score:.2f}/100) ")
+                f.write(f"among the {len(ranked_providers)} providers evaluated.\n\n")
+                
+                # Add category-specific insights if available
+                if all_categories and any('categories' in scores for scores in provider_scores.values()):
+                    top_by_category = {}
+                    
+                    for category in sorted(all_categories):
+                        providers_with_category = [(p, s['categories'][category]) 
+                                               for p, s in provider_scores.items() 
+                                               if 'categories' in s and category in s['categories']]
+                        
+                        if providers_with_category:
+                            top_in_category = max(providers_with_category, key=lambda x: x[1])
+                            top_by_category[category] = top_in_category
+                    
+                    if top_by_category:
+                        f.write("### Category Leaders\n\n")
+                        for category, (provider, score) in sorted(top_by_category.items()):
+                            f.write(f"* **{category.capitalize()}**: {provider.upper()} ({score:.2f}/100)\n")
+                        f.write("\n")
+            else:
+                f.write("No valid scores available for comparison.\n\n")
+                
+            f.write("---\n\n")
+            f.write(f"Report generated by Ethical AI Assessment Tool on {datetime.now().strftime('%Y-%m-%d at %H:%M:%S')}")
         
         log.info(f"Comparison report generated at {report_filename}")
         return report_filename
