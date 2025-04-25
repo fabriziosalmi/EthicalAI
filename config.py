@@ -146,6 +146,94 @@ def load_config(config_file: str = CONFIG_FILE) -> Dict:
         log.error(f"Unexpected error loading config '{config_file}': {e}", exc_info=True)
         raise
 
+def validate_config(config_data: Dict) -> bool:
+    """Validate the configuration data structure and values.
+    
+    Returns:
+        bool: True if valid, False otherwise
+    """
+    try:
+        # Check if all required providers are present
+        for provider in SUPPORTED_PROVIDERS:
+            if provider not in config_data:
+                log.error(f"Required provider section '{provider}' missing in config file")
+                return False
+        
+        # Validate each provider's configuration
+        for provider, provider_config in config_data.items():
+            if provider not in SUPPORTED_PROVIDERS:
+                log.warning(f"Unknown provider '{provider}' in config file - this provider will be ignored")
+                continue
+                
+            # Required fields
+            required_fields = ['api_endpoint', 'model']
+            for field in required_fields:
+                if field not in provider_config:
+                    log.error(f"Required field '{field}' missing in provider '{provider}' config")
+                    return False
+                    
+            # Numeric fields validation
+            numeric_fields = {
+                'max_tokens': {'min': 1, 'default': DEFAULT_MAX_TOKENS},
+                'temperature': {'min': 0, 'max': 1, 'default': DEFAULT_TEMPERATURE},
+                'num_samples_per_question': {'min': 1, 'default': DEFAULT_NUM_SAMPLES},
+                'max_retries_for_edge_case': {'min': 0, 'default': DEFAULT_MAX_RETRIES_EDGE},
+                'random_temp_min': {'min': 0, 'default': DEFAULT_RANDOM_TEMP_MIN},
+                'random_temp_max': {'min': 0, 'default': DEFAULT_RANDOM_TEMP_MAX},
+                'retry_confirm_threshold': {'min': 0, 'max': 1, 'default': DEFAULT_RETRY_CONFIRM_THRESHOLD},
+                'request_delay': {'min': 0, 'default': DEFAULT_REQUEST_DELAY}
+            }
+            
+            for field, constraints in numeric_fields.items():
+                if field in provider_config:
+                    try:
+                        value = float(provider_config[field])
+                        
+                        # Check minimum value
+                        if 'min' in constraints and value < constraints['min']:
+                            log.warning(f"Field '{field}' in provider '{provider}' has value {value} below minimum {constraints['min']}. Setting to default.")
+                            provider_config[field] = constraints['default']
+                            
+                        # Check maximum value
+                        if 'max' in constraints and value > constraints['max']:
+                            log.warning(f"Field '{field}' in provider '{provider}' has value {value} above maximum {constraints['max']}. Setting to default.")
+                            provider_config[field] = constraints['default']
+                    except ValueError:
+                        log.error(f"Field '{field}' in provider '{provider}' has invalid non-numeric value: {provider_config[field]}")
+                        provider_config[field] = constraints['default']
+            
+            # Ensure random_temp_min < random_temp_max
+            if ('random_temp_min' in provider_config and 
+                'random_temp_max' in provider_config and
+                float(provider_config['random_temp_min']) >= float(provider_config['random_temp_max'])):
+                log.warning(f"random_temp_min >= random_temp_max in provider '{provider}'. Setting to defaults.")
+                provider_config['random_temp_min'] = DEFAULT_RANDOM_TEMP_MIN
+                provider_config['random_temp_max'] = DEFAULT_RANDOM_TEMP_MAX
+                
+            # Validate boolean fields
+            bool_fields = ['strip_think_tags', 'retry_edge_cases']
+            for field in bool_fields:
+                if field in provider_config:
+                    if not isinstance(provider_config[field], bool):
+                        try:
+                            # Try to convert string representations to boolean
+                            value = str(provider_config[field]).lower()
+                            if value in ('true', 'yes', '1', 'on'):
+                                provider_config[field] = True
+                            elif value in ('false', 'no', '0', 'off'):
+                                provider_config[field] = False
+                            else:
+                                raise ValueError(f"Cannot convert '{value}' to boolean")
+                        except ValueError:
+                            log.warning(f"Field '{field}' in provider '{provider}' has invalid non-boolean value. Setting to default.")
+                            provider_config[field] = DEFAULT_STRIP_THINK_TAGS if field == 'strip_think_tags' else DEFAULT_RETRY_EDGE_CASES
+        
+        return True
+        
+    except Exception as e:
+        log.error(f"Unexpected error during config validation: {e}", exc_info=True)
+        return False
+
 def load_text_file(filepath: str) -> str:
     """Load text content from a file, stripping leading/trailing whitespace."""
     log.info(f"Loading text file from '{filepath}'")
@@ -166,6 +254,8 @@ def load_required_files():
     """Load all required configuration files."""
     try:
         config_data = load_config()
+        if not validate_config(config_data):
+            raise ValueError("Configuration validation failed.")
         questions_list = [q for q in load_text_file(QUESTIONS_FILE).splitlines() if q.strip()]
         if not questions_list:
             log.error(f"No questions found or loaded from '{QUESTIONS_FILE}'.")

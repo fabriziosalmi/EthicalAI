@@ -7,6 +7,8 @@ import os
 import json
 import requests
 import logging
+import time
+import random
 from typing import Dict, Any, Optional, Tuple
 
 from config import (
@@ -16,6 +18,11 @@ from config import (
 )
 
 log = logging.getLogger(__name__)
+
+# --- Add Constants for Retry Mechanism ---
+MAX_RETRIES = 3  # Maximum number of retry attempts
+INITIAL_RETRY_DELAY = 2  # Initial delay in seconds
+MAX_RETRY_DELAY = 60  # Maximum delay in seconds
 
 # --- Text Processing ---
 def strip_reasoning_tags(text: str) -> str:
@@ -121,13 +128,39 @@ def extract_response_text(provider: str, response_json: Dict[str, Any]) -> Optio
         elif provider == PROVIDER_ANTHROPIC:
             text_content = response_json.get('completion', '').strip()
         elif provider == PROVIDER_GOOGLE:
-            # Extract text from Google Gemini API response format
+            # Enhanced extraction for Google Gemini API with more robust error handling
             candidates = response_json.get('candidates', [])
-            if candidates and isinstance(candidates, list) and len(candidates) > 0:
-                content = candidates[0].get('content', {})
-                parts = content.get('parts', [])
-                if parts and isinstance(parts, list) and len(parts) > 0:
-                    text_content = parts[0].get('text', '').strip()
+            if not candidates or not isinstance(candidates, list) or len(candidates) == 0:
+                log.warning(f"No candidates found in Google API response: {str(response_json)[:250]}")
+                return None
+                
+            content = candidates[0].get('content', {})
+            if not content or not isinstance(content, dict):
+                log.warning(f"Invalid content structure in Google API response: {str(candidates[0])[:250]}")
+                return None
+                
+            parts = content.get('parts', [])
+            if not parts or not isinstance(parts, list) or len(parts) == 0:
+                log.warning(f"No parts found in Google API response content: {str(content)[:250]}")
+                return None
+                
+            # Try different ways of extracting text based on observed response patterns
+            if 'text' in parts[0]:
+                text_content = parts[0]['text'].strip()
+            elif isinstance(parts[0], str):
+                text_content = parts[0].strip()
+            elif isinstance(parts[0], dict) and 'text' in parts[0]:
+                text_content = parts[0]['text'].strip()
+            else:
+                log.warning(f"Unexpected part structure in Google API response: {str(parts[0])[:250]}")
+                # As a fallback, try to convert the entire parts object to a string
+                try:
+                    text_content = str(parts[0]).strip()
+                    if text_content.startswith('{') or text_content.startswith('['):
+                        log.warning("Part appears to be a raw JSON object, may not be usable text content")
+                except Exception as e:
+                    log.error(f"Failed to extract text from Google API response parts: {e}")
+                    return None
         elif provider == PROVIDER_GENERIC:
             text_content = response_json.get('choices', [{}])[0].get('text', '').strip()
         else:
@@ -148,16 +181,81 @@ def _send_api_request(url: str, headers: Dict, payload: Dict, timeout: int) -> D
     log.debug(f"Sending POST request to URL: {url.split('?')[0]}...")
     log.debug(f"Request Payload: {json.dumps(payload, indent=2)}")
 
-    response = requests.post(
-        url,
-        headers=headers,
-        json=payload,
-        timeout=timeout
-    )
-    response.raise_for_status()
-    response_json = response.json()
-    log.debug(f"Received Raw Response JSON: {json.dumps(response_json, indent=2)}")
-    return response_json
+    retries = 0
+    delay = INITIAL_RETRY_DELAY
+    
+    while True:
+        try:
+            response = requests.post(
+                url,
+                headers=headers,
+                json=payload,
+                timeout=timeout
+            )
+            
+            # Handle rate limiting (HTTP 429)
+            if response.status_code == 429:
+                if retries < MAX_RETRIES:
+                    # Get retry-after header if available or use exponential backoff
+                    retry_after = response.headers.get('Retry-After')
+                    if retry_after and retry_after.isdigit():
+                        wait_time = int(retry_after)
+                    else:
+                        # Exponential backoff with jitter
+                        wait_time = min(delay * (1.5 + random.random() * 0.5), MAX_RETRY_DELAY)
+                        delay = wait_time
+                    
+                    retries += 1
+                    log.warning(f"Rate limit exceeded (HTTP 429). Retrying in {wait_time:.1f} seconds... (Attempt {retries}/{MAX_RETRIES})")
+                    time.sleep(wait_time)
+                    continue
+                else:
+                    log.error(f"Rate limit exceeded (HTTP 429) and maximum retries ({MAX_RETRIES}) reached. Giving up.")
+                    response.raise_for_status()  # This will raise the exception
+            
+            # For all other errors, just raise the exception
+            response.raise_for_status()
+            
+            # If we got here, the request was successful
+            response_json = response.json()
+            log.debug(f"Received Raw Response JSON: {json.dumps(response_json, indent=2)}")
+            return response_json
+            
+        except requests.exceptions.HTTPError as e:
+            # If we've already handled rate limiting above but still got here
+            # this means we have a different HTTP error or max retries exceeded
+            if e.response.status_code == 429:
+                raise
+            
+            # Special handling for invalid API key or authentication errors
+            if e.response.status_code == 401 or e.response.status_code == 403:
+                log.error(f"Authentication error (HTTP {e.response.status_code}). Check your API key.")
+                raise
+                
+            # For other HTTP errors, retry with backoff if we haven't exceeded max retries
+            if retries < MAX_RETRIES:
+                wait_time = min(delay * (1.5 + random.random() * 0.5), MAX_RETRY_DELAY)
+                delay = wait_time
+                retries += 1
+                log.warning(f"HTTP error {e.response.status_code}. Retrying in {wait_time:.1f} seconds... (Attempt {retries}/{MAX_RETRIES})")
+                time.sleep(wait_time)
+                continue
+            else:
+                log.error(f"Maximum retries ({MAX_RETRIES}) reached for HTTP errors. Giving up.")
+                raise
+                
+        except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as e:
+            # Network errors can be temporary, so retry with backoff
+            if retries < MAX_RETRIES:
+                wait_time = min(delay * (1.5 + random.random() * 0.5), MAX_RETRY_DELAY)
+                delay = wait_time
+                retries += 1
+                log.warning(f"Network error: {str(e)}. Retrying in {wait_time:.1f} seconds... (Attempt {retries}/{MAX_RETRIES})")
+                time.sleep(wait_time)
+                continue
+            else:
+                log.error(f"Maximum retries ({MAX_RETRIES}) reached for network errors. Giving up.")
+                raise
 
 def make_api_request(provider: str, provider_config: Dict, prompt: str, model: str, max_tokens: int, temperature: float) -> Optional[str]:
     """Make an API request to the specified provider."""
@@ -166,7 +264,19 @@ def make_api_request(provider: str, provider_config: Dict, prompt: str, model: s
         log.error(f"API Endpoint missing unexpectedly for provider '{provider}'.")
         return None
 
+    # Check if request parameters are valid before attempting request
     try:
+        if not model:
+            log.error(f"Model name is missing or empty for provider '{provider}'.")
+            return None
+            
+        if max_tokens <= 0:
+            log.error(f"Invalid max_tokens value ({max_tokens}) for provider '{provider}'.")
+            return None
+            
+        if not (0 <= temperature <= 1.0):
+            log.warning(f"Temperature value ({temperature}) outside recommended range [0, 1] for provider '{provider}'. Proceeding anyway.")
+            
         api_key = get_api_key(provider, provider_config)
         headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
         
@@ -192,6 +302,8 @@ def make_api_request(provider: str, provider_config: Dict, prompt: str, model: s
         else:
             log.info(f"Successfully received response from provider '{provider}' (Temp: {temperature:.2f}).")
             return extracted_text
+            
+    # Distinguish between different types of errors for better debugging
     except requests.exceptions.Timeout:
         log.error(f"API request timed out ({REQUEST_TIMEOUT}s) for provider '{provider}' (Temp: {temperature:.2f}) at {api_endpoint}.")
         return None
@@ -199,12 +311,31 @@ def make_api_request(provider: str, provider_config: Dict, prompt: str, model: s
         log.error(f"API request failed: Could not connect to provider '{provider}' at {api_endpoint}. Is the server running? Error: {e}")
         return None
     except requests.exceptions.HTTPError as e:
-        log.error(f"HTTP Error from provider '{provider}' (Temp: {temperature:.2f}): {e.response.status_code} {e.response.reason}")
+        # Distinguish between different HTTP error types
+        status_code = e.response.status_code
+        
+        # Client errors
+        if 400 <= status_code < 500:
+            if status_code == 401:
+                log.error(f"Authentication error for provider '{provider}': Invalid or missing API key.")
+            elif status_code == 403:
+                log.error(f"Authorization error for provider '{provider}': Insufficient permissions or usage limits exceeded.")
+            elif status_code == 404:
+                log.error(f"Resource not found error for provider '{provider}': Check if model '{model}' exists and API endpoint is correct.")
+            elif status_code == 429:
+                log.error(f"Rate limit exceeded for provider '{provider}'. Consider increasing request delays.")
+            else:
+                log.error(f"Client error from provider '{provider}' (HTTP {status_code}): {e.response.reason}")
+        # Server errors
+        else:
+            log.error(f"Server error from provider '{provider}' (HTTP {status_code}): {e.response.reason}. This is likely temporary.")
+        
         try:
             error_body = e.response.text
             log.error(f"Error Response Body: {error_body[:500]}{'...' if len(error_body) > 500 else ''}")
         except Exception as read_err:
             log.error(f"Could not read error response body: {read_err}")
+            
         return None
     except requests.exceptions.RequestException as e:
         log.error(f"API request failed for provider '{provider}' (Temp: {temperature:.2f}): {e}")
