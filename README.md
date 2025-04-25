@@ -29,6 +29,7 @@ The tool incorporates advanced features like multi-sampling with random temperat
   * Category-based performance
   * Radar charts for comparative analysis
 * **Provider Comparison:** Compare assessment results across different providers
+* **Interactive Dashboard:** View assessment results in a comprehensive web dashboard with comparative analytics
 * **Rich Terminal UI:** Display dynamic progress with the `rich` library
 
 ### Deployment Options
@@ -66,7 +67,7 @@ The tool currently supports the following AI providers:
 ### Option 1: Local Installation
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/ethical-ai.git
+git clone https://github.com/fabriziosalmi/ethical-ai.git
 cd ethical-ai
 
 # Install dependencies
@@ -76,7 +77,7 @@ pip install -r requirements.txt
 ### Option 2: Docker Installation
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/ethical-ai.git
+git clone https://github.com/fabriziosalmi/ethical-ai.git
 cd ethical-ai
 
 # Build and start using Docker Compose
@@ -300,6 +301,29 @@ When using the `--compare` flag, the tool generates comparative reports that ana
 * Highest and lowest scoring questions by provider
 
 Comparison reports are stored in the `results/comparisons/` directory.
+
+## Dashboard
+
+The tool includes an interactive web dashboard for viewing assessment results and comparative analytics. The dashboard provides a comprehensive view of the data, allowing users to explore scores, visualizations, and comparisons in an intuitive interface.
+
+### Accessing the Dashboard
+
+To access the dashboard, run the tool with Docker and open the provided URL in your web browser:
+
+```bash
+# Start the Docker container
+docker-compose up
+
+# Open the dashboard in your browser
+http://localhost:8080
+```
+
+### Features
+
+* **Interactive Charts**: Explore score distributions, category averages, and radar charts
+* **Provider Comparisons**: Compare results across different AI providers
+* **Detailed Views**: Drill down into specific questions and categories
+* **Export Options**: Download reports and visualizations directly from the dashboard
 
 ## Docker Deployment
 
