@@ -292,6 +292,17 @@ The tool automatically generates visual representations of assessment results:
 
 Visualizations are embedded in HTML/PDF reports and also saved separately in the `results/visualizations/` directory.
 
+### Dashboard
+
+A comprehensive web dashboard is generated to visualize and compare assessment results:
+
+* **Overview**: Key metrics, top and bottom performing models, score trends
+* **Model Comparison**: Side-by-side comparison of model performance
+* **Category Analysis**: Detailed breakdown of performance by ethical category
+* **Detailed Results**: Complete assessment history and category scores by model
+
+The dashboard is accessible in the `docs/index.html` file and can be viewed in any web browser.
+
 ### Comparison Reports
 
 When using the `--compare` flag, the tool generates comparative reports that analyze differences between providers:
