@@ -4,9 +4,327 @@ Dashboard functionality for visualizing assessment results.
 
 import json
 import logging
-from config import ASSESSMENT_DATA_FILE
+import os
+from config import ASSESSMENT_DATA_FILE, DASHBOARD_DIR
+from datetime import datetime
+from collections import defaultdict
 
 log = logging.getLogger(__name__)
+
+HTML_TEMPLATE = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethical AI Assessment Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {{ font-family: 'Inter', sans-serif; }}
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        .chart-container {{ height: 400px; width: 100%; }}
+        /* Ensure dropdowns are visible */
+        select {{ background-image: none; }}
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="mb-10">
+            <h1 class="text-4xl font-bold text-gray-900">Ethical AI Assessment Dashboard</h1>
+            <p class="text-lg text-gray-600 mt-2">Overview and comparison of assessment results</p>
+        </header>
+
+        <!-- Assessment History Table -->
+        <section class="mb-10 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Assessment History</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <!-- ... table head ... -->
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Timestamp</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Provider</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Model</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avg Score</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valid/Total Qs</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration (s)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200" id="assessment-table-body">
+                        <!-- Data will be injected here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Overview Charts -->
+        <section class="grid md:grid-cols-2 gap-8 mb-10">
+            <div class="bg-white p-6 rounded-lg shadow-md chart-container">
+                <h2 class="text-2xl font-semibold mb-4 text-gray-800">Average Score Over Time</h2>
+                <canvas id="scoreTrendChart"></canvas>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md chart-container">
+                <h2 class="text-2xl font-semibold mb-4 text-gray-800">Latest Assessment: Category Breakdown</h2>
+                <canvas id="latestCategoryRadarChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Model Comparison Section -->
+        <section class="mb-10 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Model Comparison Arena</h2>
+            <div class="grid md:grid-cols-2 gap-4 mb-6">
+                <div>
+                    <label for="modelSelect1" class="block text-sm font-medium text-gray-700">Select Model 1:</label>
+                    <select id="modelSelect1" name="modelSelect1" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md appearance-none bg-white border">
+                        <!-- Options populated by JS -->
+                    </select>
+                </div>
+                <div>
+                    <label for="modelSelect2" class="block text-sm font-medium text-gray-700">Select Model 2:</label>
+                    <select id="modelSelect2" name="modelSelect2" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md appearance-none bg-white border">
+                        <!-- Options populated by JS -->
+                    </select>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="chart-container">
+                    <h3 class="text-xl font-semibold mb-2 text-gray-700">Overall Score Comparison</h3>
+                    <canvas id="comparisonBarChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3 class="text-xl font-semibold mb-2 text-gray-700">Category Score Comparison</h3>
+                    <canvas id="comparisonRadarChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        const allAssessmentData = {assessment_data_json};
+        const latestModelData = {latest_model_data_json};
+        const uniqueModels = {unique_models_json};
+
+        let comparisonBarChart = null;
+        let comparisonRadarChart = null;
+
+        // --- Populate History Table ---
+        const tableBody = document.getElementById('assessment-table-body');
+        allAssessmentData.slice().reverse().forEach(assessment => {{ // Show newest first
+            const row = tableBody.insertRow();
+            const avgScore = assessment.average_score !== null ? assessment.average_score.toFixed(2) : 'N/A';
+            const duration = assessment.duration_seconds !== null ? assessment.duration_seconds.toFixed(1) : 'N/A';
+            const timestamp = new Date(assessment.timestamp).toLocaleString();
+            
+            row.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${{timestamp}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${{assessment.provider}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${{assessment.model}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${{avgScore === 'N/A' ? 'text-gray-500' : (avgScore >= 70 ? 'text-green-600' : (avgScore >= 40 ? 'text-yellow-600' : 'text-red-600'))}}">${{avgScore}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${{assessment.valid_scores}}/${{assessment.total_questions}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${{duration}}</td>
+            `;
+        }});
+
+        // --- Score Trend Chart ---
+        const trendCtx = document.getElementById('scoreTrendChart').getContext('2d');
+        // Group data by model for trend lines
+        const modelsTrendData = allAssessmentData.reduce((acc, curr) => {{
+            if (!acc[curr.model]) {{
+                acc[curr.model] = {{ labels: [], scores: [] }};
+            }}
+            acc[curr.model].labels.push(new Date(curr.timestamp).toLocaleTimeString());
+            acc[curr.model].scores.push(curr.average_score);
+            return acc;
+        }}, {{}});
+
+        const trendDatasets = Object.entries(modelsTrendData).map(([model, data], index) => ({{
+            label: model,
+            data: data.scores,
+            // Basic color cycling
+            borderColor: `hsl(${{index * 60}}, 70%, 50%)`,
+            tension: 0.1,
+            fill: false
+        }}));
+
+        new Chart(trendCtx, {{
+            type: 'line',
+            data: {{
+                // Use labels from the first model or generate generic time labels if needed
+                labels: modelsTrendData[Object.keys(modelsTrendData)[0]]?.labels || [], 
+                datasets: trendDatasets
+            }},
+            options: {{
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {{
+                    y: {{
+                        beginAtZero: false,
+                        suggestedMax: 100
+                    }}
+                }}
+            }}
+        }});
+
+        // --- Latest Category Radar Chart ---
+        const latestRadarCtx = document.getElementById('latestCategoryRadarChart').getContext('2d');
+        const latestOverallAssessment = allAssessmentData.length > 0 ? allAssessmentData[allAssessmentData.length - 1] : null;
+        let latestRadarLabels = [];
+        let latestRadarScores = [];
+
+        if (latestOverallAssessment && latestOverallAssessment.categories) {{
+            latestRadarLabels = Object.keys(latestOverallAssessment.categories);
+            latestRadarScores = Object.values(latestOverallAssessment.categories);
+        }}
+
+        new Chart(latestRadarCtx, {{
+            type: 'radar',
+            data: {{
+                labels: latestRadarLabels,
+                datasets: [{{
+                    label: `Latest Overall: ${{latestOverallAssessment?.provider}} (${{latestOverallAssessment?.model}}) - Avg: ${{latestOverallAssessment?.average_score.toFixed(2)}}`,
+                    data: latestRadarScores,
+                    fill: true,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgb(54, 162, 235)',
+                    pointBackgroundColor: 'rgb(54, 162, 235)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(54, 162, 235)'
+                }}]
+            }},
+            options: {{
+                responsive: true,
+                maintainAspectRatio: false,
+                elements: {{ line: {{ borderWidth: 3 }} }},
+                scales: {{
+                    r: {{
+                        angleLines: {{ display: false }},
+                        suggestedMin: 0,
+                        suggestedMax: 100,
+                        pointLabels: {{ font: {{ size: 14 }} }}
+                    }}
+                }}
+            }}
+        }});
+
+        // --- Model Comparison Logic ---
+        const modelSelect1 = document.getElementById('modelSelect1');
+        const modelSelect2 = document.getElementById('modelSelect2');
+
+        // Populate dropdowns
+        uniqueModels.forEach(model => {{
+            const option1 = new Option(model, model);
+            const option2 = new Option(model, model);
+            modelSelect1.add(option1);
+            modelSelect2.add(option2);
+        }});
+
+        // Set initial selection (if possible)
+        if (uniqueModels.length > 0) modelSelect1.value = uniqueModels[0];
+        if (uniqueModels.length > 1) modelSelect2.value = uniqueModels[1];
+
+        function updateComparisonCharts() {{
+            const model1Name = modelSelect1.value;
+            const model2Name = modelSelect2.value;
+            const model1Data = latestModelData[model1Name];
+            const model2Data = latestModelData[model2Name];
+
+            // --- Bar Chart --- 
+            const barCtx = document.getElementById('comparisonBarChart').getContext('2d');
+            const barLabels = [model1Name, model2Name];
+            const barScores = [
+                model1Data ? model1Data.average_score : 0,
+                model2Data ? model2Data.average_score : 0
+            ];
+
+            if (comparisonBarChart) comparisonBarChart.destroy(); // Destroy previous chart instance
+            comparisonBarChart = new Chart(barCtx, {{
+                type: 'bar',
+                data: {{
+                    labels: barLabels,
+                    datasets: [{{
+                        label: 'Average Score',
+                        data: barScores,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.5)', // Reddish
+                            'rgba(54, 162, 235, 0.5)'  // Bluish
+                        ],
+                        borderColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(54, 162, 235)'
+                        ],
+                        borderWidth: 1
+                    }}]
+                }},
+                options: {{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {{ y: {{ beginAtZero: true, suggestedMax: 100 }} }},
+                    plugins: {{ legend: {{ display: false }} }}
+                }}
+            }});
+
+            // --- Radar Chart --- 
+            const radarCtx = document.getElementById('comparisonRadarChart').getContext('2d');
+            const categories = model1Data?.categories ? Object.keys(model1Data.categories) : (model2Data?.categories ? Object.keys(model2Data.categories) : []);
+            const model1CatScores = categories.map(cat => model1Data?.categories[cat] ?? 0);
+            const model2CatScores = categories.map(cat => model2Data?.categories[cat] ?? 0);
+
+            if (comparisonRadarChart) comparisonRadarChart.destroy(); // Destroy previous chart instance
+            comparisonRadarChart = new Chart(radarCtx, {{
+                type: 'radar',
+                data: {{
+                    labels: categories,
+                    datasets: [
+                        {{
+                            label: model1Name,
+                            data: model1CatScores,
+                            fill: true,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgb(255, 99, 132)',
+                            pointBackgroundColor: 'rgb(255, 99, 132)',
+                            pointBorderColor: '#fff'
+                        }},
+                        {{
+                            label: model2Name,
+                            data: model2CatScores,
+                            fill: true,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgb(54, 162, 235)',
+                            pointBackgroundColor: 'rgb(54, 162, 235)',
+                            pointBorderColor: '#fff'
+                        }}
+                    ]
+                }},
+                options: {{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    elements: {{ line: {{ borderWidth: 2 }} }},
+                    scales: {{
+                        r: {{
+                            angleLines: {{ display: false }},
+                            suggestedMin: 0,
+                            suggestedMax: 100,
+                            pointLabels: {{ font: {{ size: 12 }} }}
+                        }}
+                    }}
+                }}
+            }});
+        }}
+
+        // Add event listeners
+        modelSelect1.addEventListener('change', updateComparisonCharts);
+        modelSelect2.addEventListener('change', updateComparisonCharts);
+
+        // Initial chart draw
+        updateComparisonCharts();
+
+    </script>
+</body>
+</html>
+"""
 
 def load_assessment_data():
     """Load assessment data from the JSONL file."""
@@ -19,6 +337,8 @@ def load_assessment_data():
                 except json.JSONDecodeError:
                     log.warning(f"Skipping invalid JSON line in {ASSESSMENT_DATA_FILE}: {line.strip()}")
         log.info(f"Loaded {len(data)} assessment records from {ASSESSMENT_DATA_FILE}")
+        # Sort data by timestamp ascending
+        data.sort(key=lambda x: x.get('timestamp', ''))
         return data
     except FileNotFoundError:
         log.warning(f"Assessment data file not found: {ASSESSMENT_DATA_FILE}. Returning empty list.")
@@ -27,26 +347,69 @@ def load_assessment_data():
         log.error(f"Error loading assessment data: {e}")
         return []
 
+def get_latest_assessment_by_model(all_data):
+    """Process data to find the latest assessment for each unique model."""
+    latest_by_model = {}
+    for assessment in all_data:
+        model_name = assessment.get('model')
+        if model_name:
+            # Keep the latest entry for each model
+            latest_by_model[model_name] = assessment 
+    return latest_by_model
+
+def generate_html_dashboard(output_dir=DASHBOARD_DIR):
+    """Load assessment data and generate a static HTML dashboard file."""
+    log.info("Generating HTML dashboard...")
+    all_assessment_data = load_assessment_data()
+    latest_model_data = get_latest_assessment_by_model(all_assessment_data)
+    unique_models = sorted(list(latest_model_data.keys()))
+    
+    all_assessment_data_json = json.dumps(all_assessment_data, indent=None)
+    latest_model_data_json = json.dumps(latest_model_data, indent=None)
+    unique_models_json = json.dumps(unique_models, indent=None)
+    
+    html_content = HTML_TEMPLATE.format(
+        assessment_data_json=all_assessment_data_json,
+        latest_model_data_json=latest_model_data_json,
+        unique_models_json=unique_models_json
+    )
+    
+    output_path = os.path.join(output_dir, 'index.html')
+    try:
+        # Ensure the output directory exists
+        os.makedirs(output_dir, exist_ok=True)
+        with open(output_path, 'w', encoding='utf-8') as f:
+            f.write(html_content)
+        log.info(f"HTML dashboard successfully generated at '{output_path}'")
+        print(f"[Dashboard Update] HTML dashboard generated: {output_path}")
+    except IOError as e:
+        log.error(f"Failed to write HTML dashboard to '{output_path}': {e}")
+        print(f"Error: Could not write HTML dashboard file: {e}")
+    except Exception as e:
+        log.exception(f"An unexpected error occurred during HTML dashboard generation: {e}")
+        print(f"Error: An unexpected error occurred generating the HTML dashboard: {e}")
+
 def update_dashboard():
     """
     Placeholder function to update the dashboard.
     This function will be called after new assessment data is saved.
     It should load the data and update any dashboard views (e.g., HTML, console).
     """
-    log.info("Updating dashboard (placeholder implementation)...")
+    log.info("Updating dashboard...")
     assessment_data = load_assessment_data()
     if assessment_data:
-        # In a real implementation, you would process this data
-        # and generate/update a dashboard view (e.g., an HTML file, console output)
-        log.info(f"Dashboard update triggered with {len(assessment_data)} records.")
-        # Example: Print latest assessment average score
+        # Example: Print latest assessment average score to console
         latest_assessment = assessment_data[-1]
         print(f"[Dashboard Update] Latest assessment for {latest_assessment.get('provider')} ({latest_assessment.get('model')}): Avg Score = {latest_assessment.get('average_score'):.2f}")
+        
+        # Generate the HTML dashboard file
+        generate_html_dashboard(output_dir='docs') # Save to docs/index.html
     else:
         log.info("No assessment data found to update dashboard.")
 
 if __name__ == '__main__':
     # Example of how to manually trigger an update (e.g., for testing)
     logging.basicConfig(level=logging.INFO)
-    print("Manually triggering dashboard update...")
-    update_dashboard()
+    print("Manually triggering dashboard generation...")
+    # Ensure the function is called to generate the HTML file
+    generate_html_dashboard(output_dir='docs') # Save to docs/index.html

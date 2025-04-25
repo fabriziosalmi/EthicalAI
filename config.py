@@ -64,33 +64,41 @@ def setup_directories():
     os.makedirs(os.path.join(os.path.dirname(__file__), DASHBOARD_DIR), exist_ok=True)
 
 # --- Logging Setup ---
-def setup_logging(level=logging.INFO): # Add level argument with default
-    """Configure logging for the application."""
-    os.makedirs(RESULTS_DIR, exist_ok=True)  # Create results directory if it doesn't exist
+def setup_logging(level=logging.INFO):
+    """Configure logging for the application, removing existing handlers first."""
+    os.makedirs(RESULTS_DIR, exist_ok=True)
 
-    logging.basicConfig(
-        level=level, # Use the passed level
-        filename=LOG_FILE,
-        filemode='a',
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    )
-    console_handler = RichHandler(rich_tracebacks=True, show_time=True, level=level) # Use the passed level
-    formatter = logging.Formatter('%(message)s')
-    console_handler.setFormatter(formatter)
-    logging.getLogger().addHandler(console_handler)
-    root_logger = logging.getLogger()
-    # Remove default StreamHandler to avoid duplicate console logs
-    for handler in root_logger.handlers[:]: # Iterate over a copy
-        if isinstance(handler, logging.StreamHandler) and not isinstance(handler, RichHandler):
-            root_logger.removeHandler(handler)
+    root_logger = logging.getLogger() # Get the root logger
     
-    # Set the level for the root logger explicitly
+    # Remove all existing handlers from the root logger
+    for handler in root_logger.handlers[:]:
+        root_logger.removeHandler(handler)
+        handler.close() # Close the handler properly
+        
+    # Set the root logger's level
     root_logger.setLevel(level)
+
+    # Configure File Handler
+    file_handler = logging.FileHandler(LOG_FILE, mode='a', encoding='utf-8')
+    file_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    file_handler.setFormatter(file_formatter)
+    file_handler.setLevel(level) # Set level for file handler
+    root_logger.addHandler(file_handler)
+
+    # Configure Console Handler (RichHandler)
+    console_handler = RichHandler(rich_tracebacks=True, show_time=False, level=level, show_path=False)
+    console_formatter = logging.Formatter('%(message)s') # Simple format for console
+    console_handler.setFormatter(console_formatter)
+    root_logger.addHandler(console_handler)
     
+    # Disable propagation for libraries that might configure their own root logging
+    logging.getLogger("urllib3").propagate = False
+    logging.getLogger("httpx").propagate = False
+
+    # Return the logger for the current module (optional, as root is configured)
     return logging.getLogger(__name__)
 
-# Initialize logger with default level initially
-# The level will be potentially reconfigured when main() calls setup_logging again
+# Initialize logger - this call sets up the initial configuration
 log = setup_logging()
 
 # --- File Loading Functions ---

@@ -1,51 +1,155 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ethical AI Assessment Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding: 2rem;
-            background-color: #f8f9fa;
-            color: #2c3e50;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #3498db;
-            margin-bottom: 1.5rem;
-        }
+        body { font-family: 'Inter', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        .chart-container { max-height: 400px; }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Ethical AI Assessment Dashboard</h1>
-        <p class="lead">This dashboard will display assessment results once you've run some assessments.</p>
-        
-        <div class="alert alert-info">
-            <h4>How to use this dashboard:</h4>
-            <ol>
-                <li>Run the ethical assessment tool with your AI models</li>
-                <li>The dashboard will automatically update with your results</li>
-                <li>Compare performance across different AI providers and models</li>
-                <li>Analyze ethical performance across different categories</li>
-            </ol>
-        </div>
-        
-        <hr>
-        
-        <p class="text-center text-muted">
-            Ethical AI Assessment Tool | Dashboard will be populated once assessments are run
-        </p>
+<body class="bg-gray-100 text-gray-800 p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="mb-10">
+            <h1 class="text-4xl font-bold text-gray-900">Ethical AI Assessment Dashboard</h1>
+            <p class="text-lg text-gray-600 mt-2">Overview of assessment results</p>
+        </header>
+
+        <section class="mb-10 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Assessment History</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Timestamp</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Provider</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Model</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avg Score</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valid/Total Qs</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration (s)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200" id="assessment-table-body">
+                        <!-- Data will be injected here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="grid md:grid-cols-2 gap-8 mb-10">
+            <div class="bg-white p-6 rounded-lg shadow-md chart-container">
+                <h2 class="text-2xl font-semibold mb-4 text-gray-800">Average Score Over Time</h2>
+                <canvas id="scoreTrendChart"></canvas>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md chart-container">
+                <h2 class="text-2xl font-semibold mb-4 text-gray-800">Latest Assessment: Category Breakdown</h2>
+                <canvas id="categoryRadarChart"></canvas>
+            </div>
+        </section>
+
     </div>
+
+    <script>
+        const assessmentData = [{"timestamp": "2025-04-25T18:19:26.415196", "provider": "lmstudio", "model": "meta-llama-3.1-8b-instruct", "average_score": 55.39, "valid_scores": 100, "total_questions": 100, "assessment_date": "2025-04-25 18:17:29", "duration_seconds": 115.914605, "categories": {"transparency": 60.25, "fairness": 58.0, "safety": 61.5, "reliability": 60.4, "ethics": 28.95, "social_impact": 76.1}}, {"timestamp": "2025-04-25T18:22:07.239792", "provider": "lmstudio", "model": "meta-llama-3.1-3b-instruct", "average_score": 52.1, "valid_scores": 100, "total_questions": 100, "assessment_date": "2025-04-25 18:20:10", "duration_seconds": 114.704606, "categories": {"transparency": 52.25, "fairness": 53.0, "safety": 61.5, "reliability": 60.4, "ethics": 25.5, "social_impact": 76.1}}];
+
+        // --- Populate Table ---
+        const tableBody = document.getElementById('assessment-table-body');
+        assessmentData.forEach(assessment => {
+            const row = tableBody.insertRow();
+            const avgScore = assessment.average_score !== null ? assessment.average_score.toFixed(2) : 'N/A';
+            const duration = assessment.duration_seconds !== null ? assessment.duration_seconds.toFixed(1) : 'N/A';
+            const timestamp = new Date(assessment.timestamp).toLocaleString();
+            
+            row.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${timestamp}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${assessment.provider}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${assessment.model}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${avgScore >= 70 ? 'text-green-600' : (avgScore >= 40 ? 'text-yellow-600' : 'text-red-600')}">${avgScore}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${assessment.valid_scores}/${assessment.total_questions}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${duration}</td>
+            `;
+        });
+
+        // --- Score Trend Chart ---
+        const trendCtx = document.getElementById('scoreTrendChart').getContext('2d');
+        const trendLabels = assessmentData.map(a => new Date(a.timestamp).toLocaleTimeString());
+        const trendScores = assessmentData.map(a => a.average_score);
+
+        new Chart(trendCtx, {
+            type: 'line',
+            data: {
+                labels: trendLabels,
+                datasets: [{
+                    label: 'Average Score',
+                    data: trendScores,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        suggestedMax: 100
+                    }
+                }
+            }
+        });
+
+        // --- Category Radar Chart (Latest Assessment) ---
+        const radarCtx = document.getElementById('categoryRadarChart').getContext('2d');
+        const latestAssessment = assessmentData.length > 0 ? assessmentData[assessmentData.length - 1] : null;
+        let radarLabels = [];
+        let radarScores = [];
+
+        if (latestAssessment && latestAssessment.categories) {
+            radarLabels = Object.keys(latestAssessment.categories);
+            radarScores = Object.values(latestAssessment.categories);
+        }
+
+        new Chart(radarCtx, {
+            type: 'radar',
+            data: {
+                labels: radarLabels,
+                datasets: [{
+                    label: `Latest: ${latestAssessment?.provider} (${latestAssessment?.model}) - Avg: ${latestAssessment?.average_score.toFixed(2)}`,
+                    data: radarScores,
+                    fill: true,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgb(54, 162, 235)',
+                    pointBackgroundColor: 'rgb(54, 162, 235)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(54, 162, 235)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                elements: {
+                    line: {
+                        borderWidth: 3
+                    }
+                },
+                scales: {
+                    r: {
+                        angleLines: { display: false },
+                        suggestedMin: 0,
+                        suggestedMax: 100,
+                        pointLabels: { font: { size: 14 } }
+                    }
+                }
+            }
+        });
+
+    </script>
 </body>
 </html>
