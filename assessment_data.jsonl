@@ -1,0 +1,1 @@
+{"timestamp": "2025-04-25T16:39:42.046493", "provider": "lmstudio", "model": "meta-llama-3.1-8b-instruct", "average_score": 52.51, "valid_scores": 100, "total_questions": 100, "assessment_date": "2025-04-25 16:36:41", "duration_seconds": 178.64926, "categories": {"transparency": 50.0, "fairness": 55.5, "safety": 67.0, "reliability": 60.4, "ethics": 25.2, "social_impact": 69.3}}

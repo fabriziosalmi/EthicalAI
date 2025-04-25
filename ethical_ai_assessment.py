@@ -814,7 +814,6 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                     <td>{{ question }}</td>
                     <td>{{ score }}</td>
                 </tr>
-                {% endfor %}
             </tbody>
         </table>
         
@@ -1753,16 +1752,19 @@ def extract_scores_from_report(report_file: str) -> Dict:
 def parse_arguments():
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(description="Ethical AI Assessment Tool")
-    parser.add_argument('--provider', type=str, choices=SUPPORTED_PROVIDERS, help="Specify the AI provider to assess")
-    parser.add_argument('--model', type=str, help="Override the model specified in config.json")
-    parser.add_argument('--api-endpoint', type=str, help="Override the API endpoint specified in config.json")
-    parser.add_argument('--max-tokens', type=int, help="Override max_tokens in config.json")
-    parser.add_argument('--temperature', type=float, help="Override base temperature in config.json")
-    parser.add_argument('--samples', type=int, help="Override number of samples per question")
-    parser.add_argument('--timeout', type=int, help=f"API request timeout in seconds (default: {REQUEST_TIMEOUT})")
-    parser.add_argument('--no-retry-edges', action='store_true', help="Disable retry mechanism for edge scores (0 or 100)")
-    parser.add_argument('--request-delay', type=float, help="Delay between API requests in seconds (default: 0)")
-    parser.add_argument('--compare', action='store_true', help="Compare results across multiple providers")
+    parser.add.argument('--provider', type=str, choices=SUPPORTED_PROVIDERS, help="Specify the AI provider to assess")
+    parser.add.argument('--model', type=str, help="Override the model specified in config.json")
+    parser.add.argument('--api-endpoint', type=str, help="Override the API endpoint specified in config.json")
+    parser.add.argument('--max-tokens', type=int, help="Override max_tokens in config.json")
+    parser.add.argument('--temperature', type=float, help="Override base temperature in config.json")
+    parser.add.argument('--samples', type=int, help="Override number of samples per question")
+    parser.add.argument('--timeout', type=int, help=f"API request timeout in seconds (default: {REQUEST_TIMEOUT})")
+    parser.add.argument('--no-retry-edges', action='store_true', help="Disable retry mechanism for edge scores (0 or 100)")
+    parser.add.argument('--request-delay', type=float, help="Delay between API requests in seconds (default: 0)")
+    parser.add.argument('--compare', action='store_true', help="Compare results across multiple providers")
+    parser.add.argument('--server', action='store_true', help="Start a local web server for the dashboard")
+    parser.add.argument('--port', type=int, default=8000, help="Port for the local web server (default: 8000)")
+    parser.add.argument('--dashboard', action='store_true', help="Update the dashboard without running assessments")
     return parser.parse_args()
 
 def main():
@@ -1770,6 +1772,716 @@ def main():
     log.info("Script execution started.")
     
     args = parse_arguments()
+    
+    # Check if dashboard update only is requested
+    if args.dashboard:
+        update_dashboard()
+        print("Dashboard updated. View it in the docs/ directory or start the server with --server")
+        return
+    
+    # Check if server only is requested
+    if args.server:
+        print("Starting local web server for dashboard")
+        start_local_server(args.port)
+        return
+    
+    # Determine which provider to use
+    active_provider = args.provider if args.provider else config.get('active_provider', PROVIDER_LMSTUDIO)
+    
+    if active_provider not in SUPPORTED_PROVIDERS:
+        log.error(f"Unsupported provider specified: {active_provider}")
+        print(f"Error: Unsupported provider '{active_provider}'. Supported providers are: {', '.join(SUPPORTED_PROVIDERS)}")
+        exit(1)
+
+    provider_config = config[active_provider]
+
+    if args.model:
+        log.info(f"Overriding model from command line: {args.model}")
+        provider_config['model'] = args.model
+    
+    if args.api_endpoint:
+        log.info(f"Overriding API endpoint from command line: {args.api_endpoint}")
+        provider_config['api_endpoint'] = args.api_endpoint
+    
+    if args.max_tokens:
+        log.info(f"Overriding max_tokens from command line: {args.max_tokens}")
+        provider_config['max_tokens'] = args.max_tokens
+    
+    if args.temperature is not None:
+        log.info(f"Overriding temperature from command line: {args.temperature}")
+        provider_config['temperature'] = args.temperature
+    
+    if args.samples:
+        log.info(f"Overriding samples per question from command line: {args.samples}")
+        provider_config['num_samples_per_question'] = args.samples
+    
+    # Store the custom timeout if provided
+    custom_timeout = REQUEST_TIMEOUT
+    if args.timeout:
+        log.info(f"Overriding request timeout from command line: {args.timeout}")
+        custom_timeout = args.timeout
+    
+    if args.no_retry_edges:
+        log.info("Disabling edge case retry mechanism from command line")
+        provider_config['retry_edge_cases'] = False
+    
+    if args.request_delay is not None:
+        log.info(f"Overriding request delay from command line: {args.request_delay}")
+        provider_config['request_delay'] = args.request_delay
+    
+    # Create a custom API request function that uses our timeout
+    def custom_send_api_request(url, headers, payload, _):
+        """Custom API request function that uses our specific timeout."""
+        return requests.post(
+            url,
+            headers=headers,
+            json=payload,
+            timeout=custom_timeout
+        ).json()
+    
+    # Store the original function to restore it later
+    original_send_api_request = globals()['_send_api_request']
+    
+    try:
+        # Replace the global function with our custom one
+        globals()['_send_api_request'] = custom_send_api_request
+        
+        if args.compare:
+            compare_providers()
+        else:
+            run_assessment(active_provider)
+    finally:
+        # Restore the original function
+        globals()['_send_api_request'] = original_send_api_request
+    
+    log.info("Script execution finished.")
+
+if __name__ == "__main__":
+    main()
+
+# Create needed directories
+os.makedirs(RESULTS_DIR, exist_ok=True)  # Create results directory if it doesn't exist
+os.makedirs(os.path.join(os.path.dirname(__file__), 'templates'), exist_ok=True)
+os.makedirs(os.path.join(os.path.dirname(__file__), 'docs'), exist_ok=True)  # For GitHub Pages
+os.makedirs(os.path.join(os.path.dirname(__file__), DASHBOARD_DIR), exist_ok=True)  # Dashboard directory
+
+def update_dashboard():
+    """
+    Update the dashboard with the latest assessment data.
+    Reads the JSONL file and generates an HTML dashboard with Chart.js visualizations.
+    The dashboard is saved to the docs/ directory for GitHub Pages.
+    """
+    try:
+        log.info("Updating dashboard...")
+        
+        # Read assessment data from JSONL file
+        assessments = []
+        if os.path.exists(ASSESSMENT_DATA_FILE):
+            with open(ASSESSMENT_DATA_FILE, 'r', encoding='utf-8') as f:
+                for line in f:
+                    try:
+                        assessment = json.loads(line.strip())
+                        assessments.append(assessment)
+                    except json.JSONDecodeError:
+                        log.warning(f"Invalid JSON in line: {line}")
+        
+        if not assessments:
+            log.warning("No assessment data found for dashboard")
+            return
+        
+        # Sort assessments by timestamp
+        assessments.sort(key=lambda x: x.get('timestamp', ''), reverse=True)
+        
+        # Generate dashboard data
+        providers = list(set(a.get('provider', 'unknown') for a in assessments))
+        models = list(set(a.get('model', 'unknown') for a in assessments))
+        
+        # Prepare data for charts
+        provider_scores = defaultdict(list)
+        provider_dates = defaultdict(list)
+        model_scores = defaultdict(list)
+        model_dates = defaultdict(list)
+        
+        # Category data
+        all_categories = set()
+        for assessment in assessments:
+            if 'categories' in assessment:
+                all_categories.update(assessment['categories'].keys())
+        
+        category_data = {cat: [] for cat in all_categories}
+        
+        # Collect data for charts
+        for assessment in assessments:
+            provider = assessment.get('provider', 'unknown')
+            model = assessment.get('model', 'unknown')
+            score = assessment.get('average_score', 0)
+            date = assessment.get('timestamp', '')
+            if date:
+                try:
+                    # Convert ISO format to shorter date
+                    date_obj = datetime.fromisoformat(date)
+                    date = date_obj.strftime('%Y-%m-%d')
+                except (ValueError, TypeError):
+                    pass
+            
+            provider_scores[provider].append(score)
+            provider_dates[provider].append(date)
+            model_scores[model].append(score)
+            model_dates[model].append(date)
+            
+            # Add category data
+            if 'categories' in assessment:
+                for category, cat_score in assessment['categories'].items():
+                    if category in category_data:
+                        category_data[category].append({
+                            'provider': provider,
+                            'model': model,
+                            'score': cat_score,
+                            'date': date
+                        })
+        
+        # Calculate averages by provider and model
+        provider_avgs = {p: sum(scores)/len(scores) if scores else 0 for p, scores in provider_scores.items()}
+        model_avgs = {m: sum(scores)/len(scores) if scores else 0 for m, scores in model_scores.items()}
+        
+        # Create dashboard HTML
+        dashboard_html = generate_dashboard_html(
+            assessments=assessments,
+            provider_scores=provider_scores,
+            provider_dates=provider_dates,
+            provider_avgs=provider_avgs,
+            model_scores=model_scores,
+            model_dates=model_dates,
+            model_avgs=model_avgs,
+            category_data=category_data
+        )
+        
+        # Save dashboard to docs/ directory for GitHub Pages
+        docs_dir = os.path.join(os.path.dirname(__file__), 'docs')
+        os.makedirs(docs_dir, exist_ok=True)
+        
+        with open(os.path.join(docs_dir, 'index.html'), 'w', encoding='utf-8') as f:
+            f.write(dashboard_html)
+        
+        log.info("Dashboard updated successfully in docs directory (for GitHub Pages)")
+        
+        # Create a copy in the dashboard directory for local development
+        dashboard_dir = os.path.join(os.path.dirname(__file__), DASHBOARD_DIR)
+        os.makedirs(dashboard_dir, exist_ok=True)
+        
+        with open(os.path.join(dashboard_dir, 'index.html'), 'w', encoding='utf-8') as f:
+            f.write(dashboard_html)
+        
+        log.info("Dashboard updated successfully in dashboard directory (for local development)")
+        
+    except Exception as e:
+        log.error(f"Error updating dashboard: {e}", exc_info=True)
+
+def generate_dashboard_html(assessments, provider_scores, provider_dates, provider_avgs, 
+                           model_scores, model_dates, model_avgs, category_data):
+    """
+    Generate HTML for the dashboard using Chart.js.
+    
+    Args:
+        assessments: List of assessment data
+        provider_scores: Dictionary of provider scores
+        provider_dates: Dictionary of provider dates
+        provider_avgs: Dictionary of provider averages
+        model_scores: Dictionary of model scores
+        model_dates: Dictionary of model dates
+        model_avgs: Dictionary of model averages
+        category_data: Dictionary of category data
+        
+    Returns:
+        HTML content for the dashboard
+    """
+    # Get unique categories
+    all_categories = sorted(list(category_data.keys()))
+    
+    # Convert data to JSON for JavaScript
+    providers_json = json.dumps(list(provider_avgs.keys()))
+    provider_avgs_json = json.dumps(list(provider_avgs.values()))
+    models_json = json.dumps(list(model_avgs.keys()))
+    model_avgs_json = json.dumps(list(model_avgs.values()))
+    
+    # Format recent assessments for the table
+    recent_assessments = assessments[:10]  # Show only 10 most recent
+    assessments_table = []
+    for a in recent_assessments:
+        date = a.get('timestamp', '')
+        if date:
+            try:
+                date_obj = datetime.fromisoformat(date)
+                date = date_obj.strftime('%Y-%m-%d %H:%M')
+            except (ValueError, TypeError):
+                pass
+        
+        assessments_table.append({
+            'provider': a.get('provider', 'unknown').upper(),
+            'model': a.get('model', 'unknown'),
+            'score': f"{a.get('average_score', 0):.2f}",
+            'valid': a.get('valid_scores', 0),
+            'total': a.get('total_questions', 0),
+            'date': date
+        })
+    
+    # Time series data for providers
+    time_series_data = []
+    for provider, dates in provider_dates.items():
+        scores = provider_scores[provider]
+        data_points = []
+        for i in range(len(dates)):
+            data_points.append({'x': dates[i], 'y': scores[i]})
+        
+        # Sort by date
+        data_points.sort(key=lambda x: x['x'])
+        
+        time_series_data.append({
+            'label': provider.upper(),
+            'data': data_points
+        })
+    
+    time_series_json = json.dumps(time_series_data)
+    
+    # Category data for radar chart
+    radar_data = {}
+    for category in all_categories:
+        cat_items = category_data[category]
+        if not cat_items:
+            continue
+            
+        for item in cat_items:
+            provider = item['provider']
+            if provider not in radar_data:
+                radar_data[provider] = {}
+            
+            if category not in radar_data[provider]:
+                radar_data[provider][category] = []
+                
+            radar_data[provider][category].append(item['score'])
+    
+    # Calculate averages for each provider/category
+    radar_avgs = {}
+    for provider, categories in radar_data.items():
+        radar_avgs[provider] = {}
+        for category, scores in categories.items():
+            radar_avgs[provider][category] = sum(scores) / len(scores) if scores else 0
+    
+    # Format radar data for Chart.js
+    radar_datasets = []
+    for provider, categories in radar_avgs.items():
+        dataset = {
+            'label': provider.upper(),
+            'data': [categories.get(cat, 0) for cat in all_categories]
+        }
+        radar_datasets.append(dataset)
+    
+    radar_json = json.dumps({
+        'labels': [cat.capitalize() for cat in all_categories],
+        'datasets': radar_datasets
+    })
+    
+    html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethical AI Assessment Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.1/dist/chartjs-adapter-moment.min.js"></script>
+    <style>
+        :root {{
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --background-color: #f8f9fa;
+            --card-bg-color: #ffffff;
+            --text-color: #2c3e50;
+            --border-color: #e0e0e0;
+        }}
+        
+        body {{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            background-color: var(--background-color);
+        }}
+        
+        .dashboard-header {{
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }}
+        
+        .card {{
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }}
+        
+        .card-header {{
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+        }}
+        
+        .table {{
+            margin-bottom: 0;
+        }}
+        
+        .chart-container {{
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }}
+    </style>
+</head>
+<body>
+    <div class="dashboard-header">
+        <div class="container">
+            <h1>Ethical AI Assessment Dashboard</h1>
+            <p class="lead">Comparing ethical performance across AI models and providers</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">Provider Comparison</div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="providerChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">Model Comparison</div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="modelChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">Performance Over Time</div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="timeSeriesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">Category Comparison</div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="radarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">Recent Assessments</div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Provider</th>
+                                        <th>Model</th>
+                                        <th>Score</th>
+                                        <th>Valid Questions</th>
+                                        <th>Total Questions</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+"""
+    
+    # Add rows for recent assessments
+    for a in assessments_table:
+        html += f"""                                    <tr>
+                                        <td>{a['provider']}</td>
+                                        <td>{a['model']}</td>
+                                        <td>{a['score']}</td>
+                                        <td>{a['valid']}</td>
+                                        <td>{a['total']}</td>
+                                        <td>{a['date']}</td>
+                                    </tr>
+"""
+    
+    html += f"""                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-light py-3 mt-5">
+        <div class="container text-center">
+            <p>Ethical AI Assessment Dashboard | Generated on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
+        </div>
+    </footer>
+
+    <script>
+        // Provider comparison chart
+        const providerCtx = document.getElementById('providerChart').getContext('2d');
+        new Chart(providerCtx, {{
+            type: 'bar',
+            data: {{
+                labels: {providers_json},
+                datasets: [{{
+                    label: 'Average Score',
+                    data: {provider_avgs_json},
+                    backgroundColor: 'rgba(52, 152, 219, 0.7)',
+                    borderColor: 'rgba(52, 152, 219, 1)',
+                    borderWidth: 1
+                }}]
+            }},
+            options: {{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {{
+                    title: {{
+                        display: true,
+                        text: 'Average Score by Provider'
+                    }}
+                }},
+                scales: {{
+                    y: {{
+                        beginAtZero: true,
+                        max: 100,
+                        title: {{
+                            display: true,
+                            text: 'Score (0-100)'
+                        }}
+                    }}
+                }}
+            }}
+        }});
+
+        // Model comparison chart
+        const modelCtx = document.getElementById('modelChart').getContext('2d');
+        new Chart(modelCtx, {{
+            type: 'bar',
+            data: {{
+                labels: {models_json},
+                datasets: [{{
+                    label: 'Average Score',
+                    data: {model_avgs_json},
+                    backgroundColor: 'rgba(231, 76, 60, 0.7)',
+                    borderColor: 'rgba(231, 76, 60, 1)',
+                    borderWidth: 1
+                }}]
+            }},
+            options: {{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {{
+                    title: {{
+                        display: true,
+                        text: 'Average Score by Model'
+                    }}
+                }},
+                scales: {{
+                    y: {{
+                        beginAtZero: true,
+                        max: 100,
+                        title: {{
+                            display: true,
+                            text: 'Score (0-100)'
+                        }}
+                    }}
+                }}
+            }}
+        }});
+
+        // Time series chart
+        const timeSeriesCtx = document.getElementById('timeSeriesChart').getContext('2d');
+        new Chart(timeSeriesCtx, {{
+            type: 'line',
+            data: {{
+                datasets: {time_series_json}
+            }},
+            options: {{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {{
+                    title: {{
+                        display: true,
+                        text: 'Score Progression Over Time'
+                    }}
+                }},
+                scales: {{
+                    y: {{
+                        beginAtZero: true,
+                        max: 100,
+                        title: {{
+                            display: true,
+                            text: 'Score (0-100)'
+                        }}
+                    }},
+                    x: {{
+                        type: 'time',
+                        time: {{
+                            unit: 'day'
+                        }},
+                        title: {{
+                            display: true,
+                            text: 'Date'
+                        }}
+                    }}
+                }}
+            }}
+        }});
+
+        // Radar chart for categories
+        const radarCtx = document.getElementById('radarChart').getContext('2d');
+        new Chart(radarCtx, {{
+            type: 'radar',
+            data: {radar_json},
+            options: {{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {{
+                    title: {{
+                        display: true,
+                        text: 'Category Performance by Provider'
+                    }}
+                }},
+                scales: {{
+                    r: {{
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {{
+                            stepSize: 20
+                        }}
+                    }}
+                }}
+            }}
+        }});
+    </script>
+</body>
+</html>
+"""
+    return html
+
+def start_local_server(port=8000):
+    """
+    Start a local web server for dashboard development.
+    
+    Args:
+        port: Port to run the server on (default: 8000)
+    """
+    try:
+        import http.server
+        import socketserver
+        import webbrowser
+        
+        # Create handler that serves from the dashboard directory
+        dashboard_dir = os.path.join(os.path.dirname(__file__), DASHBOARD_DIR)
+        os.makedirs(dashboard_dir, exist_ok=True)
+        
+        # Check if index.html exists, if not create a simple one
+        if not os.path.exists(os.path.join(dashboard_dir, 'index.html')):
+            with open(os.path.join(dashboard_dir, 'index.html'), 'w', encoding='utf-8') as f:
+                f.write("""<!DOCTYPE html>
+<html>
+<head>
+    <title>Ethical AI Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <h1>Ethical AI Assessment Dashboard</h1>
+    <p>No assessment data available yet. Run some assessments to populate the dashboard.</p>
+</body>
+</html>""")
+        
+        # Create handler
+        handler = http.server.SimpleHTTPRequestHandler
+        
+        class CustomHandler(handler):
+            def __init__(self, *args, **kwargs):
+                # Change directory to dashboard
+                current_dir = os.getcwd()
+                os.chdir(dashboard_dir)
+                super().__init__(*args, **kwargs)
+                os.chdir(current_dir)
+        
+        # Create server
+        with socketserver.TCPServer(("", port), CustomHandler) as httpd:
+            print(f"Server started at http://localhost:{port}")
+            print("Press Ctrl+C to stop the server")
+            
+            # Open browser
+            webbrowser.open(f"http://localhost:{port}")
+            
+            # Start server
+            httpd.serve_forever()
+    except ImportError:
+        print("Error: Could not import required modules for web server")
+    except Exception as e:
+        print(f"Error starting local server: {e}")
+
+def parse_arguments():
+    """Parse command-line arguments."""
+    parser = argparse.ArgumentParser(description="Ethical AI Assessment Tool")
+    parser.add_argument('--provider', type=str, choices=SUPPORTED_PROVIDERS, help="Specify the AI provider to assess")
+    parser.add.argument('--model', type=str, help="Override the model specified in config.json")
+    parser.add.argument('--api-endpoint', type=str, help="Override the API endpoint specified in config.json")
+    parser.add.argument('--max-tokens', type=int, help="Override max_tokens in config.json")
+    parser.add.argument('--temperature', type=float, help="Override base temperature in config.json")
+    parser.add.argument('--samples', type=int, help="Override number of samples per question")
+    parser.add.argument('--timeout', type=int, help=f"API request timeout in seconds (default: {REQUEST_TIMEOUT})")
+    parser.add.argument('--no-retry-edges', action='store_true', help="Disable retry mechanism for edge scores (0 or 100)")
+    parser.add.argument('--request-delay', type=float, help="Delay between API requests in seconds (default: 0)")
+    parser.add.argument('--compare', action='store_true', help="Compare results across multiple providers")
+    parser.add.argument('--server', action='store_true', help="Start a local web server for the dashboard")
+    parser.add.argument('--port', type=int, default=8000, help="Port for the local web server (default: 8000)")
+    parser.add.argument('--dashboard', action='store_true', help="Update the dashboard without running assessments")
+    return parser.parse_args()
+
+def main():
+    """Main entry point for the assessment tool."""
+    log.info("Script execution started.")
+    
+    args = parse_arguments()
+    
+    # Check if dashboard update only is requested
+    if args.dashboard:
+        update_dashboard()
+        print("Dashboard updated. View it in the docs/ directory or start the server with --server")
+        return
+    
+    # Check if server only is requested
+    if args.server:
+        print("Starting local web server for dashboard")
+        start_local_server(args.port)
+        return
     
     # Determine which provider to use
     active_provider = args.provider if args.provider else config.get('active_provider', PROVIDER_LMSTUDIO)
