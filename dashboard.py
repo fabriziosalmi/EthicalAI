@@ -26,6 +26,19 @@ HTML_TEMPLATE = """
         .chart-container {{ height: 400px; width: 100%; }}
         /* Ensure dropdowns are visible */
         select {{ background-image: none; }}
+        /* Badge styles */
+        .badge {{
+            display: inline-flex;
+            align-items: center;
+            padding: 0.15rem 0.5rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }}
+        .badge-improvement {{ background-color: #d1fae5; color: #065f46; }}
+        .badge-decline {{ background-color: #fee2e2; color: #b91c1c; }}
+        .badge-neutral {{ background-color: #e5e7eb; color: #374151; }}
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800 p-8">
@@ -35,12 +48,38 @@ HTML_TEMPLATE = """
             <p class="text-lg text-gray-600 mt-2">Overview and comparison of assessment results</p>
         </header>
 
+        <!-- Dashboard Controls -->
+        <section class="mb-6 bg-white p-4 rounded-lg shadow-md">
+            <div class="grid md:grid-cols-3 gap-4">
+                <div>
+                    <label for="providerFilter" class="block text-sm font-medium text-gray-700">Filter by Provider:</label>
+                    <select id="providerFilter" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md appearance-none bg-white border">
+                        <option value="all">All Providers</option>
+                        <!-- Provider options will be added by JS -->
+                    </select>
+                </div>
+                <div>
+                    <label for="dateRange" class="block text-sm font-medium text-gray-700">Date Range:</label>
+                    <select id="dateRange" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md appearance-none bg-white border">
+                        <option value="all">All Time</option>
+                        <option value="month">Last Month</option>
+                        <option value="week">Last Week</option>
+                        <option value="day">Last 24 Hours</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button id="refreshDashboard" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Refresh Dashboard
+                    </button>
+                </div>
+            </div>
+        </section>
+
         <!-- Assessment History Table -->
         <section class="mb-10 bg-white p-6 rounded-lg shadow-md">
             <h2 class="text-2xl font-semibold mb-4 text-gray-800">Assessment History</h2>
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
-                    <!-- ... table head ... -->
                     <thead class="bg-gray-50">
                         <tr>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Timestamp</th>
@@ -99,6 +138,66 @@ HTML_TEMPLATE = """
             </div>
         </section>
 
+        <!-- Category Performance Comparison Table -->
+        <section class="mb-10 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Category Performance Comparison</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Model</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Change</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200" id="category-comparison-table-body">
+                        <!-- Data will be injected here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Ethics Score Breakdown -->
+        <section class="mb-10 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Ethics Score Breakdown</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <p class="text-gray-600 mb-4">Ethics scores are typically among the most challenging for AI models. This visualization breaks down how models perform across different ethical dimensions.</p>
+                    <div class="chart-container">
+                        <canvas id="ethicsBreakdownChart"></canvas>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-700">Ethics Assessment Insights</h3>
+                    <ul class="space-y-4" id="ethics-insights">
+                        <!-- Insights will be populated by JavaScript -->
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Strengths and Weaknesses -->
+        <section class="mb-10 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Model Strengths & Weaknesses</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="border border-green-200 rounded-lg p-4 bg-green-50">
+                    <h3 class="text-xl font-semibold mb-2 text-green-700">Top Performing Categories</h3>
+                    <div id="strengths-container" class="space-y-4">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="border border-red-200 rounded-lg p-4 bg-red-50">
+                    <h3 class="text-xl font-semibold mb-2 text-red-700">Areas for Improvement</h3>
+                    <div id="weaknesses-container" class="space-y-4">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </div>
 
     <script>
@@ -106,108 +205,465 @@ HTML_TEMPLATE = """
         const latestModelData = {latest_model_data_json};
         const uniqueModels = {unique_models_json};
 
+        // Get unique providers
+        const uniqueProviders = [...new Set(allAssessmentData.map(data => data.provider))];
+        
+        // Initialize chart objects
         let comparisonBarChart = null;
         let comparisonRadarChart = null;
+        let ethicsBreakdownChart = null;
+        let trendChart = null;
+        let latestRadarChart = null;
 
-        // --- Populate History Table ---
-        const tableBody = document.getElementById('assessment-table-body');
-        allAssessmentData.slice().reverse().forEach(assessment => {{ // Show newest first
-            const row = tableBody.insertRow();
-            const avgScore = assessment.average_score !== null ? assessment.average_score.toFixed(2) : 'N/A';
-            const duration = assessment.duration_seconds !== null ? assessment.duration_seconds.toFixed(1) : 'N/A';
-            const timestamp = new Date(assessment.timestamp).toLocaleString();
+        // Populate provider filter dropdown
+        const providerFilter = document.getElementById('providerFilter');
+        uniqueProviders.forEach(provider => {{
+            const option = new Option(provider, provider);
+            providerFilter.add(option);
+        }});
+
+        // Function to filter data based on provider and date range
+        function filterData() {{
+            const selectedProvider = providerFilter.value;
+            const selectedDateRange = document.getElementById('dateRange').value;
             
-            row.innerHTML = `
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${{timestamp}}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${{assessment.provider}}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${{assessment.model}}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${{avgScore === 'N/A' ? 'text-gray-500' : (avgScore >= 70 ? 'text-green-600' : (avgScore >= 40 ? 'text-yellow-600' : 'text-red-600'))}}">${{avgScore}}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${{assessment.valid_scores}}/${{assessment.total_questions}}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${{duration}}</td>
-            `;
-        }});
-
-        // --- Score Trend Chart ---
-        const trendCtx = document.getElementById('scoreTrendChart').getContext('2d');
-        // Group data by model for trend lines
-        const modelsTrendData = allAssessmentData.reduce((acc, curr) => {{
-            if (!acc[curr.model]) {{
-                acc[curr.model] = {{ labels: [], scores: [] }};
+            let filteredData = [...allAssessmentData];
+            
+            // Filter by provider
+            if (selectedProvider !== 'all') {{
+                filteredData = filteredData.filter(data => data.provider === selectedProvider);
             }}
-            acc[curr.model].labels.push(new Date(curr.timestamp).toLocaleTimeString());
-            acc[curr.model].scores.push(curr.average_score);
-            return acc;
-        }}, {{}});
-
-        const trendDatasets = Object.entries(modelsTrendData).map(([model, data], index) => ({{
-            label: model,
-            data: data.scores,
-            // Basic color cycling
-            borderColor: `hsl(${{index * 60}}, 70%, 50%)`,
-            tension: 0.1,
-            fill: false
-        }}));
-
-        new Chart(trendCtx, {{
-            type: 'line',
-            data: {{
-                // Use labels from the first model or generate generic time labels if needed
-                labels: modelsTrendData[Object.keys(modelsTrendData)[0]]?.labels || [], 
-                datasets: trendDatasets
-            }},
-            options: {{
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {{
-                    y: {{
-                        beginAtZero: false,
-                        suggestedMax: 100
-                    }}
+            
+            // Filter by date range
+            if (selectedDateRange !== 'all') {{
+                const now = new Date();
+                let cutoffDate;
+                
+                switch(selectedDateRange) {{
+                    case 'day':
+                        cutoffDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+                        break;
+                    case 'week':
+                        cutoffDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                        break;
+                    case 'month':
+                        cutoffDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+                        break;
                 }}
+                
+                filteredData = filteredData.filter(data => new Date(data.timestamp) >= cutoffDate);
             }}
-        }});
-
-        // --- Latest Category Radar Chart ---
-        const latestRadarCtx = document.getElementById('latestCategoryRadarChart').getContext('2d');
-        const latestOverallAssessment = allAssessmentData.length > 0 ? allAssessmentData[allAssessmentData.length - 1] : null;
-        let latestRadarLabels = [];
-        let latestRadarScores = [];
-
-        if (latestOverallAssessment && latestOverallAssessment.categories) {{
-            latestRadarLabels = Object.keys(latestOverallAssessment.categories);
-            latestRadarScores = Object.values(latestOverallAssessment.categories);
+            
+            return filteredData;
         }}
 
-        new Chart(latestRadarCtx, {{
-            type: 'radar',
-            data: {{
-                labels: latestRadarLabels,
-                datasets: [{{
-                    label: `Latest Overall: ${{latestOverallAssessment?.provider}} (${{latestOverallAssessment?.model}}) - Avg: ${{latestOverallAssessment?.average_score.toFixed(2)}}`,
-                    data: latestRadarScores,
-                    fill: true,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgb(54, 162, 235)',
-                    pointBackgroundColor: 'rgb(54, 162, 235)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgb(54, 162, 235)'
-                }}]
-            }},
-            options: {{
-                responsive: true,
-                maintainAspectRatio: false,
-                elements: {{ line: {{ borderWidth: 3 }} }},
-                scales: {{
-                    r: {{
-                        angleLines: {{ display: false }},
-                        suggestedMin: 0,
-                        suggestedMax: 100,
-                        pointLabels: {{ font: {{ size: 14 }} }}
+        // Function to update all dashboard visualizations
+        function updateDashboard() {{
+            const filteredData = filterData();
+            
+            // Update history table
+            updateHistoryTable(filteredData);
+            
+            // Update trend chart
+            updateTrendChart(filteredData);
+            
+            // Update latest radar chart
+            updateLatestRadarChart(filteredData);
+            
+            // Update category comparison table
+            updateCategoryComparisonTable(filteredData);
+            
+            // Update ethics breakdown
+            updateEthicsBreakdown(filteredData);
+            
+            // Update strengths and weaknesses
+            updateStrengthsWeaknesses(filteredData);
+        }}
+
+        // Function to update history table
+        function updateHistoryTable(data) {{
+            const tableBody = document.getElementById('assessment-table-body');
+            tableBody.innerHTML = '';
+            
+            data.slice().reverse().forEach(assessment => {{
+                const row = tableBody.insertRow();
+                const avgScore = assessment.average_score !== null ? assessment.average_score.toFixed(2) : 'N/A';
+                const duration = assessment.duration_seconds !== null ? assessment.duration_seconds.toFixed(1) : 'N/A';
+                const timestamp = new Date(assessment.timestamp).toLocaleString();
+                
+                // Find previous assessment for this model to calculate change
+                const prevAssessments = allAssessmentData.filter(a => 
+                    a.model === assessment.model && 
+                    new Date(a.timestamp) < new Date(assessment.timestamp)
+                ).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                
+                let changeHtml = '';
+                if (prevAssessments.length > 0) {{
+                    const prevScore = prevAssessments[0].average_score;
+                    const change = assessment.average_score - prevScore;
+                    const changeClass = change > 0 ? 'badge-improvement' : (change < 0 ? 'badge-decline' : 'badge-neutral');
+                    const changeSign = change > 0 ? '+' : '';
+                    changeHtml = `<span class="badge ${{changeClass}}">${{changeSign}}${{change.toFixed(2)}}</span>`;
+                }}
+                
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${{timestamp}}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${{assessment.provider}}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${{assessment.model}}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${{avgScore === 'N/A' ? 'text-gray-500' : (avgScore >= 70 ? 'text-green-600' : (avgScore >= 40 ? 'text-yellow-600' : 'text-red-600'))}}">
+                        ${{avgScore}} ${{changeHtml}}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${{assessment.valid_scores}}/${{assessment.total_questions}}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${{duration}}</td>
+                `;
+            }});
+        }}
+
+        // Function to update trend chart
+        function updateTrendChart(data) {{
+            const trendCtx = document.getElementById('scoreTrendChart').getContext('2d');
+            
+            // Group data by model for trend lines
+            const modelsTrendData = data.reduce((acc, curr) => {{
+                if (!acc[curr.model]) {{
+                    acc[curr.model] = {{ labels: [], scores: [] }};
+                }}
+                acc[curr.model].labels.push(new Date(curr.timestamp).toLocaleString());
+                acc[curr.model].scores.push(curr.average_score);
+                return acc;
+            }}, {{}});
+            
+            const trendDatasets = Object.entries(modelsTrendData).map(([model, data], index) => ({{
+                label: model,
+                data: data.scores,
+                // Basic color cycling
+                borderColor: `hsl(${{index * 60}}, 70%, 50%)`,
+                tension: 0.1,
+                fill: false
+            }}));
+            
+            // Destroy previous chart if exists
+            if (trendChart) trendChart.destroy();
+            
+            trendChart = new Chart(trendCtx, {{
+                type: 'line',
+                data: {{
+                    // Use labels from the first model or generate generic time labels if needed
+                    labels: modelsTrendData[Object.keys(modelsTrendData)[0]]?.labels || [], 
+                    datasets: trendDatasets
+                }},
+                options: {{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {{
+                        y: {{
+                            beginAtZero: false,
+                            suggestedMax: 100
+                        }}
                     }}
                 }}
+            }});
+        }}
+
+        // Function to update latest radar chart
+        function updateLatestRadarChart(data) {{
+            if (data.length === 0) return;
+            
+            const latestRadarCtx = document.getElementById('latestCategoryRadarChart').getContext('2d');
+            // Sort data by timestamp to get latest
+            const sortedData = [...data].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            const latestAssessment = sortedData[0];
+            
+            let radarLabels = [];
+            let radarScores = [];
+            
+            if (latestAssessment && latestAssessment.categories) {{
+                radarLabels = Object.keys(latestAssessment.categories);
+                radarScores = Object.values(latestAssessment.categories);
             }}
-        }});
+            
+            // Destroy previous chart if exists
+            if (latestRadarChart) latestRadarChart.destroy();
+            
+            latestRadarChart = new Chart(latestRadarCtx, {{
+                type: 'radar',
+                data: {{
+                    labels: radarLabels,
+                    datasets: [{{
+                        label: `Latest: ${{latestAssessment?.provider}} (${{latestAssessment?.model}}) - Avg: ${{latestAssessment?.average_score.toFixed(2)}}`,
+                        data: radarScores,
+                        fill: true,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgb(54, 162, 235)',
+                        pointBackgroundColor: 'rgb(54, 162, 235)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(54, 162, 235)'
+                    }}]
+                }},
+                options: {{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    elements: {{ line: {{ borderWidth: 3 }} }},
+                    scales: {{
+                        r: {{
+                            angleLines: {{ display: false }},
+                            suggestedMin: 0,
+                            suggestedMax: 100,
+                            pointLabels: {{ font: {{ size: 14 }} }}
+                        }}
+                    }}
+                }}
+            }});
+        }}
+
+        // Function to update category comparison table
+        function updateCategoryComparisonTable(data) {{
+            const categoryTableBody = document.getElementById('category-comparison-table-body');
+            categoryTableBody.innerHTML = '';
+            
+            const categoryScores = {{}};
+            const modelTimestamps = {{}};
+            
+            // First collect the latest assessment for each model
+            data.forEach(assessment => {{
+                const model = assessment.model;
+                const timestamp = new Date(assessment.timestamp);
+                
+                if (!modelTimestamps[model] || timestamp > modelTimestamps[model].timestamp) {{
+                    modelTimestamps[model] = {{
+                        timestamp,
+                        categories: assessment.categories
+                    }};
+                }}
+            }});
+            
+            // Organize by category
+            Object.entries(modelTimestamps).forEach(([model, data]) => {{
+                Object.entries(data.categories).forEach(([category, score]) => {{
+                    if (!categoryScores[category]) {{
+                        categoryScores[category] = [];
+                    }}
+                    categoryScores[category].push({{ model, score }});
+                }});
+            }});
+            
+            // Sort categories by average score
+            const sortedCategories = Object.entries(categoryScores)
+                .sort((a, b) => {{
+                    const avgA = a[1].reduce((sum, item) => sum + item.score, 0) / a[1].length;
+                    const avgB = b[1].reduce((sum, item) => sum + item.score, 0) / b[1].length;
+                    return avgB - avgA;
+                }});
+            
+            // Generate table rows
+            sortedCategories.forEach(([category, models]) => {{
+                // Sort models by score within each category
+                models.sort((a, b) => b.score - a.score);
+                
+                models.forEach(({{ model, score }}) => {{
+                    const row = categoryTableBody.insertRow();
+                    
+                    // Find previous score for this model/category to show change
+                    const prevAssessments = allAssessmentData.filter(a => 
+                        a.model === model && 
+                        a.categories[category] !== undefined &&
+                        new Date(a.timestamp) < modelTimestamps[model].timestamp
+                    ).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                    
+                    let changeBadge = '';
+                    if (prevAssessments.length > 0) {{
+                        const prevScore = prevAssessments[0].categories[category];
+                        const change = score - prevScore;
+                        if (Math.abs(change) > 0.01) {{  // Only show significant changes
+                            const changeClass = change > 0 ? 'badge-improvement' : 'badge-decline';
+                            const changeSign = change > 0 ? '+' : '';
+                            changeBadge = `<span class="badge ${{changeClass}}">${{changeSign}}${{change.toFixed(2)}}</span>`;
+                        }} else {{
+                            changeBadge = `<span class="badge badge-neutral">0.00</span>`;
+                        }}
+                    }}
+                    
+                    row.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${{category}}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${{model}}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${{score.toFixed(2)}}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${{changeBadge}}</td>
+                    `;
+                }});
+            }});
+        }}
+
+        // Function to update ethics breakdown chart
+        function updateEthicsBreakdown(data) {{
+            const ethicsBreakdownCtx = document.getElementById('ethicsBreakdownChart').getContext('2d');
+            
+            // Only use latest assessment for each model
+            const latestByModel = {{}};
+            data.forEach(assessment => {{
+                const model = assessment.model;
+                const timestamp = new Date(assessment.timestamp);
+                
+                if (!latestByModel[model] || timestamp > new Date(latestByModel[model].timestamp)) {{
+                    latestByModel[model] = assessment;
+                }}
+            }});
+            
+            const models = Object.keys(latestByModel);
+            const ethicsScores = models.map(model => latestByModel[model].categories.ethics || 0);
+            
+            // Destroy previous chart if exists
+            if (ethicsBreakdownChart) ethicsBreakdownChart.destroy();
+            
+            ethicsBreakdownChart = new Chart(ethicsBreakdownCtx, {{
+                type: 'bar',
+                data: {{
+                    labels: models,
+                    datasets: [{{
+                        label: 'Ethics Score',
+                        data: ethicsScores,
+                        backgroundColor: models.map((_, i) => `hsla(${{i * 60}}, 70%, 60%, 0.6)`),
+                        borderColor: models.map((_, i) => `hsl(${{i * 60}}, 70%, 50%)`),
+                        borderWidth: 1
+                    }}]
+                }},
+                options: {{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {{
+                        y: {{
+                            beginAtZero: true,
+                            suggestedMax: 100
+                        }}
+                    }},
+                    plugins: {{
+                        tooltip: {{
+                            callbacks: {{
+                                afterLabel: function(context) {{
+                                    const modelIndex = context.dataIndex;
+                                    const model = models[modelIndex];
+                                    const allCats = latestByModel[model].categories;
+                                    const avgScore = latestByModel[model].average_score;
+                                    return `Overall Avg: ${{avgScore.toFixed(2)}}`;
+                                }}
+                            }}
+                        }}
+                    }}
+                }}
+            }});
+            
+            // Update ethics insights
+            const ethicsInsightsContainer = document.getElementById('ethics-insights');
+            ethicsInsightsContainer.innerHTML = '';
+            
+            // Calculate statistics for insights
+            const avgEthicsScore = ethicsScores.reduce((sum, score) => sum + score, 0) / ethicsScores.length || 0;
+            const highestModelIndex = ethicsScores.indexOf(Math.max(...ethicsScores));
+            const lowestModelIndex = ethicsScores.indexOf(Math.min(...ethicsScores));
+            
+            const insights = [
+                `Average ethics score across all models: ${{avgEthicsScore.toFixed(2)}}`,
+                `Best performing model: ${{models[highestModelIndex]}} (${{ethicsScores[highestModelIndex]?.toFixed(2) || 'N/A'}})`,
+                `Model with most room for improvement: ${{models[lowestModelIndex]}} (${{ethicsScores[lowestModelIndex]?.toFixed(2) || 'N/A'}})`,
+                `Ethics scores are typically ${{avgEthicsScore.toFixed(0)}}% lower than other assessment categories.`
+            ];
+            
+            insights.forEach(insight => {{
+                const li = document.createElement('li');
+                li.className = 'text-gray-600';
+                li.textContent = insight;
+                ethicsInsightsContainer.appendChild(li);
+            }});
+        }}
+
+        // Function to update strengths and weaknesses
+        function updateStrengthsWeaknesses(data) {{
+            if (data.length === 0) return;
+            
+            // Get latest assessment for each model
+            const latestByModel = {{}};
+            data.forEach(assessment => {{
+                const model = assessment.model;
+                const timestamp = new Date(assessment.timestamp);
+                
+                if (!latestByModel[model] || timestamp > new Date(latestByModel[model].timestamp)) {{
+                    latestByModel[model] = assessment;
+                }}
+            }});
+            
+            // Combine all categories across models to find overall strengths/weaknesses
+            const allCategoryScores = {{}};
+            Object.values(latestByModel).forEach(assessment => {{
+                if (assessment.categories) {{
+                    Object.entries(assessment.categories).forEach(([category, score]) => {{
+                        if (!allCategoryScores[category]) {{
+                            allCategoryScores[category] = [];
+                        }}
+                        allCategoryScores[category].push(score);
+                    }});
+                }}
+            }});
+            
+            // Calculate average score for each category
+            const categoryAverages = {{}};
+            Object.entries(allCategoryScores).forEach(([category, scores]) => {{
+                categoryAverages[category] = scores.reduce((sum, score) => sum + score, 0) / scores.length;
+            }});
+            
+            // Sort categories by average score
+            const sortedCategories = Object.entries(categoryAverages)
+                .sort((a, b) => b[1] - a[1]);
+            
+            // Get top 3 strengths and bottom 3 weaknesses
+            const strengths = sortedCategories.slice(0, Math.min(3, sortedCategories.length));
+            const weaknesses = sortedCategories.slice(-Math.min(3, sortedCategories.length)).reverse();
+            
+            // Update strengths container
+            const strengthsContainer = document.getElementById('strengths-container');
+            strengthsContainer.innerHTML = '';
+            
+            strengths.forEach(([category, score]) => {{
+                const div = document.createElement('div');
+                div.className = 'flex justify-between items-center';
+                div.innerHTML = `
+                    <span class="text-gray-700">${{category}}</span>
+                    <span class="text-green-700 font-semibold">${{score.toFixed(2)}}</span>
+                `;
+                strengthsContainer.appendChild(div);
+                
+                // Add progress bar
+                const progressContainer = document.createElement('div');
+                progressContainer.className = 'w-full bg-gray-200 rounded-full h-2.5 mt-1 mb-4';
+                const progressBar = document.createElement('div');
+                progressBar.className = 'bg-green-600 h-2.5 rounded-full';
+                progressBar.style.width = `${{score}}%`;
+                progressContainer.appendChild(progressBar);
+                strengthsContainer.appendChild(progressContainer);
+            }});
+            
+            // Update weaknesses container
+            const weaknessesContainer = document.getElementById('weaknesses-container');
+            weaknessesContainer.innerHTML = '';
+            
+            weaknesses.forEach(([category, score]) => {{
+                const div = document.createElement('div');
+                div.className = 'flex justify-between items-center';
+                div.innerHTML = `
+                    <span class="text-gray-700">${{category}}</span>
+                    <span class="text-red-700 font-semibold">${{score.toFixed(2)}}</span>
+                `;
+                weaknessesContainer.appendChild(div);
+                
+                // Add progress bar
+                const progressContainer = document.createElement('div');
+                progressContainer.className = 'w-full bg-gray-200 rounded-full h-2.5 mt-1 mb-4';
+                const progressBar = document.createElement('div');
+                progressBar.className = 'bg-red-500 h-2.5 rounded-full';
+                progressBar.style.width = `${{score}}%`;
+                progressContainer.appendChild(progressBar);
+                weaknessesContainer.appendChild(progressContainer);
+            }});
+        }}
 
         // --- Model Comparison Logic ---
         const modelSelect1 = document.getElementById('modelSelect1');
@@ -269,8 +725,8 @@ HTML_TEMPLATE = """
             // --- Radar Chart --- 
             const radarCtx = document.getElementById('comparisonRadarChart').getContext('2d');
             const categories = model1Data?.categories ? Object.keys(model1Data.categories) : (model2Data?.categories ? Object.keys(model2Data.categories) : []);
-            const model1CatScores = categories.map(cat => model1Data?.categories[cat] ?? 0);
-            const model2CatScores = categories.map(cat => model2Data?.categories[cat] ?? 0);
+            const model1CatScores = categories.map(cat => model1Data?.categories?.[cat] ?? 0);
+            const model2CatScores = categories.map(cat => model2Data?.categories?.[cat] ?? 0);
 
             if (comparisonRadarChart) comparisonRadarChart.destroy(); // Destroy previous chart instance
             comparisonRadarChart = new Chart(radarCtx, {{
@@ -314,13 +770,16 @@ HTML_TEMPLATE = """
             }});
         }}
 
-        // Add event listeners
+        // Event listeners
         modelSelect1.addEventListener('change', updateComparisonCharts);
         modelSelect2.addEventListener('change', updateComparisonCharts);
+        document.getElementById('refreshDashboard').addEventListener('click', updateDashboard);
+        providerFilter.addEventListener('change', updateDashboard);
+        document.getElementById('dateRange').addEventListener('change', updateDashboard);
 
-        // Initial chart draw
+        // Initialize dashboard
+        updateDashboard();
         updateComparisonCharts();
-
     </script>
 </body>
 </html>
