@@ -56,6 +56,8 @@ CONFIG_FILE = 'config.json'
 QUESTIONS_FILE = 'questions.txt'
 PROMPT_FILE = 'prompt.txt'
 RESULTS_DIR = 'results'  # Directory to store results
+DASHBOARD_DIR = 'dashboard'  # Directory to store dashboard
+ASSESSMENT_DATA_FILE = 'assessment_data.jsonl'  # File to store assessment data
 
 # --- Provider Names ---
 PROVIDER_LMSTUDIO = 'lmstudio'
@@ -540,7 +542,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
-            margin-bottom: 2rem;
+            margin-bottom: 2rem.
         }
         
         .metadata-item {
@@ -917,11 +919,9 @@ def generate_html_report(markdown_file: str, include_charts: bool = True) -> str
                 template_data["score_class"] = "score-medium"
             else:
                 template_data["score_class"] = "score-low"
+        
         else:
             template_data["average_score"] = "0.00"
-            template_data["valid_scores"] = 0
-            template_data["total_questions"] = len(results)
-            template_data["invalid_scores"] = len(results)
             template_data["max_score"] = "100"
             template_data["score_class"] = "score-low"
         
@@ -1270,6 +1270,45 @@ def run_assessment(provider: str, generate_reports: bool = True):
         summary_text.append(f"{str(duration).split('.')[0]}")
                 
         console.print(Panel(summary_text, title="[bold magenta]Assessment Complete", border_style="magenta"))
+
+        # Save assessment results to assessments.jsonl
+        assessment_data = {
+            'timestamp': datetime.now().isoformat(),
+            'provider': provider,
+            'model': model,
+            'average_score': average_final_score,
+            'valid_scores': num_valid_final_scores,
+            'total_questions': total_questions,
+            'assessment_date': assessment_date,
+            'duration_seconds': duration.total_seconds(),
+            'categories': {}
+        }
+        
+        # Calculate category scores
+        category_scores = defaultdict(list)
+        for i, (question, score, _) in enumerate(results, 1):
+            if score is not None:
+                # Determine category for this question
+                for cat, indices in category_mapping.items():
+                    if i in indices:
+                        category_scores[cat].append(score)
+                        break
+        
+        # Add category averages to assessment data
+        for category, scores in category_scores.items():
+            if scores:
+                assessment_data['categories'][category] = sum(scores) / len(scores)
+        
+        # Save to JSONL file (append mode)
+        try:
+            with open(ASSESSMENT_DATA_FILE, 'a', encoding='utf-8') as f:
+                f.write(json.dumps(assessment_data) + '\n')
+            log.info(f"Assessment data saved to {ASSESSMENT_DATA_FILE}")
+            
+            # Update dashboard with new data
+            update_dashboard()
+        except Exception as e:
+            log.error(f"Failed to save assessment data: {e}")
 
     except IOError as e:
         log.error(f"Error writing report to file '{report_filename}': {e}")
