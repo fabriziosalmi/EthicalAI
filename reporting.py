@@ -70,7 +70,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         }
         
         h2 {
-            color: var(--secondary-color);
+            color: var (--secondary-color);
             margin-top: 2rem;
             margin-bottom: 1rem;
             padding-bottom: 0.5rem;
@@ -381,6 +381,10 @@ def generate_html_report(markdown_file: str, include_charts: bool = True) -> Opt
         Path to the generated HTML report or None if generation failed
     """
     try:
+        if not os.path.exists(markdown_file):
+            log.error(f"Markdown file not found: {markdown_file}")
+            return None
+            
         log.info(f"Generating HTML report from {markdown_file}")
         
         # Extract data from markdown file
@@ -476,7 +480,25 @@ def generate_html_report(markdown_file: str, include_charts: bool = True) -> Opt
             # Look for visualization charts in the directory
             viz_dir = os.path.join(RESULTS_DIR, 'visualizations')
             if os.path.exists(viz_dir):
-                chart_files = [f for f in os.listdir(viz_dir) if f.endswith('.png') and provider.lower() in f.lower()]
+                timestamp_pattern = re.search(r'\/(\d{8}_\d{6})_', markdown_file)
+                timestamp = timestamp_pattern.group(1) if timestamp_pattern else None
+                
+                # If we have a timestamp, look for charts with that timestamp
+                if timestamp:
+                    chart_files = [f for f in os.listdir(viz_dir) if f.startswith(timestamp) and f.endswith('.png') and provider.lower() in f.lower()]
+                else:
+                    # Otherwise, just look for charts with the provider name
+                    chart_files = [f for f in os.listdir(viz_dir) if f.endswith('.png') and provider.lower() in f.lower()]
+                
+                # Sort files by creation time (newest first) so we get the most recent charts
+                if not chart_files and os.listdir(viz_dir):
+                    # Fallback: try to find any charts for this provider
+                    chart_files = [f for f in os.listdir(viz_dir) if f.endswith('.png') and provider.lower() in f.lower()]
+                    if chart_files:
+                        chart_files.sort(key=lambda f: os.path.getctime(os.path.join(viz_dir, f)), reverse=True)
+                        # Take only the most recent set (they should have the same timestamp)
+                        most_recent_time = os.path.getctime(os.path.join(viz_dir, chart_files[0]))
+                        chart_files = [f for f in chart_files if abs(os.path.getctime(os.path.join(viz_dir, f)) - most_recent_time) < 10]  # Within 10 seconds
                 
                 # If we have charts, include them in the template
                 if chart_files:
@@ -506,8 +528,10 @@ def generate_html_report(markdown_file: str, include_charts: bool = True) -> Opt
                     template_data["charts"] = charts
                 else:
                     template_data["charts"] = []
+                    log.warning(f"No visualization charts found for provider '{provider}' in {viz_dir}")
             else:
                 template_data["charts"] = []
+                log.warning(f"Visualization directory not found: {viz_dir}")
         else:
             template_data["charts"] = []
         
@@ -516,7 +540,14 @@ def generate_html_report(markdown_file: str, include_charts: bool = True) -> Opt
         html_content = template.render(**template_data)
         
         # Create output filepath
-        html_file = markdown_file.replace('.md', '.html')
+        if markdown_file.endswith('.md'):
+            html_file = markdown_file.replace('.md', '.html')
+        else:
+            # In case the file doesn't have .md extension
+            html_file = markdown_file + '.html'
+        
+        # Ensure the directory exists
+        os.makedirs(os.path.dirname(os.path.abspath(html_file)), exist_ok=True)
         
         # Write HTML to file
         with open(html_file, 'w', encoding='utf-8') as f:
@@ -541,6 +572,14 @@ def generate_pdf_report(markdown_file: str, html_file: Optional[str] = None) -> 
         Path to the generated PDF report or None if generation failed
     """
     try:
+        if not markdown_file:
+            log.error("No markdown file provided for PDF generation")
+            return None
+            
+        if not os.path.exists(markdown_file):
+            log.error(f"Markdown file not found: {markdown_file}")
+            return None
+            
         log.info(f"Generating PDF report from {'HTML file' if html_file else 'markdown file'}")
         
         # If no HTML file provided, generate one
@@ -549,20 +588,41 @@ def generate_pdf_report(markdown_file: str, html_file: Optional[str] = None) -> 
             if not html_file:
                 log.error("Failed to generate HTML report for PDF conversion")
                 return None
+        elif not os.path.exists(html_file):
+            log.error(f"Provided HTML file not found: {html_file}")
+            html_file = generate_html_report(markdown_file)
+            if not html_file:
+                log.error("Failed to generate HTML report for PDF conversion")
+                return None
         
         # Create output filepath
-        pdf_file = markdown_file.replace('.md', '.pdf')
+        if markdown_file.endswith('.md'):
+            pdf_file = markdown_file.replace('.md', '.pdf')
+        else:
+            # In case the file doesn't have .md extension
+            pdf_file = markdown_file + '.pdf
+            
+        # Ensure the directory exists
+        os.makedirs(os.path.dirname(os.path.abspath(pdf_file)), exist_ok=True)
         
-        # Generate PDF from HTML using WeasyPrint
-        with open(html_file, 'r', encoding='utf-8') as f:
-            html_content = f.read()
-        
-        html = weasyprint.HTML(string=html_content)
-        css = weasyprint.CSS(string='@page { size: A4; margin: 1cm; }')
-        html.write_pdf(pdf_file, stylesheets=[css])
-        
-        log.info(f"PDF report generated at {pdf_file}")
-        return pdf_file
+        try:
+            # Generate PDF from HTML using WeasyPrint
+            with open(html_file, 'r', encoding='utf-8') as f:
+                html_content = f.read()
+            
+            html = weasyprint.HTML(string=html_content, base_url=os.path.dirname(os.path.abspath(html_file)))
+            css = weasyprint.CSS(string='@page { size: A4; margin: 1cm; }')
+            html.write_pdf(pdf_file, stylesheets=[css])
+            
+            if not os.path.exists(pdf_file):
+                log.error(f"PDF file was not created at the expected location: {pdf_file}")
+                return None
+                
+            log.info(f"PDF report successfully generated at {pdf_file}")
+            return pdf_file
+        except Exception as e:
+            log.error(f"Error during PDF generation with WeasyPrint: {e}", exc_info=True)
+            return None
     
     except Exception as e:
         log.error(f"Error generating PDF report: {e}", exc_info=True)
