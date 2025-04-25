@@ -35,7 +35,7 @@ from reporting import generate_html_report, generate_pdf_report
 
 log = logging.getLogger(__name__)
 
-def run_assessment(provider: str, config: Dict, questions: List[str], prompt_template: str, generate_reports: bool = True):
+def run_assessment(provider: str, config: Dict, questions: List[str], prompt_template: str, generate_reports: bool = True, override_model: str = None):
     """
     Run the assessment for a given provider.
     
@@ -45,12 +45,13 @@ def run_assessment(provider: str, config: Dict, questions: List[str], prompt_tem
         questions: List of questions to ask
         prompt_template: Template for the prompts
         generate_reports: Whether to automatically generate HTML and PDF reports
+        override_model: Optional model name to override the one in config
     """
     start_time = datetime.now()
 
     try:
         provider_config = config[provider]
-        model = provider_config['model']
+        model = override_model if override_model else provider_config['model']
         max_tokens = int(provider_config['max_tokens'])
         base_temperature = float(provider_config['temperature'])
         strip_tags = bool(provider_config['strip_think_tags'])

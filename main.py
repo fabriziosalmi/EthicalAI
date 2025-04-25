@@ -66,6 +66,11 @@ def main():
         dest="generate_reports",
         help="Disable automatic generation of HTML and PDF reports"
     )
+    parser.add_argument(
+        "-m", "--model",
+        default=None,
+        help="Specify a custom model to use (overrides the model in config.json)"
+    )
 
     args = parser.parse_args()
 
@@ -115,7 +120,8 @@ def main():
             config=config,
             questions=questions_list,
             prompt_template=prompt_template,
-            generate_reports=args.generate_reports
+            generate_reports=args.generate_reports,
+            override_model=args.model
         )
         log.info(f"Assessment for provider '{args.provider}' completed.")
     except Exception as e:

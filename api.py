@@ -63,12 +63,16 @@ def build_request_payload(provider: str, model: str, prompt: str, max_tokens: in
     system_prompt_content = provider_config.get("system_prompt")
 
     if provider == PROVIDER_LMSTUDIO:
+        # Allow for model specification in LM Studio by using the provided model parameter
+        # instead of the model from config if it's specifically set
+        model_to_use = model if model else provider_config.get('model', '')
+        
         messages = []
         if system_prompt_content:
             messages.append({"role": "system", "content": system_prompt_content})
         messages.append({"role": "user", "content": prompt})
         return {
-            'model': model,
+            'model': model_to_use,
             'messages': messages,
             'max_tokens': max_tokens,
             'temperature': temperature,
