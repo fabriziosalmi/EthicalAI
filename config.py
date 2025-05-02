@@ -14,7 +14,8 @@ CONFIG_FILE = 'config.json'
 QUESTIONS_FILE = 'questions.txt'
 PROMPT_FILE = 'prompt.txt'
 RESULTS_DIR = 'results'  # Directory to store results
-DASHBOARD_DIR = 'dashboard'  # Directory to store dashboard
+REPORTS_DIR = 'docs/reports'  # Directory to store GitHub Pages reports
+DASHBOARD_DIR = 'docs'  # Directory to store dashboard
 ASSESSMENT_DATA_FILE = 'assessment_data.jsonl'  # File to store assessment data
 
 # --- Provider Names ---
@@ -62,6 +63,7 @@ def setup_directories():
     os.makedirs(os.path.join(os.path.dirname(__file__), 'templates'), exist_ok=True)
     os.makedirs(os.path.join(os.path.dirname(__file__), 'docs'), exist_ok=True)
     os.makedirs(os.path.join(os.path.dirname(__file__), DASHBOARD_DIR), exist_ok=True)
+    os.makedirs(os.path.join(os.path.dirname(__file__), REPORTS_DIR), exist_ok=True)  # Create reports directory
 
 # --- Logging Setup ---
 def setup_logging(level=logging.INFO):

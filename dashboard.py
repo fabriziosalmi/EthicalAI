@@ -513,8 +513,8 @@ def generate_html_dashboard(output_dir=DASHBOARD_DIR):
         
         # Build report links if available
         report_links = f"""
-            <a href="../results/{assessment_date}_{provider}_{model_name}_assessment.html" class="text-blue-600 hover:underline" target="_blank">HTML</a> |
-            <a href="../results/{assessment_date}_{provider}_{model_name}_assessment.pdf" class="text-blue-600 hover:underline" target="_blank">PDF</a>
+            <a href="reports/{timestamp}_{provider}_{model_name}_assessment.html" class="text-blue-600 hover:underline" target="_blank">HTML</a> |
+            <a href="reports/{timestamp}_{provider}_{model_name}_assessment.pdf" class="text-blue-600 hover:underline" target="_blank">PDF</a>
         """ if assessment_date else "N/A"
         
         html_content += f"""

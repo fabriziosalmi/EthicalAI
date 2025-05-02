@@ -264,46 +264,64 @@ def generate_assessment_report(
             markdown_table = "Error generating results table. Please check logs."
 
         safe_model_name = re.sub(r'[\\/*?:"<>|]+', '_', model)
+        # Use a GitHub Pages friendly timestamp format (replace colons with hyphens)
         timestamp = start_time.strftime('%Y%m%d_%H%M%S')
+        github_friendly_date = assessment_date.replace(':', '-')
+        
+        # Create both paths - one for original location and one for GitHub Pages
         report_filename = f"{RESULTS_DIR}/{timestamp}_{provider}_{safe_model_name}_assessment.md"
+        # Also save to docs/reports for GitHub Pages
+        github_report_filename = f"{REPORTS_DIR}/{timestamp}_{provider}_{safe_model_name}_assessment.md"
 
-        log.info(f"Writing assessment report to '{report_filename}'")
+        log.info(f"Writing assessment report to '{report_filename}' and '{github_report_filename}'")
+        
+        # Write report content
+        report_content = ""
+        report_content += f"# Ethical AI Assessment Report ({provider.upper()})\n\n"
+        report_content += f"*   **API Provider:** `{provider.upper()}`\n"
+        report_content += f"*   **Model:** `{model}`\n"
+        report_content += f"*   **Endpoint:** `{provider_config['api_endpoint']}`\n"
+        report_content += f"*   **Assessment Date:** {assessment_date}\n"
+        report_content += f"*   **Duration:** {str(duration).split('.')[0]} (HH:MM:SS)\n\n"
+
+        report_content += f"### Methodology\n"
+        report_content += f"*   **Samples per Question:** {num_samples}\n"
+        report_content += f"*   **Aggregation:** Median of valid scores\n"
+        report_content += f"*   **Base Temperature:** {base_temperature}\n"
+        report_content += f"*   **Random Temperature Range (samples 2+):** [{random_temp_min:.2f}, {random_temp_max:.2f}]\n"
+        report_content += f"*   **Edge Case Retries (0/100):** {'Enabled' if retry_edges else 'Disabled'}"
+        if retry_edges:
+            report_content += f" (Max: {max_retries}, Confirm Threshold: {retry_confirm_threshold*100:.0f}%)\n"
+        else:
+            report_content += "\n"
+        report_content += f"*   **Reasoning Tag Stripping:** {'Enabled' if strip_tags else 'Disabled'}\n"
+        report_content += f"*   **Score Range Used:** {SCORE_RANGE[0]}-{SCORE_RANGE[1]}\n\n"
+
+        report_content += f"### Overall Result\n"
+        report_content += f"*   **Final Score (Average):** **{average_final_score:.2f} / {SCORE_RANGE[1]}**\n"
+        report_content += f"    *   (Based on {num_valid_final_scores} valid final scores out of {total_questions} questions)\n\n"
+
+        report_content += f"## Summary\n\n"
+        report_content += f"- Total Questions Asked: {total_questions}\n"
+        report_content += f"- Questions with Valid Final Scores: {num_valid_final_scores}\n"
+        report_content += f"- Questions with No Valid Final Score (after {num_samples} samples): {num_invalid_final_scores}\n\n"
+
+        report_content += f"## Detailed Results\n\n"
+        report_content += markdown_table.replace("[grey70]N/A[/]", "N/A")
+
+        report_content += "\n\n---\nEnd of Report\n"
+        
+        # Write to both locations
         with open(report_filename, 'w', encoding='utf-8') as md_file:
-            md_file.write(f"# Ethical AI Assessment Report ({provider.upper()})\n\n")
-            md_file.write(f"*   **API Provider:** `{provider.upper()}`\n")
-            md_file.write(f"*   **Model:** `{model}`\n")
-            md_file.write(f"*   **Endpoint:** `{provider_config['api_endpoint']}`\n")
-            md_file.write(f"*   **Assessment Date:** {assessment_date}\n")
-            md_file.write(f"*   **Duration:** {str(duration).split('.')[0]} (HH:MM:SS)\n\n")
+            md_file.write(report_content)
+            
+        # Ensure the reports directory exists and write the GitHub Pages version
+        os.makedirs(os.path.dirname(github_report_filename), exist_ok=True)
+        with open(github_report_filename, 'w', encoding='utf-8') as md_file:
+            md_file.write(report_content)
 
-            md_file.write(f"### Methodology\n")
-            md_file.write(f"*   **Samples per Question:** {num_samples}\n")
-            md_file.write(f"*   **Aggregation:** Median of valid scores\n")
-            md_file.write(f"*   **Base Temperature:** {base_temperature}\n")
-            md_file.write(f"*   **Random Temperature Range (samples 2+):** [{random_temp_min:.2f}, {random_temp_max:.2f}]\n")
-            md_file.write(f"*   **Edge Case Retries (0/100):** {'Enabled' if retry_edges else 'Disabled'}")
-            if retry_edges:
-                md_file.write(f" (Max: {max_retries}, Confirm Threshold: {retry_confirm_threshold*100:.0f}%)\n")
-            else:
-                md_file.write("\n")
-            md_file.write(f"*   **Reasoning Tag Stripping:** {'Enabled' if strip_tags else 'Disabled'}\n")
-            md_file.write(f"*   **Score Range Used:** {SCORE_RANGE[0]}-{SCORE_RANGE[1]}\n\n")
-
-            md_file.write(f"### Overall Result\n")
-            md_file.write(f"*   **Final Score (Average):** **{average_final_score:.2f} / {SCORE_RANGE[1]}**\n")
-            md_file.write(f"    *   (Based on {num_valid_final_scores} valid final scores out of {total_questions} questions)\n\n")
-
-            md_file.write(f"## Summary\n\n")
-            md_file.write(f"- Total Questions Asked: {total_questions}\n")
-            md_file.write(f"- Questions with Valid Final Scores: {num_valid_final_scores}\n")
-            md_file.write(f"- Questions with No Valid Final Score (after {num_samples} samples): {num_invalid_final_scores}\n\n")
-
-            md_file.write(f"## Detailed Results\n\n")
-            md_file.write(markdown_table.replace("[grey70]N/A[/]", "N/A"))
-
-            md_file.write("\n\n---\nEnd of Report\n")
-
-        log.info(f"Assessment completed for provider '{provider}'. Report saved to '{report_filename}'.")
+        log.info(f"Assessment completed for provider '{provider}'. Reports saved to '{report_filename}' and '{github_report_filename}'.")
+        # Return the original filename for backward compatibility
         return report_filename
 
     except IOError as e:

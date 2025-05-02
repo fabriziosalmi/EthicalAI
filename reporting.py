@@ -13,7 +13,7 @@ from jinja2 import Template
 from typing import Dict, List, Optional, Tuple
 from collections import defaultdict
 
-from config import RESULTS_DIR
+from config import RESULTS_DIR, REPORTS_DIR
 
 log = logging.getLogger(__name__)
 
@@ -540,21 +540,34 @@ def generate_html_report(markdown_file: str, include_charts: bool = True) -> Opt
         template = Template(HTML_TEMPLATE)
         html_content = template.render(**template_data)
         
-        # Create output filepath
+        # Create output filepaths for both locations
         if markdown_file.endswith('.md'):
+            # Original path (same location as markdown file)
             html_file = markdown_file.replace('.md', '.html')
+            
+            # Also create a path for GitHub Pages in docs/reports
+            base_filename = os.path.basename(html_file)
+            github_html_file = os.path.join(REPORTS_DIR, base_filename)
         else:
             # In case the file doesn't have .md extension
             html_file = markdown_file + '.html'
+            
+            # Also create a path for GitHub Pages in docs/reports
+            base_filename = os.path.basename(html_file)
+            github_html_file = os.path.join(REPORTS_DIR, base_filename)
         
-        # Ensure the directory exists
+        # Ensure the directories exist
         os.makedirs(os.path.dirname(os.path.abspath(html_file)), exist_ok=True)
+        os.makedirs(os.path.dirname(os.path.abspath(github_html_file)), exist_ok=True)
         
-        # Write HTML to file
+        # Write HTML to both files
         with open(html_file, 'w', encoding='utf-8') as f:
             f.write(html_content)
+            
+        with open(github_html_file, 'w', encoding='utf-8') as f:
+            f.write(html_content)
         
-        log.info(f"HTML report generated at {html_file}")
+        log.info(f"HTML report generated at {html_file} and {github_html_file}")
         return html_file
     
     except Exception as e:
@@ -596,15 +609,25 @@ def generate_pdf_report(markdown_file: str, html_file: Optional[str] = None) -> 
                 log.error("Failed to generate HTML report for PDF conversion")
                 return None
         
-        # Create output filepath
+        # Create output filepaths for both original location and GitHub Pages
         if markdown_file.endswith('.md'):
+            # Original path (same location as markdown file)
             pdf_file = markdown_file.replace('.md', '.pdf')
+            
+            # GitHub Pages path
+            base_filename = os.path.basename(pdf_file)
+            github_pdf_file = os.path.join(REPORTS_DIR, base_filename)
         else:
             # In case the file doesn't have .md extension
             pdf_file = markdown_file + '.pdf'
             
-        # Ensure the directory exists
+            # GitHub Pages path
+            base_filename = os.path.basename(pdf_file)
+            github_pdf_file = os.path.join(REPORTS_DIR, base_filename)
+            
+        # Ensure the directories exist
         os.makedirs(os.path.dirname(os.path.abspath(pdf_file)), exist_ok=True)
+        os.makedirs(os.path.dirname(os.path.abspath(github_pdf_file)), exist_ok=True)
         
         try:
             # Generate PDF from HTML using WeasyPrint
@@ -613,13 +636,16 @@ def generate_pdf_report(markdown_file: str, html_file: Optional[str] = None) -> 
             
             html = weasyprint.HTML(string=html_content, base_url=os.path.dirname(os.path.abspath(html_file)))
             css = weasyprint.CSS(string='@page { size: A4; margin: 1cm; }')
-            html.write_pdf(pdf_file, stylesheets=[css])
             
-            if not os.path.exists(pdf_file):
-                log.error(f"PDF file was not created at the expected location: {pdf_file}")
+            # Write to both locations
+            html.write_pdf(pdf_file, stylesheets=[css])
+            html.write_pdf(github_pdf_file, stylesheets=[css])
+            
+            if not os.path.exists(pdf_file) or not os.path.exists(github_pdf_file):
+                log.error(f"PDF file was not created at the expected location(s)")
                 return None
                 
-            log.info(f"PDF report successfully generated at {pdf_file}")
+            log.info(f"PDF report successfully generated at {pdf_file} and {github_pdf_file}")
             return pdf_file
         except Exception as e:
             log.error(f"Error during PDF generation with WeasyPrint: {e}", exc_info=True)
