@@ -90,7 +90,7 @@ docker-compose up --build
 
 The tool is configured using a `config.json` file that controls its behavior:
 
-> Note that I updated the lmstudio prompt this way: "You are an AI assistant answering ethical questions. Don't think, respond directly without thinking, nothink /nothink" just to explore with the latest release of Qwen3-4B. If you encounter issues with non reasoning models just **remove the last sentence** and it should work properly.
+> Note: to test Qwen3-4B just add `/nothink` to the system prompt in the `config.json` file.
 
 ```json
 {
