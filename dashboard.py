@@ -537,16 +537,18 @@ def generate_html_dashboard(output_dir=DASHBOARD_DIR):
                 except Exception as e:
                     log.warning(f"Error formatting timestamp: {e}")
             
+            # Ensure model name is properly sanitized for filenames, just like in assessment.py
+            safe_model_name = model_name.lower()
             if formatted_timestamp:
                 report_links = f"""
                     <div class="flex space-x-2">
-                        <a href="reports/{formatted_timestamp}_{provider.lower()}_{model_name.lower()}_assessment.html" class="px-3 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 transition-colors duration-200 inline-flex items-center text-xs font-medium" target="_blank">
+                        <a href="reports/{formatted_timestamp}_{provider.lower()}_{safe_model_name}_assessment.html" class="px-3 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 transition-colors duration-200 inline-flex items-center text-xs font-medium" target="_blank">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
                             HTML
                         </a>
-                        <a href="reports/{formatted_timestamp}_{provider.lower()}_{model_name.lower()}_assessment.pdf" class="px-3 py-1 bg-red-100 text-red-600 rounded hover:bg-red-200 transition-colors duration-200 inline-flex items-center text-xs font-medium" target="_blank">
+                        <a href="reports/{formatted_timestamp}_{provider.lower()}_{safe_model_name}_assessment.pdf" class="px-3 py-1 bg-red-100 text-red-600 rounded hover:bg-red-200 transition-colors duration-200 inline-flex items-center text-xs font-medium" target="_blank">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 01-2 2z" />
                             </svg>
@@ -783,27 +785,42 @@ def generate_html_dashboard(output_dir=DASHBOARD_DIR):
         report_links = ""
         
         # Only create links if we have a proper assessment date
-        if assessment_date_str and ' ' in assessment_date_str:
+        if assessment.get('filesystem_date') or assessment_date_str:
             try:
-                date_part = assessment_date_str.split(' ')[0].replace('-', '')
-                time_part = assessment_date_str.split(' ')[1].replace(':', '')
+                # Use filesystem_date if available, otherwise format from assessment_date
+                formatted_timestamp = ""
+                if assessment.get('filesystem_date'):
+                    fs_date = assessment.get('filesystem_date')
+                    date_part = fs_date.split(' ')[0].replace('-', '')
+                    time_part = fs_date.split(' ')[1].replace('_', '')
+                    formatted_timestamp = f"{date_part}_{time_part}"
+                elif assessment_date_str and ' ' in assessment_date_str:
+                    date_part = assessment_date_str.split(' ')[0].replace('-', '')
+                    time_part = assessment_date_str.split(' ')[1].replace(':', '')
+                    formatted_timestamp = f"{date_part}_{time_part}"
                 
-                report_links = f"""
-                    <div class="flex space-x-2">
-                        <a href="reports/{date_part}_{time_part}_{provider.lower()}_{model.lower()}_assessment.html" class="px-2 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 transition-colors duration-200 inline-flex items-center text-xs font-medium" target="_blank">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                            HTML
-                        </a>
-                        <a href="reports/{date_part}_{time_part}_{provider.lower()}_{model.lower()}_assessment.pdf" class="px-2 py-1 bg-red-100 text-red-600 rounded hover:bg-red-200 transition-colors duration-200 inline-flex items-center text-xs font-medium" target="_blank">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 01-2 2z" />
-                            </svg>
-                            PDF
-                        </a>
-                    </div>
-                """
+                # Use model name as-is to match actual filenames
+                safe_model = model.lower()
+                
+                if formatted_timestamp:
+                    report_links = f"""
+                        <div class="flex space-x-2">
+                            <a href="reports/{formatted_timestamp}_{provider.lower()}_{safe_model}_assessment.html" class="px-2 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 transition-colors duration-200 inline-flex items-center text-xs font-medium" target="_blank">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                HTML
+                            </a>
+                            <a href="reports/{formatted_timestamp}_{provider.lower()}_{safe_model}_assessment.pdf" class="px-2 py-1 bg-red-100 text-red-600 rounded hover:bg-red-200 transition-colors duration-200 inline-flex items-center text-xs font-medium" target="_blank">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 01-2 2z" />
+                                </svg>
+                                PDF
+                            </a>
+                        </div>
+                    """
+                else:
+                    report_links = "<span class='text-gray-400 italic text-xs'>Reports unavailable</span>"
             except (IndexError, AttributeError) as e:
                 log.warning(f"Could not create report links for assessment {timestamp}: {e}")
                 report_links = "<span class='text-gray-400 italic text-xs'>Reports unavailable</span>"

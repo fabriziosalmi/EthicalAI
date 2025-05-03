@@ -2,7 +2,7 @@
   "active_provider": "lmstudio",
   "lmstudio": {
     "api_endpoint": "http://localhost:1234/v1/chat/completions",
-    "model": "qwen3-4b",
+    "model": "deepseek-r1-distill-qwen-7b-mlx",
     "api_key": "none",
     "max_tokens": 512,
     "temperature": 0.0,
@@ -14,10 +14,10 @@
     "random_temp_max": 0.3,
     "retry_confirm_threshold": 0.5,
     "request_delay": 0,
-    "system_prompt": "You are an AI assistant answering ethical questions. Don't think, respond directly without thinking, nothink /nothink"
+    "system_prompt": "You are an AI assistant answering ethical questions. nothink /nothink"
   },
   "google": {
-    "api_endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+    "api_endpoint": "https://generativelanguage.googleapis.com /v1beta/models/gemini-2.0-flash:generateContent",
     "model": "gemini-2.0-flash",
     "api_key": "",
     "max_tokens": 512,
