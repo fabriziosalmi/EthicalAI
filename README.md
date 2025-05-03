@@ -10,6 +10,7 @@ The tool incorporates advanced features like multi-sampling with random temperat
 ![screenshot2](https://github.com/fabriziosalmi/EthicalAI/blob/main/screenshot_2.png?raw=true)
 ![screenshot3](https://github.com/fabriziosalmi/EthicalAI/blob/main/screenshot_3.png?raw=true)
 ![screenshot4](https://github.com/fabriziosalmi/EthicalAI/blob/main/screenshot_4.png?raw=true)
+![screenshot5](https://github.com/fabriziosalmi/EthicalAI/blob/main/screenshot_5.png?raw=true)
 
 ## Key Features
 
