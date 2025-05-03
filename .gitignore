@@ -2,8 +2,4 @@ assessment.log
 config.json
 .DS_Store
 *.pyc
-__pycache__/api.cpython-312.pyc
-__pycache__/assessment.cpython-312.pyc
-__pycache__/config.cpython-312.pyc
-__pycache__/visualization.cpython-312.pyc
 __pycache__/

@@ -26,7 +26,7 @@ from tabulate import tabulate
 from collections import defaultdict
 
 from config import (
-    RESULTS_DIR, ASSESSMENT_DATA_FILE, SCORE_RANGE,
+    RESULTS_DIR, REPORTS_DIR, ASSESSMENT_DATA_FILE, SCORE_RANGE,
     DEFAULT_RETRY_CONFIRM_THRESHOLD
 )
 from api import get_single_score
@@ -264,20 +264,18 @@ def generate_assessment_report(
             markdown_table = "Error generating results table. Please check logs."
 
         safe_model_name = re.sub(r'[\\/*?:"<>|]+', '_', model)
-        # Use a GitHub Pages friendly timestamp format (replace colons with hyphens)
+        # Use only GitHub Pages friendly timestamp format
         timestamp = start_time.strftime('%Y%m%d_%H%M%S')
-        github_friendly_date = assessment_date.replace(':', '-')
         
-        # Create both paths - one for original location and one for GitHub Pages
-        report_filename = f"{RESULTS_DIR}/{timestamp}_{provider}_{safe_model_name}_assessment.md"
-        # Also save to docs/reports for GitHub Pages
-        github_report_filename = f"{REPORTS_DIR}/{timestamp}_{provider}_{safe_model_name}_assessment.md"
+        # Only save to docs/reports for GitHub Pages
+        os.makedirs(REPORTS_DIR, exist_ok=True)
+        report_filename = f"{REPORTS_DIR}/{timestamp}_{provider.lower()}_{safe_model_name.lower()}_assessment.md"
 
-        log.info(f"Writing assessment report to '{report_filename}' and '{github_report_filename}'")
+        log.info(f"Writing assessment report to '{report_filename}'")
         
         # Write report content
         report_content = ""
-        report_content += f"# Ethical AI Assessment Report ({provider.upper()})\n\n"
+        report_content += f"# Ethical AI Self-Assessment Report\n\n"
         report_content += f"*   **API Provider:** `{provider.upper()}`\n"
         report_content += f"*   **Model:** `{model}`\n"
         report_content += f"*   **Endpoint:** `{provider_config['api_endpoint']}`\n"
@@ -311,17 +309,12 @@ def generate_assessment_report(
 
         report_content += "\n\n---\nEnd of Report\n"
         
-        # Write to both locations
+        # Write report to docs/reports directory only
         with open(report_filename, 'w', encoding='utf-8') as md_file:
             md_file.write(report_content)
-            
-        # Ensure the reports directory exists and write the GitHub Pages version
-        os.makedirs(os.path.dirname(github_report_filename), exist_ok=True)
-        with open(github_report_filename, 'w', encoding='utf-8') as md_file:
-            md_file.write(report_content)
 
-        log.info(f"Assessment completed for provider '{provider}'. Reports saved to '{report_filename}' and '{github_report_filename}'.")
-        # Return the original filename for backward compatibility
+        log.info(f"Assessment completed for provider '{provider}'. Report saved to '{report_filename}'.")
+        # Return the filename
         return report_filename
 
     except IOError as e:
@@ -384,15 +377,19 @@ def save_assessment_data(
                         category_scores[cat].append(score)
                         break
         
-        # Create assessment data
+        # Format assessment date for file system, but keep original format for display
+        filesystem_friendly_date = assessment_date.replace(':', '_')
+        
+        # Create assessment data - use standard ISO format for timestamp (needed for datetime parsing)
         assessment_data = {
-            'timestamp': datetime.now().isoformat(),
+            'timestamp': datetime.now().isoformat(),  # Keep original ISO format
             'provider': provider,
             'model': model,
             'average_score': average_final_score,
             'valid_scores': num_valid_final_scores,
             'total_questions': total_questions,
-            'assessment_date': assessment_date,
+            'assessment_date': assessment_date,  # Keep original format for display
+            'filesystem_date': filesystem_friendly_date,  # Add separate field for filesystem friendly format
             'duration_seconds': duration.total_seconds(),
             'categories': {}
         }

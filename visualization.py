@@ -10,13 +10,13 @@ from datetime import datetime
 from typing import Dict, List, Tuple, Optional
 from collections import defaultdict
 
-from config import RESULTS_DIR
+from config import REPORTS_DIR  # Change from RESULTS_DIR to REPORTS_DIR
 
 log = logging.getLogger(__name__)
 
 def generate_visualizations(provider: str, results: List[Tuple[str, Optional[int], List[Optional[int]]]], category_mapping: Dict[str, List[int]]):
     """
-    Generate visualizations for assessment results and save them to the results directory.
+    Generate visualizations for assessment results and save them to the docs/reports directory.
     
     Args:
         provider: Name of the AI provider
@@ -42,9 +42,9 @@ def generate_visualizations(provider: str, results: List[Tuple[str, Optional[int
             
         log.info(f"Generating visualizations for provider '{provider}'")
         
-        # Create directory for visualizations
-        viz_dir = os.path.join(RESULTS_DIR, 'visualizations')
-        os.makedirs(viz_dir, exist_ok=True)
+        # Create directory for visualizations - save directly to docs/reports
+        os.makedirs(REPORTS_DIR, exist_ok=True)
+        viz_dir = REPORTS_DIR
         
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         
@@ -79,7 +79,7 @@ def generate_visualizations(provider: str, results: List[Tuple[str, Optional[int
             plt.ylabel('Frequency', fontsize=14)
             plt.grid(alpha=0.3)
             plt.tight_layout()
-            dist_file = os.path.join(viz_dir, f"{timestamp}_{provider}_score_distribution.png")
+            dist_file = os.path.join(viz_dir, f"{timestamp}_{provider.lower()}_score_distribution.png")
             plt.savefig(dist_file)
             plt.close()
             log.info(f"Generated score distribution chart: {dist_file}")
@@ -122,7 +122,7 @@ def generate_visualizations(provider: str, results: List[Tuple[str, Optional[int
                 
                 plt.grid(axis='y', alpha=0.3)
                 plt.tight_layout()
-                cat_file = os.path.join(viz_dir, f"{timestamp}_{provider}_category_scores.png")
+                cat_file = os.path.join(viz_dir, f"{timestamp}_{provider.lower()}_category_scores.png")
                 plt.savefig(cat_file)
                 plt.close()
                 log.info(f"Generated category scores chart: {cat_file}")
@@ -182,7 +182,7 @@ def generate_visualizations(provider: str, results: List[Tuple[str, Optional[int
                 plt.title(f'{category.capitalize()} Scores - {provider.upper()}', fontsize=16)
                 
                 plt.tight_layout()
-                radar_file = os.path.join(viz_dir, f"{timestamp}_{provider}_{category}_radar.png")
+                radar_file = os.path.join(viz_dir, f"{timestamp}_{provider.lower()}_{category.lower()}_radar.png")
                 plt.savefig(radar_file)
                 plt.close()
                 log.info(f"Generated radar chart for category '{category}': {radar_file}")

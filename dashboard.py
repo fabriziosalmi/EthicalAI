@@ -504,25 +504,80 @@ def generate_html_dashboard(output_dir=DASHBOARD_DIR):
         display_date = datetime.fromisoformat(timestamp).strftime('%Y-%m-%d') if timestamp else 'N/A'
         assessment_date = assessment.get('assessment_date', '').replace(' ', '_')
         
-        # Determine score color class
+        # Determine score color class and badge
         score_color = 'text-red-600'
+        badge_class = 'bg-red-100 text-red-800'
         if avg_score >= 70:
             score_color = 'text-green-600'
+            badge_class = 'bg-green-100 text-green-800'
         elif avg_score >= 40:
             score_color = 'text-yellow-600'
+            badge_class = 'bg-yellow-100 text-yellow-800'
         
         # Build report links if available
-        report_links = f"""
-            <a href="reports/{timestamp}_{provider}_{model_name}_assessment.html" class="text-blue-600 hover:underline" target="_blank">HTML</a> |
-            <a href="reports/{timestamp}_{provider}_{model_name}_assessment.pdf" class="text-blue-600 hover:underline" target="_blank">PDF</a>
-        """ if assessment_date else "N/A"
+        if assessment.get('filesystem_date') or assessment.get('timestamp'):
+            # First try to use the filesystem_date which is already properly formatted
+            formatted_timestamp = ""
+            if assessment.get('filesystem_date'):
+                # Convert filesystem_date (2025-05-03 14_46_11) to timestamp format (20250503_144611)
+                try:
+                    fs_date = assessment.get('filesystem_date')
+                    date_part = fs_date.split(' ')[0].replace('-', '')
+                    time_part = fs_date.split(' ')[1].replace('_', '')
+                    formatted_timestamp = f"{date_part}_{time_part}"
+                except Exception as e:
+                    log.warning(f"Error formatting filesystem_date: {e}")
+            
+            # If filesystem_date didn't work, fall back to timestamp
+            if not formatted_timestamp and assessment.get('timestamp'):
+                try:
+                    # Format from ISO timestamp
+                    timestamp_obj = datetime.fromisoformat(assessment.get('timestamp'))
+                    formatted_timestamp = timestamp_obj.strftime("%Y%m%d_%H%M%S")
+                except Exception as e:
+                    log.warning(f"Error formatting timestamp: {e}")
+            
+            if formatted_timestamp:
+                report_links = f"""
+                    <div class="flex space-x-2">
+                        <a href="reports/{formatted_timestamp}_{provider.lower()}_{model_name.lower()}_assessment.html" class="px-3 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 transition-colors duration-200 inline-flex items-center text-xs font-medium" target="_blank">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            HTML
+                        </a>
+                        <a href="reports/{formatted_timestamp}_{provider.lower()}_{model_name.lower()}_assessment.pdf" class="px-3 py-1 bg-red-100 text-red-600 rounded hover:bg-red-200 transition-colors duration-200 inline-flex items-center text-xs font-medium" target="_blank">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 01-2 2z" />
+                            </svg>
+                            PDF
+                        </a>
+                    </div>
+                """
+            else:
+                report_links = "<span class='text-gray-400 italic text-xs'>Report links unavailable</span>"
+        else:
+            report_links = "<span class='text-gray-400 italic text-xs'>No reports available</span>"
         
         html_content += f"""
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{rank}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{model_name}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{provider}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium {score_color}">{avg_score:.2f}</td>
+                            <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-semibold text-gray-600">{rank}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900">{model_name}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                        {provider}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
+                                        <div class="{score_color.replace('text', 'bg')} h-2.5 rounded-full" style="width: {min(100, avg_score)}%"></div>
+                                    </div>
+                                    <div class="text-sm font-medium {score_color}">{avg_score:.2f}</div>
+                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{display_date}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{report_links}</td>
                             </tr>
@@ -693,13 +748,14 @@ def generate_html_dashboard(output_dir=DASHBOARD_DIR):
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avg Score</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valid/Total Qs</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration (s)</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reports</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
     """
     
-    # Sort the data for display in the table (high to low score)
-    sorted_data = sorted(all_assessment_data, key=lambda x: x.get('average_score', 0), reverse=True)
+    # Sort the data for display in the table (most recent first)
+    sorted_data = sorted(all_assessment_data, key=lambda x: x.get('timestamp', ''), reverse=True)
     
     # Generate table rows for assessment history
     for assessment in sorted_data:
@@ -714,19 +770,79 @@ def generate_html_dashboard(output_dir=DASHBOARD_DIR):
         
         # Determine color class based on score
         score_color = 'text-red-600'
+        score_bg = 'bg-red-100'
         if avg_score >= 70:
             score_color = 'text-green-600'
+            score_bg = 'bg-green-100'
         elif avg_score >= 40:
             score_color = 'text-yellow-600'
+            score_bg = 'bg-yellow-100'
+        
+        # Build report links
+        assessment_date_str = assessment.get('assessment_date', '')
+        report_links = ""
+        
+        # Only create links if we have a proper assessment date
+        if assessment_date_str and ' ' in assessment_date_str:
+            try:
+                date_part = assessment_date_str.split(' ')[0].replace('-', '')
+                time_part = assessment_date_str.split(' ')[1].replace(':', '')
+                
+                report_links = f"""
+                    <div class="flex space-x-2">
+                        <a href="reports/{date_part}_{time_part}_{provider.lower()}_{model.lower()}_assessment.html" class="px-2 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 transition-colors duration-200 inline-flex items-center text-xs font-medium" target="_blank">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            HTML
+                        </a>
+                        <a href="reports/{date_part}_{time_part}_{provider.lower()}_{model.lower()}_assessment.pdf" class="px-2 py-1 bg-red-100 text-red-600 rounded hover:bg-red-200 transition-colors duration-200 inline-flex items-center text-xs font-medium" target="_blank">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 01-2 2z" />
+                            </svg>
+                            PDF
+                        </a>
+                    </div>
+                """
+            except (IndexError, AttributeError) as e:
+                log.warning(f"Could not create report links for assessment {timestamp}: {e}")
+                report_links = "<span class='text-gray-400 italic text-xs'>Reports unavailable</span>"
+        else:
+            report_links = "<span class='text-gray-400 italic text-xs'>No reports available</span>"
         
         html_content += f"""
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{display_timestamp}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{provider}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{model}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium {score_color}">{avg_score:.2f}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{valid_scores}/{total_questions}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{duration:.1f}</td>
+                            <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">{display_timestamp}</div>
+                                    <div class="text-xs text-gray-500 mt-1">ID: {timestamp.split('T')[0]}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                        {provider}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900">{model}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-3 py-1 rounded-full text-xs font-medium {score_bg} {score_color}">
+                                        {avg_score:.2f}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">{valid_scores}/{total_questions}</div>
+                                    <div class="w-full bg-gray-200 rounded-full h-1.5 mt-1">
+                                        <div class="bg-blue-600 h-1.5 rounded-full" style="width: {(valid_scores/total_questions*100) if total_questions else 0}%"></div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-500">
+                                        <span class="font-medium">{duration:.1f}</span> sec
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    {report_links}
+                                </td>
                             </tr>
         """
     
@@ -804,7 +920,7 @@ def generate_html_dashboard(output_dir=DASHBOARD_DIR):
         
         <footer class="mt-12 text-center text-gray-500 text-sm">
             <p>Generated on: """ + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + """</p>
-            <p class="mt-1">Ethical AI Assessment Tool</p>
+            <p class="mt-1"><a href="https://github.com/fabriziosalmi/ethical-ai" target="_blank">Ethical AI Assessment Tool</a></p>
         </footer>
     </div>
 

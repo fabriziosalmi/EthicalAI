@@ -26,20 +26,20 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     <title>{{ title }}</title>
     <style>
         :root {
-            --primary-color: #3498db;
-            --secondary-color: #2c3e50;
-            --accent-color: #e74c3c;
-            --background-color: #f8f9fa;
+            --primary-color: #3b82f6;
+            --secondary-color: #1e3a8a;
+            --accent-color: #ef4444;
+            --background-color: #f8fafc;
             --card-bg-color: #ffffff;
-            --text-color: #2c3e50;
-            --border-color: #e0e0e0;
-            --success-color: #2ecc71;
-            --warning-color: #f39c12;
-            --danger-color: #e74c3c;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+            --success-color: #22c55e;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
             line-height: 1.6;
             color: var(--text-color);
             background-color: var(--background-color);
@@ -56,6 +56,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             border-radius: 8px;
             margin-top: 2rem;
             margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
         }
         
         header {
@@ -68,26 +69,31 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         h1 {
             color: var(--primary-color);
             margin-bottom: 0.5rem;
+            font-size: 2.25rem;
+            font-weight: bold;
         }
         
         h2 {
-            color: var (--secondary-color);
+            color: var(--secondary-color);
             margin-top: 2rem;
             margin-bottom: 1rem;
             padding-bottom: 0.5rem;
             border-bottom: 1px solid var(--border-color);
+            font-size: 1.5rem;
+            font-weight: semibold;
         }
         
         h3 {
             color: var(--secondary-color);
             margin-top: 1.5rem;
+            font-size: 1.25rem;
         }
         
         .metadata {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1rem;
-            margin-bottom: 2rem.
+            margin-bottom: 2rem;
         }
         
         .metadata-item {
@@ -95,69 +101,89 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             padding: 1rem;
             border-radius: 6px;
             border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+        
+        .metadata-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         
         .metadata-item strong {
             display: block;
             margin-bottom: 0.5rem;
             color: var(--secondary-color);
+            font-weight: 600;
         }
         
         .methodology {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1rem;
-            margin-bottom: 2rem.
+            margin-bottom: 2rem;
         }
         
         .method-item {
             background-color: var(--card-bg-color);
             padding: 1rem;
             border-radius: 6px;
-            border: 1px solid var (--border-color);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+        
+        .method-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         
         .method-item strong {
             display: block;
             color: var(--secondary-color);
+            font-weight: 600;
         }
         
         .highlight-box {
-            background-color: var(--primary-color);
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 1.5rem;
+            padding: 2rem;
             border-radius: 8px;
             text-align: center;
             margin: 2rem 0;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
         }
         
         .highlight-box h3 {
             color: white;
             margin-top: 0;
+            font-size: 1.5rem;
         }
         
         .score {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: bold;
             margin: 1rem 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .score-high {
-            color: var(--success-color);
+            color: white;
         }
         
         .score-medium {
-            color: var(--warning-color);
+            color: white;
         }
         
         .score-low {
-            color: var(--danger-color);
+            color: white;
         }
         
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 2rem 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         
         th, td {
@@ -169,6 +195,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         th {
             background-color: var(--primary-color);
             color: white;
+            font-weight: 600;
         }
         
         tr:nth-child(even) {
@@ -181,7 +208,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         
         .summary {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
             margin: 2rem 0;
         }
@@ -189,46 +216,69 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         .summary-item {
             background-color: var(--card-bg-color);
             padding: 1.5rem;
-            border-radius: 6px;
+            border-radius: 8px;
             text-align: center;
             border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+        
+        .summary-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         
         .summary-item strong {
             display: block;
-            font-size: 1.8rem;
+            font-size: 2rem;
             margin-bottom: 0.5rem;
             color: var(--primary-color);
+            font-weight: 700;
         }
         
         .summary-item span {
             color: var(--secondary-color);
+            font-weight: 500;
         }
         
         .charts {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 2rem;
             margin: 2rem 0;
         }
         
         .chart {
             background-color: var(--card-bg-color);
-            padding: 1rem;
+            padding: 1.5rem;
             border-radius: 8px;
             border: 1px solid var(--border-color);
             text-align: center;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .chart:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chart h3 {
+            margin-top: 0;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
         }
         
         .chart img {
             max-width: 100%;
             height: auto;
+            border-radius: 4px;
         }
         
         footer {
             text-align: center;
             margin-top: 3rem;
-            padding-top: 1rem;
+            padding-top: 1.5rem;
             border-top: 1px solid var(--border-color);
             color: var(--secondary-color);
             font-size: 0.9rem;
@@ -243,11 +293,35 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                 max-width: 100%;
                 margin: 0;
                 padding: 1rem;
+                box-shadow: none;
                 border: none;
+            }
+            
+            .chart, .summary-item, .metadata-item, .method-item {
+                break-inside: avoid;
+                page-break-inside: avoid;
             }
             
             @page {
                 margin: 1.5cm;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .metadata, .methodology, .summary, .charts {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            table {
+                font-size: 0.9rem;
+            }
+            
+            th, td {
+                padding: 0.75rem;
             }
         }
     </style>
@@ -363,7 +437,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         </table>
         
         <footer>
-            <p>Generated by Ethical AI Assessment Tool | {{ current_date }}</p>
+            <p>Generated by <a href="https://github.com/fabriziosalmi/ethical-ai" target="_blank">Ethical AI Assessment Tool</a> | {{ current_date }}</p>
         </footer>
     </div>
 </body>
@@ -429,7 +503,7 @@ def generate_html_report(markdown_file: str, include_charts: bool = True) -> Opt
         else:
             model = "Unknown"
         
-        title = f"Ethical AI Assessment Report - {provider}"
+        title = f"Ethical AI Self-Assessment Report"
         
         template_data = {
             "title": title,
@@ -485,7 +559,7 @@ def generate_html_report(markdown_file: str, include_charts: bool = True) -> Opt
                 timestamp = timestamp_pattern.group(1) if timestamp_pattern else None
                 
                 # If we have a timestamp, look for charts with that timestamp
-                if timestamp:
+                if (timestamp):
                     chart_files = [f for f in os.listdir(viz_dir) if f.startswith(timestamp) and f.endswith('.png') and provider.lower() in f.lower()]
                 else:
                     # Otherwise, just look for charts with the provider name
@@ -540,34 +614,21 @@ def generate_html_report(markdown_file: str, include_charts: bool = True) -> Opt
         template = Template(HTML_TEMPLATE)
         html_content = template.render(**template_data)
         
-        # Create output filepaths for both locations
+        # Create output filepath (same location as markdown file)
         if markdown_file.endswith('.md'):
-            # Original path (same location as markdown file)
             html_file = markdown_file.replace('.md', '.html')
-            
-            # Also create a path for GitHub Pages in docs/reports
-            base_filename = os.path.basename(html_file)
-            github_html_file = os.path.join(REPORTS_DIR, base_filename)
         else:
             # In case the file doesn't have .md extension
             html_file = markdown_file + '.html'
-            
-            # Also create a path for GitHub Pages in docs/reports
-            base_filename = os.path.basename(html_file)
-            github_html_file = os.path.join(REPORTS_DIR, base_filename)
         
-        # Ensure the directories exist
+        # Ensure the directory exists
         os.makedirs(os.path.dirname(os.path.abspath(html_file)), exist_ok=True)
-        os.makedirs(os.path.dirname(os.path.abspath(github_html_file)), exist_ok=True)
         
-        # Write HTML to both files
+        # Write HTML file
         with open(html_file, 'w', encoding='utf-8') as f:
             f.write(html_content)
-            
-        with open(github_html_file, 'w', encoding='utf-8') as f:
-            f.write(html_content)
         
-        log.info(f"HTML report generated at {html_file} and {github_html_file}")
+        log.info(f"HTML report generated at {html_file}")
         return html_file
     
     except Exception as e:
@@ -609,25 +670,16 @@ def generate_pdf_report(markdown_file: str, html_file: Optional[str] = None) -> 
                 log.error("Failed to generate HTML report for PDF conversion")
                 return None
         
-        # Create output filepaths for both original location and GitHub Pages
+        # Create output filepath - use the same location as the markdown file
+        # which should already be in the docs/reports directory
         if markdown_file.endswith('.md'):
-            # Original path (same location as markdown file)
             pdf_file = markdown_file.replace('.md', '.pdf')
-            
-            # GitHub Pages path
-            base_filename = os.path.basename(pdf_file)
-            github_pdf_file = os.path.join(REPORTS_DIR, base_filename)
         else:
             # In case the file doesn't have .md extension
             pdf_file = markdown_file + '.pdf'
             
-            # GitHub Pages path
-            base_filename = os.path.basename(pdf_file)
-            github_pdf_file = os.path.join(REPORTS_DIR, base_filename)
-            
-        # Ensure the directories exist
+        # Ensure the directory exists
         os.makedirs(os.path.dirname(os.path.abspath(pdf_file)), exist_ok=True)
-        os.makedirs(os.path.dirname(os.path.abspath(github_pdf_file)), exist_ok=True)
         
         try:
             # Generate PDF from HTML using WeasyPrint
@@ -637,15 +689,14 @@ def generate_pdf_report(markdown_file: str, html_file: Optional[str] = None) -> 
             html = weasyprint.HTML(string=html_content, base_url=os.path.dirname(os.path.abspath(html_file)))
             css = weasyprint.CSS(string='@page { size: A4; margin: 1cm; }')
             
-            # Write to both locations
+            # Write PDF file
             html.write_pdf(pdf_file, stylesheets=[css])
-            html.write_pdf(github_pdf_file, stylesheets=[css])
             
-            if not os.path.exists(pdf_file) or not os.path.exists(github_pdf_file):
-                log.error(f"PDF file was not created at the expected location(s)")
+            if not os.path.exists(pdf_file):
+                log.error(f"PDF file was not created at the expected location")
                 return None
                 
-            log.info(f"PDF report successfully generated at {pdf_file} and {github_pdf_file}")
+            log.info(f"PDF report successfully generated at {pdf_file}")
             return pdf_file
         except Exception as e:
             log.error(f"Error during PDF generation with WeasyPrint: {e}", exc_info=True)

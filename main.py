@@ -1,5 +1,5 @@
 """
-Main entry point for the Ethical AI Assessment tool.
+Main entry point for the Ethical AI Self-Assessment tool.
 """
 
 import argparse
