@@ -580,7 +580,10 @@ def generate_html_dashboard(output_dir=DASHBOARD_DIR):
                                     </div>
                                     <div class="text-sm font-medium {score_color}">{avg_score:.2f}</div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{display_date}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">{timestamp.split('T')[0]}</div>
+                                    <div class="text-xs text-gray-500 mt-1" style="display: none;">ID: {formatted_timestamp}</div>
+                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{report_links}</td>
                             </tr>
         """
@@ -831,7 +834,7 @@ def generate_html_dashboard(output_dir=DASHBOARD_DIR):
                             <tr class="hover:bg-gray-50 transition-colors duration-150">
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm text-gray-900">{display_timestamp}</div>
-                                    <div class="text-xs text-gray-500 mt-1">ID: {timestamp.split('T')[0]}</div>
+                                    <div class="text-xs text-gray-500 mt-1">ID: {formatted_timestamp}</div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
